@@ -23,7 +23,7 @@ crt_offset = 0.5 # different for connectors
 #  |      OOO         OOO         OOO       | |secondHoleOffset    | package_height  
 #  |     OOOOO       OOOOO       OOOOO      | v                    |                  ^
 #  |      OOO         OOO         OOO       |                      |                  |
-#  +----------------------------------------+ ^                    |                  | leftbottom_offset
+#  +----------------------------------------+ ^                    |                  | leftbottom_offset[1]
 #  |                                        | | bevel_height       |                  |
 #  +----------------------------------------+ v                    v                  v
 #          <--- rm ---->
