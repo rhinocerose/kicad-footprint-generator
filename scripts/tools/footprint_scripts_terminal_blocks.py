@@ -99,7 +99,6 @@ def makeTerminalBlockStd(footprint_name, pins, rm, package_height, leftbottom_of
     
     
     # create pads
-    p1 = int(1)
     x1 = 0
     y1 = 0 
      
@@ -113,10 +112,7 @@ def makeTerminalBlockStd(footprint_name, pins, rm, package_height, leftbottom_of
         pad_shapeother = Pad.SHAPE_OVAL 
     pad_layers = Pad.LAYERS_THT
     keepouts=[];
-    for p in range(1, pins + 1): 
-        pextra=0
-        if secondDrillPad[0]>0:
-            pextra=p
+    for p in range(1, pins + 1):
         if p == 1: 
             kicad_modg.append(Pad(number=p, type=pad_type, shape=pad_shape1, at=[x1, y1], size=pad, drill=ddrill, layers=pad_layers)) 
             keepouts=keepouts+addKeepoutRect(x1, y1, pad[0]+8*slk_offset, pad[1]+8*slk_offset)
