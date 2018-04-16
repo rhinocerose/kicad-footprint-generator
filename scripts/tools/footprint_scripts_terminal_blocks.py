@@ -122,7 +122,7 @@ def makeTerminalBlockStd(footprint_name, pins, rm, package_height, leftbottom_of
             keepouts=keepouts+addKeepoutRect(x1, y1, pad[0]+8*slk_offset, pad[1]+8*slk_offset)
             if secondDrillDiameter>0:
                 kicad_modg.append(Pad(number=p, type=extradrill1_type, shape=pad_shape1, at=[x1+secondDrillOffset[0], y1+secondDrillOffset[1]], size=secondDrillPad, drill=secondDrillDiameter, layers=pad_layers)) 
-                keepouts=keepouts+addKeepoutRect(x1+secondDrillOffset[0], y1+secondDrillOffset[1], max(secondDrillPad[0],secondDrillDiameter)+8*slk_offset, max(secondDrillPad[0],secondDrillDiameter)+8*slk_offset)
+                keepouts=keepouts+addKeepoutRect(x1+secondDrillOffset[0], y1+secondDrillOffset[1], max(secondDrillPad[0],secondDrillDiameter)+8*slk_offset, max(secondDrillPad[1],secondDrillDiameter)+8*slk_offset)
         else:
             kicad_modg.append(Pad(number=p, type=pad_type, shape=pad_shapeother, at=[x1, y1], size=pad, drill=ddrill, layers=pad_layers))
             if secondDrillPad[0]!=secondDrillPad[1]:
@@ -131,7 +131,7 @@ def makeTerminalBlockStd(footprint_name, pins, rm, package_height, leftbottom_of
                 keepouts=keepouts+addKeepoutRound(x1, y1, pad[0]+8*slk_offset, pad[0]+8*slk_offset)
             if secondDrillDiameter>0:
                 kicad_modg.append(Pad(number=p, type=extradrill1_type, shape=pad_shapeother, at=[x1+secondDrillOffset[0], y1+secondDrillOffset[1]], size=secondDrillPad, drill=secondDrillDiameter, layers=pad_layers)) 
-                keepouts=keepouts+addKeepoutRect(x1+secondDrillOffset[0], y1+secondDrillOffset[1], max(secondDrillPad[0],secondDrillDiameter)+8*slk_offset, max(secondDrillPad[0],secondDrillDiameter)+8*slk_offset)
+                keepouts=keepouts+addKeepoutRect(x1+secondDrillOffset[0], y1+secondDrillOffset[1], max(secondDrillPad[0],secondDrillDiameter)+8*slk_offset, max(secondDrillPad[1],secondDrillDiameter)+8*slk_offset)
         
         x1=x1+rm
     
