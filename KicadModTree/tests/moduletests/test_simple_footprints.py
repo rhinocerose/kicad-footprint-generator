@@ -80,6 +80,7 @@ RESULT_PAD_OFFSET = """(module test (layer F.Cu) (tedit 0)
   (pad 6 np_thru_hole rect (at 10 0) (size 2 2) (drill 1.2) (layers *.Cu *.Mask))
 )"""
 
+
 class SimpleFootprintTests(unittest.TestCase):
 
     def testMinimum(self):
