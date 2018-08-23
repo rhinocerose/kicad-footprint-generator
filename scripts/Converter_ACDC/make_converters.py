@@ -168,10 +168,29 @@ def make_hilink_hlk_pm01():
     )
 
 
+def make_hilink_hlk_5m01():
+    """Hi-Link HLK-5MXX - http://www.hlktech.net/product.php?CateId=9"""
+    make_converter(
+        footprint_name="{}_Hi-Link_HLK-5MXX_THT".format(classname),
+        description='http://www.hlktech.net/product_detail.php?ProId=60',
+        tags='ACDC-Converter 5W Hi-Link HLK-5MXX THT',
+        size=(38, 23),
+        pin1_offset=(2.2, 8.5),
+        pins = [
+            ( 0.0, 0.0),
+            ( 0.0, 6.0),
+            ( 33.6, -6.0),
+            ( 33.6, 12.0),
+        ],
+        drill=1.1,
+        pad=3,
+    )
+
+
 if __name__ == '__main__':
     make_meanwell_irm_30()
     make_meanwell_irm_45()
     make_meanwell_irm_60()
     make_hilink_hlk_pm01()
-    
-    
+    make_hilink_hlk_5m01()
+
