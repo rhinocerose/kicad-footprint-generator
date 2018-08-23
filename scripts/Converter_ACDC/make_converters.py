@@ -149,8 +149,29 @@ def make_meanwell_irm_60():
     )
 
 
+def make_hilink_hlk_pm01():
+    """Hi-Link HLK-PMXX - http://www.hlktech.net/product.php?CateId=10"""
+    make_converter(
+        footprint_name="{}_Hi-Link_HLK-PMXX_THT".format(classname),
+        description='http://www.hlktech.net/product_detail.php?ProId=54',
+        tags='ACDC-Converter 3W Hi-Link HLK-PMXX THT',
+        size=(34, 20.2),
+        pin1_offset=(2.3, 7.6),
+        pins = [
+            ( 0.0, 0.0),
+            ( 0.0, 5.0),
+            ( 29.4, -5.2),
+            ( 29.4, 10.4),
+        ],
+        drill=0.9,
+        pad=3,
+    )
+
+
 if __name__ == '__main__':
     make_meanwell_irm_30()
     make_meanwell_irm_45()
     make_meanwell_irm_60()
+    make_hilink_hlk_pm01()
+    
     
