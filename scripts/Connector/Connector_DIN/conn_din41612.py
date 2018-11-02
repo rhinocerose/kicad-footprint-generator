@@ -310,7 +310,9 @@ def build_din41612_connector(series, direction, pins, rows, extra_args={}):
     footprint_name = f'DIN41612_{safe_series}_{len(rows):02d}x{pins_per_row:02d}_{direction}'
     config['footprint_name'] = footprint_name
     mod = Footprint(footprint_name)
-    mod.setDescription(f'DIN41612 connector, type {series}, {direction}')
+    mod.setDescription(f"DIN41612 connector, type {series}, {direction}, "
+            f"{config['row_pins']} pins wide, {len(config['series_rows'])} "
+            f"rows")
     mod.setTags(f'DIN 41612 IEC 60603 {series}')
     model3d_path_prefix = '${KISYS3DMOD}/'
     mod.append(Model(filename=f'{model3d_path_prefix}{lib_name}.3dshapes/{footprint_name}.wrl'))
