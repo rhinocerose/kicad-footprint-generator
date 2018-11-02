@@ -134,12 +134,13 @@ def build_pins(mod, config, pins, rows, row_direction, column_direction):
                 size=config['pin_plating_diameter'],
                 drill=config['pin_hole_diameter'],
                 layers=Pad.LAYERS_THT,
+                radius_ratio=0.25,
+                maximum_radius=0.25,
             )
 
     pins_per_row = pins / len(rows)
-    first=True
-    for row in rows.upper():
-        offset = config['series_rows'].upper().index(row) * dimensions['pin_row_offset']
+    for row in rows.lower():
+        offset = config['series_rows'].lower().index(row) * dimensions['pin_row_offset']
         pin_one = Point(row_direction.x * offset, row_direction.y * offset)
         if pins_per_row == config['row_pins']:
             positions = range(1, config['row_pins'] + 1)
@@ -151,18 +152,16 @@ def build_pins(mod, config, pins, rows, row_direction, column_direction):
             raise Exception('weird pins per row')
 
         for pin in positions:
-            if first:
-                first = False
-                shape = Pad.SHAPE_RECT
+            number = config['name_pattern'].format(**locals())
+            if number == 'a1':
+                shape = Pad.SHAPE_ROUNDRECT
             else:
                 shape = Pad.SHAPE_CIRCLE
             pos = Point( pin_one.x + column_direction.x * (pin - 1) *
                     dimensions['pin_column_offset'], pin_one.y +
                     column_direction.y * (pin - 1) *
                     dimensions['pin_column_offset'])
-            mod.append(Pad(at=pos,
-                number=config['name_pattern'].format(**locals()),
-                shape=shape, **pin_args))
+            mod.append(Pad(at=pos, number=number, shape=shape, **pin_args))
 
 
 def build_din41612_connector_horizontal(mod, series, direction, pins, rows,
