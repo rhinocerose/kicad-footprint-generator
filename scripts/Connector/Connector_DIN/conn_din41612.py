@@ -303,7 +303,8 @@ def build_din41612_connector(series, direction, pins, rows, extra_args={}):
     config.update(config['series'][series.split('/')[0]])
     config.update(extra_args)
 
-    config['last_row_pos'] = (len(config['series_rows']) - 1)* config['pin_row_offset']
+    used_rows = config['series_rows'].find(rows[-1])
+    config['last_row_pos'] = used_rows * config['pin_row_offset']
 
     # generate base settings
     pins_per_row = pins // len(rows)
