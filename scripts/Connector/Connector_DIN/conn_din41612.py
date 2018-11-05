@@ -345,8 +345,8 @@ def build_din41612_connector(series, direction, pins, rows, extra_args={}):
 connectors = {
     'Horizontal': {
         'B': [ (64, 'ab'), (32, 'a'), (32, 'ab') ],
-        'B/2': [ (32, 'ab') ],
-        'B/3': [ (20, 'ab') ],
+        'B/2': [ (32, 'ab'), (16, 'ab') ],
+        'B/3': [ (20, 'ab'), (10, 'ab') ],
         'C': [ (96, 'abc'), (64, 'ac'), (32, 'ac'), (32, 'a'), (48, 'abc') ],
         'C/2': [ (32, 'ac'), (48, 'abc') ],
         'C/3': [ (20, 'ac'), (30, 'abc') ],
