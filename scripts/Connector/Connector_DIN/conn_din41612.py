@@ -243,6 +243,14 @@ def build_din41612_connector_horizontal(mod, series, direction, pins, rows,
     mod.append(PolygoneLine(polygone=silk_points, layer='F.SilkS', width=.12))
     mod.append(PolygoneLine(polygone=list(map(lambda x: mirror_x(x, center),
         silk_points)), layer='F.SilkS', width=.12))
+    # add arrow pointing at a1
+    arrow_points = [
+            Point(-1.27, 0),
+            Point(-1.95, -0.3),
+            Point(-1.95, 0.3),
+            Point(-1.27, 0)
+            ]
+    mod.append(PolygoneLine(polygone=arrow_points, layer='F.SilkS', width=.12))
 
     # add courtyard
     cy = .5
