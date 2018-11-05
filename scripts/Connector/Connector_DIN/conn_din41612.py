@@ -13,6 +13,8 @@ large_holes = {
         'pin_plating_diameter': 2.3,
         }
 
+
+# dimensions based of ERNI, ept and Harting
 dimensions = {
         'pin_hole_diameter': 1,
         'pin_plating_diameter': 1.7,
@@ -24,8 +26,8 @@ dimensions = {
         'Horizontal': {
             'a1_mounting': 2.54,
             'a1_edge': 5.3,
-            'mounting_housing_front': 10.2,
-            'mounting_housing_back': 10.2 - 12.5,
+            'mounting_housing_front': 10.2, # max set by ERNI
+            'mounting_housing_back': -2.54, # max set by ept
             'full': {
                 'housing_width': 94,
                 'connector_width': 87.5,
