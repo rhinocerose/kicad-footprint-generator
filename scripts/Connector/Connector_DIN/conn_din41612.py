@@ -21,7 +21,7 @@ dimensions = {
         'mounting_hole_diameter': 2.8,
         'pin_row_offset': 2.54,
         'pin_column_offset': 2.54,
-        'silk_reference_offset': 1.5,
+        'silk_reference_offset': 1.0,
         'name_pattern': '{row}{pin}',
         'Horizontal': {
             'a1_mounting': 2.54,
@@ -54,37 +54,84 @@ dimensions = {
             'nodge_width': 1,
             'mounting_hole_diameter': 2.8,
             'pin_hole_diameter': 1,
+            'nodge_height': 3,
+            'nodge_width': 1,
+            'gender': 'female',
             'full': {
                 'housing_width': 95,
                 'connector_width': 85,
+                'connector_outer_width': 88,
                 'mounting_width': 90,
                 'row_pins': 32,
                 },
             'half': {
+                'housing_width': 55,
+                'connector_width': 44.4,
+                'connector_outer_width': 47.4,
+                'mounting_width': 50,
+                'row_pins': 16,
                 },
             'third': {
+                'housing_width': 39.76,
+                'connector_width': 29.2,
+                'connector_outer_width': 32.1,
+                'mounting_width': 34.76,
+                'row_pins': 10,
                 },
             },
         'series': {
-            'B': { 'series_rows': 'ab' },
-            'C': { 'series_rows': 'abc' },
-            'CD': { 'series_rows': 'abcd' },
-            'D': { 'series_rows': 'abc', **large_holes, },
-            'E': { 'series_rows': 'abcde', **large_holes, },
-            'E160': { 'series_rows': 'abcde', },
-            'F': { 'series_rows': 'zbd', **large_holes, },
-            'F_flat': { 'series_rows': 'zbd', },
-            'H11': { 'series_rows': 'e',
-                'name_pattern': '{pin}', **large_holes,
-                'mounting_housing_front': 14.3,
-                'a1_mounting': 12.7,
-                'a1_edge': 12.7 + 2.3,
-                },
-            'Q': {
-                'series_rows': 'ab',
-                'mounting_housing_back': 10.2 - 12.6,
-                },
-            'R': { 'series_rows': 'abc' },
+            'B': dict(
+                series_rows='ab',
+                housing_height=8.1,
+                connector_height=6,
+                ),
+            'C': dict(
+                series_rows='abc',
+                housing_height=10.6,
+                connector_height=8.5,
+                ),
+#            'CD': { 'series_rows': 'abcd' },
+            'D': dict(
+                series_rows='abc',
+                housing_height=10.6,
+                connector_height=8.5,
+                **large_holes
+                ),
+            'E': dict(
+                series_rows='abcde',
+                housing_height=15.7,
+                connector_height=13.6,
+                **large_holes
+                ),
+#            'E160': { 'series_rows': 'abcde', },
+            'F': dict(
+                series_rows='zbd',
+                housing_height=14.8,
+                connector_height=12.4,
+                **large_holes),
+#            'F_flat': { 'series_rows': 'zbd', },
+# TODO H11 vertical and horizontal use different rows (e, vs. ac)
+#            'H11': { 'series_rows': 'e',
+#                'name_pattern': '{pin}', **large_holes,
+#                'mounting_housing_front': 14.3,
+#                'a1_mounting': 12.7,
+#                'a1_edge': 12.7 + 2.3,
+#                },
+            'Q': dict(
+                series_rows='ab',
+                mounting_housing_back=10.2 - 12.6,
+                housing_height=8.6,
+                connector_height=6.2,
+                nodge_height=2.5,
+                gender='male',
+                ),
+            'R': dict(
+                series_rows='abc',
+                housing_height=11.1,
+                connector_height=8.7,
+                nodge_height=2.5,
+                gender='male',
+                ),
         },
 
 }
@@ -102,7 +149,6 @@ silk_reference_args = dict(
         text='REF**',
         layer='F.SilkS',
         thickness=0.15,
-        rotation=0,
         size=(1,1),
         )
 
@@ -147,16 +193,23 @@ def build_pins(mod, config, pins, rows, row_direction, column_direction):
 
     pins_per_row = pins / len(rows)
     for row in rows.lower():
-        offset = config['series_rows'].lower().index(row) * dimensions['pin_row_offset']
+        if row_direction == Point(0,1): # horizontal
+            offset = config['series_rows'].lower().index(row) * dimensions['pin_row_offset']
+        else: # vertical always uses all rows, z is index -1
+            rows = "zabcde"
+            offset = (rows.index(row) - 1) * dimensions['pin_row_offset']
         pin_one = Point(row_direction.x * offset, row_direction.y * offset)
         if pins_per_row == config['row_pins']:
             positions = range(1, config['row_pins'] + 1)
         elif pins_per_row == config['row_pins'] // 2:
             positions = range(2, config['row_pins'] + 1, 2)
+        elif pins_per_row == config['row_pins'] // 4:
+            positions = range(2, config['row_pins'] + 1, 4)
         elif pins_per_row == 11:
             positions = range(2, config['row_pins'] + 1, 3)
         else:
-            raise Exception('weird pins per row')
+            raise Exception(f"weird pins per row: {pins_per_row} (row_pins: "
+                            f"{config['row_pins']}, {pins}x{rows}")
 
         for pin in positions:
             number = config['name_pattern'].format(**locals())
@@ -186,7 +239,7 @@ def build_din41612_connector_horizontal(mod, series, direction, pins, rows,
 
     # silk screen reference
     mod.append(Text(at=mounting + (0, -config['mounting_housing_back'] +
-        config['silk_reference_offset']), **silk_reference_args))
+        config['silk_reference_offset']), rotation=0, **silk_reference_args))
     mod.append(Text(at=Point(center.x, mounting.y), **fab_reference_args))
     mod.append(Text(text=config['footprint_name'],
         at=Point(center.x, config['last_row_pos'] + config['pin_row_offset']),
@@ -300,6 +353,118 @@ def build_din41612_connector_horizontal(mod, series, direction, pins, rows,
         Point(center.x, -config['a1_edge'] - 1.4),
         ], **arrow_args))
 
+def build_din41612_connector_vertical(mod, series, direction, pins, rows,
+        config):
+    all_rows = 'zabcde'
+    min_row_index = all_rows.find(config['series_rows'][0])
+    max_row_index = all_rows.find(config['series_rows'][-1])
+    total_rows = max_row_index - min_row_index
+    rows_width = (total_rows) * config['pin_column_offset']
+    center_x = rows_width / 2
+    if 'z' in config['series_rows']:
+        center_x -= config['pin_column_offset']
+    center = Point(center_x, config['pin_column_offset'] * (config['row_pins'] / 2 -
+        0.5))
+    build_pins(mod, config, pins, rows,
+            row_direction=Point(1,0), column_direction=Point(0,1))
+    mounting = Point(config['a1_mounting'],
+               center.y - config['mounting_width'] / 2)
+    mod.append(Pad(at=mounting, **mounting_args))
+    mod.append(Pad(at=mirror_y(mounting, center), **mounting_args))
+
+    # references
+    mod.append(Text(at=center - (config['housing_height'] / 2 +
+        config['silk_reference_offset'], 0), rotation=90, **silk_reference_args))
+    mod.append(Text(at=center, **fab_reference_args))
+    mod.append(Text(text=config['footprint_name'],
+        at=center + (0, config['housing_width'] / 2 + 
+            config['silk_reference_offset']), **name_text_args))
+
+    # connector outline
+    conn_left = center.x - config['connector_height'] / 2
+    conn_right = center.x + config['connector_height'] / 2
+    conn_top = center.y - config['connector_width'] / 2
+    conn_bottom = center.y + config['connector_width'] / 2
+    conn_outline = [
+            Point(conn_left, conn_top),
+            Point(conn_right - config['nodge_height'], conn_top),
+            Point(conn_right - config['nodge_height'],
+                  conn_top + config['nodge_width']),
+            Point(conn_right,
+                  conn_top + config['nodge_width']),
+            Point(conn_right,
+                  conn_bottom - config['nodge_width']),
+            Point(conn_right - config['nodge_height'],
+                  conn_bottom - config['nodge_width']),
+            Point(conn_right - config['nodge_height'], conn_bottom),
+            Point(conn_left, conn_bottom),
+            Point(conn_left, conn_top),
+            ]
+    mod.append(PolygoneLine(polygone=conn_outline, layer='F.Fab', width=.1))
+    if config['gender'] == 'male':
+        for mul in (1, -1):
+            height = center.y + mul * config['connector_outer_width'] / 2
+            inner_height = center.y + mul * config['connector_width'] / 2
+            mod.append(PolygoneLine(polygone=(
+                    Point(center.x - config['housing_height'] / 2, height),
+                    Point(mounting.x - 3, height),
+                    Point(mounting.x - 3, inner_height),
+                    Point(mounting.x + 3, inner_height),
+                    Point(mounting.x + 3, height),
+                    Point(center.x + config['housing_height'] / 2, height),
+                ),
+                layer='F.Fab', width=.1))
+
+    # housing
+    def housing(expand):
+        return [
+            Point(center.x - config['housing_height'] / 2 - expand,
+                  center.y - config['housing_width'] / 2 - expand),
+            Point(center.x + config['housing_height'] / 2 + expand,
+                  center.y - config['housing_width'] / 2 - expand),
+            Point(center.x + config['housing_height'] / 2 + expand,
+                  center.y + config['housing_width'] / 2 + expand),
+            Point(center.x - config['housing_height'] / 2 - expand,
+                  center.y + config['housing_width'] / 2 + expand),
+            Point(center.x - config['housing_height'] / 2 - expand,
+                  center.y - config['housing_width'] / 2 - expand)
+            ]
+    mod.append(PolygoneLine(polygone=housing(0), layer='F.Fab', width=.1))
+    mod.append(PolygoneLine(polygone=housing(.2), layer='F.SilkS', width=.12))
+    mod.append(PolygoneLine(polygone=list(map(round_courtyard, housing(.5))),
+        layer='F.CrtYd', width=.05))
+
+    # add arrow pointing at a1
+    arrow_tip = center.x - config['housing_height'] / 2 - 0.3
+    arrow_points = [
+            Point(arrow_tip, 0),
+            Point(arrow_tip - 0.68, -0.3),
+            Point(arrow_tip - 0.68, 0.3),
+            Point(arrow_tip, 0)
+            ]
+    mod.append(PolygoneLine(polygone=arrow_points, layer='F.SilkS', width=.12))
+
+    # highlight connector shape on silk
+    highlight_depth = 2
+    conn_highlight = [
+            Point(conn_left, conn_top + highlight_depth),
+            Point(conn_left, conn_top),
+            Point(conn_right - config['nodge_height'], conn_top),
+            Point(conn_right - config['nodge_height'],
+                  conn_top + config['nodge_width']),
+            Point(conn_right,
+                  conn_top + config['nodge_width']),
+            Point(conn_right,
+                  conn_top + highlight_depth),
+            ]
+    mod.append(PolygoneLine(polygone=conn_highlight, layer='F.SilkS',
+        width=.12))
+    mod.append(PolygoneLine(
+        polygone=list(map(lambda x: mirror_y(x, center), conn_highlight)),
+        layer='F.SilkS', width=.12))
+
+
+
 def build_din41612_connector(series, direction, pins, rows, extra_args={}):
     width = 'full'
     try:
@@ -323,7 +488,12 @@ def build_din41612_connector(series, direction, pins, rows, extra_args={}):
 
     # generate base settings
     pins_per_row = pins // len(rows)
-    footprint_name = f'DIN41612_{safe_series}_{len(rows):02d}x{pins_per_row:02d}_{direction}'
+    extra_fp_name = ''
+    if config.get('extra_desc') == 'rows':
+        extra_fp_name += f"_Rows{rows.upper()}"
+    footprint_name = (
+        f"DIN41612_{safe_series}_{len(rows):02d}x{pins_per_row:02d}"
+        f"{extra_fp_name}_{direction}" )
     config['footprint_name'] = footprint_name
     mod = Footprint(footprint_name)
     mod.setDescription(f"DIN41612 connector, type {series}, {direction}, "
@@ -343,27 +513,25 @@ def build_din41612_connector(series, direction, pins, rows, extra_args={}):
     return mod
 
 connectors = {
-    'Horizontal': {
         'B': [ (64, 'ab'), (32, 'a'), (32, 'ab') ],
         'B/2': [ (32, 'ab'), (16, 'ab') ],
         'B/3': [ (20, 'ab'), (10, 'ab') ],
         'C': [ (96, 'abc'), (64, 'ac'), (32, 'ac'), (32, 'a'), (48, 'abc') ],
         'C/2': [ (32, 'ac'), (48, 'abc') ],
         'C/3': [ (20, 'ac'), (30, 'abc') ],
-        'CD': [ (128, 'abcd') ], 
-        'D': [ (32, 'ac') ],
-        'E': [ (32, 'ae'), (48, 'ace') ],
-        'E160': [ (160, 'abcde') ],
-        'F_flat': [ (32, 'zd'), (48, 'zbd') ],
-        'F': [ (32, 'zd'), (48, 'zbd') ],
-        'H11': [ (11, 'e') ],
+#        'CD': [ (128, 'abcd') ], 
+        'D': [ (32, 'ac'), (16, 'ac') ],
+        'E': [ (32, 'ae'), (32, 'ac', dict(extra_desc='rows')), (48, 'ace') ],
+#        'E160': [ (160, 'abcde') ],
+#        'F_flat': [ (32, 'zb') (32, 'zd'), (48, 'zbd') ],
+        'F': [ (32, 'zd'), (32, 'zb', dict(extra_desc='rows')), (48, 'zbd') ],
+#        'H11': [ (11, 'e') ],
         'Q': [ (64, 'ab') ],
         'Q/2': [ (32, 'ab') ],
         'Q/3': [ (20, 'ab') ],
-        'R': [ (64, 'ac'), (96, 'abc'), (32, 'ac'), (32, 'a') ],
+        'R': [ (64, 'ac'), (96, 'abc'), (48, 'abc'), (32, 'ac'), (32, 'a') ],
         'R/2': [ (48, 'abc'), (32, 'ac') ],
         'R/3': [ (30, 'abc'), (20, 'ac') ],
-    },
 }
 
 # TODO: Q R RD TE M H15 H7/F24
@@ -371,13 +539,13 @@ connectors = {
 # make fab shape depend on mounting position not on front of connector
 # TODO: check housing dimensions for all variants
 
-for direction, cs in connectors.items():
-    for series, variants in cs.items():
+for direction in ('Horizontal', 'Vertical'):
+    for series, variants in connectors.items():
         for v in variants:
             pins = v[0]
             rows = v[1]
             if len(v) > 2:
-                args = v[2:]
+                args = v[2]
             else:
                 args = {}
             build_din41612_connector(series=series, direction=direction,
