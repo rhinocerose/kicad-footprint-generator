@@ -373,8 +373,9 @@ def build_din41612_connector_vertical(mod, series, direction, pins, rows,
     mod.append(Pad(at=mirror_y(mounting, center), **mounting_args))
 
     # references
-    mod.append(Text(at=center - (config['housing_height'] / 2 +
-        config['silk_reference_offset'], 0), rotation=90, **silk_reference_args))
+    mod.append(Text(at=center - (0, config['housing_width'] / 2 +
+        config['silk_reference_offset'], 0), rotation=0,
+        **silk_reference_args))
     mod.append(Text(at=center, **fab_reference_args))
     mod.append(Text(text=config['footprint_name'],
         at=center + (0, config['housing_width'] / 2 + 
