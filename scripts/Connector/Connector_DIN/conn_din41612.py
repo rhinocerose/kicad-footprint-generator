@@ -446,15 +446,17 @@ def build_din41612_connector_vertical(mod, series, direction, pins, rows,
 
     # highlight connector shape on silk
     highlight_depth = 2
+    highlight_expand = .1
+    he = highlight_expand
     conn_highlight = [
-            Point(conn_left, conn_top + highlight_depth),
-            Point(conn_left, conn_top),
-            Point(conn_right - config['nodge_height'], conn_top),
-            Point(conn_right - config['nodge_height'],
-                  conn_top + config['nodge_width']),
-            Point(conn_right,
-                  conn_top + config['nodge_width']),
-            Point(conn_right,
+            Point(conn_left - he, conn_top + highlight_depth),
+            Point(conn_left - he, conn_top - he),
+            Point(conn_right - config['nodge_height'] + he, conn_top - he),
+            Point(conn_right - config['nodge_height'] + he,
+                  conn_top + config['nodge_width'] - he),
+            Point(conn_right + he,
+                  conn_top + config['nodge_width'] - he),
+            Point(conn_right + he,
                   conn_top + highlight_depth),
             ]
     mod.append(PolygoneLine(polygone=conn_highlight, layer='F.SilkS',
