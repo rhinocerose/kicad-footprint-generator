@@ -492,7 +492,7 @@ def build_din41612_connector(series, direction, pins, rows, extra_args={}):
     if config.get('extra_desc') == 'rows':
         extra_fp_name += f"_Rows{rows.upper()}"
     footprint_name = (
-        f"DIN41612_{safe_series}_{len(rows):02d}x{pins_per_row:02d}"
+        f"DIN41612_{safe_series}_{len(rows)}x{pins_per_row}"
         f"{extra_fp_name}_{direction}" )
     config['footprint_name'] = footprint_name
     mod = Footprint(footprint_name)
