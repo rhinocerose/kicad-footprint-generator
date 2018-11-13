@@ -40,7 +40,7 @@ large_holes = {
 # dimensions based of ERNI, ept and Harting
 dimensions = {
         'pin_hole_diameter': 1,
-        'pin_plating_diameter': 1.7,
+        'pin_plating_diameter': 1.55,
         'mounting_hole_diameter': 2.8,
         'pin_row_offset': 2.54,
         'pin_column_offset': 2.54,
