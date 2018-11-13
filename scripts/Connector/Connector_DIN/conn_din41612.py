@@ -136,6 +136,12 @@ dimensions = {
 
 }
 
+# Harting catalog download requires manual consent for download and can not be
+# linked
+datasheets = [
+        "https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf",
+        ]
+
 mounting_args = dict(
             type=Pad.TYPE_NPTH,
             shape=Pad.SHAPE_CIRCLE,
@@ -502,6 +508,7 @@ def build_din41612_connector(series, direction, pins, rows, extra_args={}):
     mod.setDescription(f"DIN41612 connector, type {series}, {direction}, "
             f"{len(config['series_rows'])} rows"
             f"{config['row_pins']} pins wide, "
+            f"{' '.join(datasheets)}"
             )
     mod.setTags(f'DIN 41612 IEC 60603 {series}')
     model3d_path_prefix = '${KISYS3DMOD}/'
