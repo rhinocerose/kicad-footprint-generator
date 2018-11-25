@@ -49,7 +49,7 @@ class Model(Node):
         self.offset = Vector3D(kwargs.get('offset', [0, 0, 0]))
         self.scale = Vector3D(kwargs.get('scale', [1, 1, 1]))
         self.rotate = Vector3D(kwargs.get('rotate', [0, 0, 0]))
-        
+
         self.useAt = False
         if kwargs.get('at'):
             self.useAt = True
