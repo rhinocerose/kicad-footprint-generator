@@ -1,7 +1,8 @@
-Valve_Magnoval-B9D-Pin:
+Valve_Magnoval-B9D_Pin:
   pkg_description: "Magnoval B9D pin hole"
   pkg_datasheet: "https://en.wikipedia.org/wiki/Tube_socket"
   pkg_D: 30.00                  # Body width/diameter
+  pkg_flange: []                # flange width at NPTH hole
   pkg_npth_pin: []              # NPTH hole [(x, y, length)]
   pkg_center_pin: []            # Center pin ('type', diameter, length)
   pkg_pin_type: ['round', 1.27, 3.0]  # Pin type, diameter, length
@@ -10,110 +11,277 @@ Valve_Magnoval-B9D-Pin:
   pkg_pin_diameter: 17.45       # Diameter of the circle where pins are located
   pkg_socket_offset: [0.00, 0.00, 0.00]    # Socket 3D model placement 
   pkg_valve_offset: [0.00, 0.00, 12.00]    # Valve 3D model placement 
-  pkg_socket: 'Valve_Socket_Magnoval-B9D-D17.45mm_Pin'       # 3D model of socket
-  pkg_tube: 'Valve_Tube_Magnoval-B9D-D17.45mm_Pin'       # 3D model of tube
+  pkg_socket: ''     # 3D model of socket
+  pkg_tube: 'Valve_Tube_Magnoval-B9D'       # 3D model of tube
+  
+Valve_Magnoval-B9D_Conrad-120529_Tap_Socket:
+  pkg_description: "Conrad 120529 B9D tap hole"
+  pkg_datasheet: "http://www.produktinfo.conrad.com/datenblaetter/100000-124999/120529-da-01-ml-ROEHRENFA_NOVAL_PRINT_KLEIN_de_en.pdf"
+  pkg_D: 22.00                  # Body width/diameter
+  pkg_flange: []                # flange width at NPTH hole
+  pkg_npth_pin: []              # NPTH hole [(x, y, length)]
+  pkg_center_pin: []            # Center pin ('type', diameter, length)
+  pkg_pin_type: ['round', 1.7, 3.0]  # Pin type, diameter, length
+  pkg_pin_number: 9             # Number of pins
+  pkg_pin_arc: 36.0             # Arch between pins
+  pkg_pin_diameter: 20.00       # Diameter of the circle where pins are located
+  pkg_socket_offset: [0.00, 0.00, 0.00]                     # Socket 3D model placement 
+  pkg_valve_offset: [0.00, 0.00, 12.00]                     # Valve 3D model placement 
+  pkg_socket: 'Valve_Magnoval-B9D_Conrad-120529_Tap_Socket' # 3D model of socket
+  pkg_tube: 'Valve_Tube_Magnoval-B9D'                       # 3D model of tube
 
-Valve_Noval-B9A-Pin:
+Valve_Noval-B9A_Pin:
   pkg_description: "Noval B9A pin hole"
   pkg_datasheet: "https://en.wikipedia.org/wiki/Tube_socket"
   pkg_D: 25.50                  # Body width/diameter
+  pkg_flange: []                # flange width at NPTH hole
   pkg_npth_pin: []              # NPTH hole [(x, y, length)]
   pkg_center_pin: []            # Center pin ('type', diameter, length)
   pkg_pin_type: ['round', 1.016, 3.0]  # Pin type, diameter, length
   pkg_pin_number: 9             # Number of pins
   pkg_pin_arc: 36.0             # Arch between pins
   pkg_pin_diameter: 11.89       # Diameter of the circle where pins are located
-  pkg_socket_offset: [0.00, 0.00, 0.00]    # Socket 3D model placement 
-  pkg_valve_offset: [0.00, 0.00, 11.00]    # Valve 3D model placement 
-  pkg_socket: 'Valve_Socket_Noval-B9A-D11.89mm_Pin'       # 3D model of socket
-  pkg_tube: 'Valve_Tube_Noval-B9A-D11.89mm_Pin'       # 3D model of tube
+  pkg_socket_offset: [0.00, 0.00, 0.00]     # Socket 3D model placement 
+  pkg_valve_offset: [0.00, 0.00, 11.00]     # Valve 3D model placement 
+  pkg_socket: ''                            # 3D model of socket
+  pkg_tube: 'Valve_Tube_Noval-B9A'          # 3D model of tube
 
-Valve_Belton_VT9_PT-B9A-Tap:
-  pkg_description: "Belton VT9-PT-B9A Tap"
-  pkg_datasheet: "http://www.belton.co.kr/inc/downfile.php?seq=58&file=pdf"
-  pkg_D: 27.00                  # Body width/diameter
+Valve_Noval-B9A_Pin_Socket:
+  pkg_description: "Noval B9A pin hole"
+  pkg_datasheet: "https://en.wikipedia.org/wiki/Tube_socket"
+  pkg_D: 25.50                  # Body width/diameter
+  pkg_flange: []                # flange width at NPTH hole
   pkg_npth_pin: []              # NPTH hole [(x, y, length)]
   pkg_center_pin: []            # Center pin ('type', diameter, length)
-  pkg_pin_type: ['round', 1.8, 3.0]  # Pin type, diameter, length
+  pkg_pin_type: ['round', 1.016, 3.0]  # Pin type, diameter, length
   pkg_pin_number: 9             # Number of pins
   pkg_pin_arc: 36.0             # Arch between pins
-  pkg_pin_diameter: 21.00       # Diameter of the circle where pins are located
-  pkg_socket_offset: [0.00, 0.00, 0.00]    # Socket 3D model placement 
-  pkg_valve_offset: [2.68, -3.69, 12.00]    # Valve 3D model placement 
-  pkg_socket: 'Valve_Socket_Belton_VT9_PT-B9A-D21.00mm_Tap'       # 3D model of socket
-  pkg_tube: 'Valve_Tube_Noval-B9A-D11.89mm_Pin'       # 3D model of tube
+  pkg_pin_diameter: 11.89       # Diameter of the circle where pins are located
+  pkg_socket_offset: [0.00, 0.00, 0.00]     # Socket 3D model placement 
+  pkg_valve_offset: [0.00, 0.00, 11.00]     # Valve 3D model placement 
+  pkg_socket: 'Valve_Noval-B9A_Pin_Socket'  # 3D model of socket
+  pkg_tube: 'Valve_Tube_Noval-B9A'          # 3D model of tube
 
-Valve_Miniature-B7G-Pin:
+Valve_Miniature-B7G_Pin:
   pkg_description: "Miniature B7G pin hole"
   pkg_datasheet: "https://en.wikipedia.org/wiki/Tube_socket"
   pkg_D: 15.00                  # Body width/diameter
+  pkg_flange: []                # flange width at NPTH hole
   pkg_npth_pin: []              # NPTH hole [(x, y, length)]
   pkg_center_pin: []            # Center pin ('type', diameter, length)
   pkg_pin_type: ['round', 1.016, 3.0]  # Pin type, diameter, length
   pkg_pin_number: 7             # Number of pins
   pkg_pin_arc: 45.0             # Arch between pins
   pkg_pin_diameter: 09.53       # Diameter of the circle where pins are located
-  pkg_socket_offset: [0.00, 0.00, 0.00]    # Socket 3D model placement 
-  pkg_valve_offset: [0.00, 0.00,  8.00]    # Valve 3D model placement 
-  pkg_socket: 'Valve_Socket_Miniature-B7G-D09.53mm_Pin'       # 3D model of socket
-  pkg_tube: 'Valve_Tube_Miniature-B7G-D09.53mm_Pin'       # 3D model of tube
+  pkg_socket_offset: [0.00, 0.00, 0.00]         # Socket 3D model placement 
+  pkg_valve_offset: [0.00, 0.00,  8.00]         # Valve 3D model placement 
+  pkg_socket: ''                                # 3D model of socket
+  pkg_tube: 'Valve_Tube_Miniature-B7G'          # 3D model of tube
 
-Valve_Loctal-B9G-Pin:
+Valve_Miniature-B7G_Conrad-120510_Tag:
+  pkg_description: "Miniature B7G Conrad-120510 tag"
+  pkg_datasheet: "http://www.produktinfo.conrad.com/datenblaetter/100000-124999/120510-da-01-ml-ROEHRENFASSUNG_MINIATUR_PRINTMONT_de_en.pdf"
+  pkg_D: 18.60                  # Body width/diameter
+  pkg_flange: []                # flange width at NPTH hole
+  pkg_npth_pin: []              # NPTH hole [(x, y, length)]
+  pkg_center_pin: []            # Center pin ('type', diameter, length)
+  pkg_pin_type: ['round', 1.7, 8.1]  # Pin type, diameter, length
+  pkg_pin_number: 7             # Number of pins
+  pkg_pin_arc: 45.0             # Arch between pins
+  pkg_pin_diameter: 09.50       # Diameter of the circle where pins are located
+  pkg_socket_offset: [0.00, 0.00, 0.00]                 # Socket 3D model placement 
+  pkg_valve_offset: [0.00, 0.00,  8.00]                 # Valve 3D model placement 
+  pkg_socket: 'Valve_Miniature-B7G_Conrad-120510_Tag'   # 3D model of socket
+  pkg_tube: 'Valve_Tube_Miniature-B7G'                  # 3D model of tube
+
+Valve_Loctal-B9G_Pin:
   pkg_description: "Loctal B9G pin hole"
   pkg_datasheet: "https://en.wikipedia.org/wiki/Tube_socket"
   pkg_D: 27.00                  # Body width/diameter
+  pkg_flange: []                # flange width at NPTH hole
   pkg_npth_pin: []              # NPTH hole [(x, y, length)]
   pkg_center_pin: []            # Center pin ('type', diameter, length)
   pkg_pin_type: ['round', 1.3, 3.0]  # Pin type, diameter, length
   pkg_pin_number: 9             # Number of pins
   pkg_pin_arc: 40.0             # Arch between pins
   pkg_pin_diameter: 21.00       # Diameter of the circle where pins are located
-  pkg_socket_offset: [0.00, 0.00, 0.00]    # Socket 3D model placement 
-  pkg_valve_offset: [0.00, 0.00, 12.00]    # Valve 3D model placement 
-  pkg_socket: 'Valve_Socket_Loctal-B9G-D21.00mm_Pin'       # 3D model of socket
-  pkg_tube: 'Valve_Tube_Loctal-B9G-D21.00mm_Pin'       # 3D model of tube
+  pkg_socket_offset: [0.00, 0.00, 0.00]     # Socket 3D model placement 
+  pkg_valve_offset: [0.00, 0.00, 12.00]     # Valve 3D model placement 
+  pkg_socket: ''                            # 3D model of socket
+  pkg_tube: 'Valve_Tube_Loctal-B9G'         # 3D model of tube
 
-Valve_Loctal-B8G-Pin:
+Valve_Loctal-B9G_Pin_Socket:
+  pkg_description: "Loctal B9G pin hole"
+  pkg_datasheet: "https://en.wikipedia.org/wiki/Tube_socket"
+  pkg_D: 27.00                  # Body width/diameter
+  pkg_flange: []                # flange width at NPTH hole
+  pkg_npth_pin: []              # NPTH hole [(x, y, length)]
+  pkg_center_pin: []            # Center pin ('type', diameter, length)
+  pkg_pin_type: ['round', 1.3, 3.0]  # Pin type, diameter, length
+  pkg_pin_number: 9             # Number of pins
+  pkg_pin_arc: 40.0             # Arch between pins
+  pkg_pin_diameter: 21.00       # Diameter of the circle where pins are located
+  pkg_socket_offset: [0.00, 0.00, 0.00]     # Socket 3D model placement 
+  pkg_valve_offset: [0.00, 0.00, 12.00]     # Valve 3D model placement 
+  pkg_socket: 'Valve_Loctal-B9G_Pin_Socket' # 3D model of socket
+  pkg_tube: 'Valve_Tube_Loctal-B9G'         # 3D model of tube
+
+Valve_Loctal-B8G_Pin_Socket:
   pkg_description: "Loctal B8G pin hole"
   pkg_datasheet: "https://en.wikipedia.org/wiki/Tube_socket"
   pkg_D: 29.00                  # Body width/diameter
+  pkg_flange: []                # flange width at NPTH hole
   pkg_npth_pin: []              # NPTH pin [(x, y, length)]
   pkg_center_pin: []            # Center pin ('type', diameter, length)
   pkg_pin_type: ['round', 1.30, 3.0]   # Pin type, diameter, length
   pkg_pin_number: 8             # Number of pins
   pkg_pin_arc: 45.0             # Arch between pins
   pkg_pin_diameter: 17.45       # Diameter of the circle where pins are located
-  pkg_socket_offset: [0.00, 0.00, 0.00]    # Socket 3D model placement 
-  pkg_valve_offset: [0.00, 0.00, 14.00]    # Valve 3D model placement 
-  pkg_socket: 'Valve_Socket_Loctal-B8G-D17.45mm-Pin'       # 3D model of socket
-  pkg_tube: 'Valve_Tube_Loctal-B8G-D17.45mm-Pin'       # 3D model of tube
+  pkg_socket_offset: [0.00, 0.00, 0.00]             # Socket 3D model placement 
+  pkg_valve_offset: [0.00, 0.00, 14.00]             # Valve 3D model placement 
+  pkg_socket: 'Valve_Loctal-B8G_Pin_Socket'         # 3D model of socket
+  pkg_tube: 'Valve_Tube_Loctal-B8G'                 # 3D model of tube
 
 Valve_Decar-B10G-Pin:
   pkg_description: "Decar B10G pin hole"
   pkg_datasheet: "https://en.wikipedia.org/wiki/Tube_socket"
   pkg_D: 17.00                  # Body width/diameter
+  pkg_flange: []                # flange width at NPTH hole
   pkg_npth_pin: []              # NPTH pin [(x, y, length)]
-  pkg_center_pin: []            # Center pin ('type', diameter, length)
-  pkg_pin_type: ['round', 1.016, 3.0]   # Pin type, diameter, length
+  pkg_center_pin: ['round', 1.016, 3.0]     # Center pin ('type', diameter, length)
+  pkg_pin_type: ['round', 1.016, 3.0]       # Pin type, diameter, length
   pkg_pin_number: 9             # Number of pins
   pkg_pin_arc: 36.0             # Arch between pins
   pkg_pin_diameter: 11.89       # Diameter of the circle where pins are located
-  pkg_socket_offset: [0.00, 0.00, 0.00]    # Socket 3D model placement 
-  pkg_valve_offset: [0.00, 0.00,  8.00]    # Valve 3D model placement 
-  pkg_socket: 'Valve_Socket_Decar-B10G-D11.89mm_Pin'  # 3D model of socket
-  pkg_tube: 'Valve_Tube_Decar-B10G-D11.89mm_Pin'      # 3D model of tube
+  pkg_socket_offset: [0.00, 0.00, 0.00]             # Socket 3D model placement 
+  pkg_valve_offset: [0.00, 0.00,  8.00]             # Valve 3D model placement 
+  pkg_socket: ''                                    # 3D model of socket
+  pkg_tube: 'Valve_Tube_Decar-B10G'                 # 3D model of tube
 
 Valve_Octal-K8A-Pin:
   pkg_description: "Octal K8A pin hole"
   pkg_datasheet: "https://en.wikipedia.org/wiki/Tube_socket"
   pkg_D: 29.00                  # Body width/diameter
+  pkg_flange: []                # flange width at NPTH hole
   pkg_npth_pin: []              # NPTH pin [(x, y, length)]
   pkg_center_pin: []            # Center pin ('type', diameter, length)
   pkg_pin_type: ['round', 2.36, 3.0]   # Pin type, diameter, length
   pkg_pin_number: 8             # Number of pins
   pkg_pin_arc: 45.0             # Arch between pins
   pkg_pin_diameter: 17.45       # Diameter of the circle where pins are located
-  pkg_socket_offset: [0.00, 0.00, 0.00]    # Socket 3D model placement 
-  pkg_valve_offset: [0.00, 0.00, 14.50]    # Valve 3D model placement 
-  pkg_socket: 'Valve_Socket_Octal-K8A-D17.45mm_Pin' # 3D model of socket
-  pkg_tube: 'Valve_Tube_Octal-K8A-D17.45mm_Pin'     # 3D model of tube
+  pkg_socket_offset: [0.00, 0.00, 0.00]     # Socket 3D model placement 
+  pkg_valve_offset: [0.00, 0.00, 14.50]     # Valve 3D model placement 
+  pkg_socket: ''                            # 3D model of socket
+  pkg_tube: 'Valve_Tube_Octal-K8A'          # 3D model of tube
+
+Valve_Octal-K8A_Conrad-120537_Tap_Socket:
+  pkg_description: "Octal K8A Conrad-120537 Tap"
+  pkg_datasheet: "http://www.produktinfo.conrad.com/datenblaetter/100000-124999/120537-da-01-de-Roehrenfassung_Oktal_Print.pdf"
+  pkg_D: 30.00                          # Body width/diameter
+  pkg_flange: []                        # flange width at NPTH hole
+  pkg_npth_pin: []                      # NPTH pin [(x, y, length)]
+  pkg_center_pin: []                    # Center pin ('type', diameter, length)
+  pkg_pin_type: ['round', 1.70, 3.0]    # Pin type, diameter, length
+  pkg_pin_number: 8                     # Number of pins
+  pkg_pin_arc: 45.0                     # Arch between pins
+  pkg_pin_diameter: 26.50               # Diameter of the circle where pins are located
+  pkg_socket_offset: [0.00, 0.00, 0.00]                     # Socket 3D model placement 
+  pkg_valve_offset: [0.00, 0.00, 14.00]                     # Valve 3D model placement 
+  pkg_socket: 'Valve_Octal-K8A_Conrad-120537_Tap_Socket'    # 3D model of socket
+  pkg_tube: 'Valve_Tube_Octal-K8A'                          # 3D model of tube
+
+Valve_Noval-B9A_Belton_VT9_PT-B9A_Tap_Socket:
+  pkg_description: "Noval B9A Belton VT9-PT Tap"
+  pkg_datasheet: "http://www.belton.co.kr/inc/downfile.php?seq=58&file=pdf"
+  pkg_D: 27.00                  # Body width/diameter
+  pkg_flange: []                # flange width at NPTH hole
+  pkg_npth_pin: []              # NPTH hole [(x, y, length)]
+  pkg_center_pin: []            # Center pin ('type', diameter, length)
+  pkg_pin_type: ['round', 1.8, 3.0]  # Pin type, diameter, length
+  pkg_pin_number: 9             # Number of pins
+  pkg_pin_arc: 36.0             # Arch between pins
+  pkg_pin_diameter: 21.00       # Diameter of the circle where pins are located
+  pkg_socket_offset: [0.00, 0.00, 0.00]                         # Socket 3D model placement 
+  pkg_valve_offset: [2.68, -3.69, 12.00]                        # Valve 3D model placement 
+  pkg_socket: 'Valve_Noval-B9A_Belton_VT9_PT-B9A_Tap_Socket'    # 3D model of socket
+  pkg_tube: 'Valve_Tube_Noval-B9A'                              # 3D model of tube
+
+Valve_Noval-B9A_Belton-VT9-PT-C_Tap_Socket:
+  pkg_description: "Valve Noval B9A Belton VT9-PT-C Tap"
+  pkg_datasheet: "http://www.belton.co.kr/inc/downfile.php?seq=58&file=pdf"
+  pkg_D: 29.00                  # Body width/diameter
+  pkg_flange: [14.25, 0, 1.3, -14.25, 0, 3.3, 35.5, 26.5, 72]        # "npth hole 1 x-pos, y-pos, diameter", "npth hole 2 x-pos, y-pos, diameter", width, length of flange, rotation in degree of flange
+  pkg_npth_pin: []              # NPTH pin [(x, y, diameter)]
+  pkg_center_pin: []            # Center pin ('type', diameter, length)
+  pkg_pin_type: ['round', 1.8, 5.0]   # Pin type, diameter, length
+  pkg_pin_number: 9             # Number of pins
+  pkg_pin_arc: 36.0             # Arch between pins
+  pkg_pin_diameter: 21.00       # Diameter of the circle where pins are located
+  pkg_socket_offset: [0.00, 0.00, 0.00]                     # Socket 3D model placement 
+  pkg_valve_offset: [0.00, 0.00, 14.50]                     # Valve 3D model placement 
+  pkg_socket: 'Valve_Noval-B9A_Belton-VT9-PT-C_Tap_Socket'  # 3D model of socket
+  pkg_tube: 'Valve_Tube_Noval-B9A'                          # 3D model of tube
+
+Valve_Octal-K8A_Belton-VT8-PT_Tap_Socket:
+  pkg_description: "Valve_Belton_VT8_PT-B9A-Tap"
+  pkg_datasheet: "http://www.belton.co.kr/inc/downfile.php?seq=58&file=pdf"
+  pkg_D: 30.00                  # Body width/diameter
+  pkg_flange: [20.0, 0, 3.5, -20.0, 0, 3.5, 50.0, 34.0, -67.5]        # "npth hole 1 x-pos, y-pos, diameter", "npth hole 2 x-pos, y-pos, diameter", width, length of flange, rotation in degree of flange
+  pkg_npth_pin: []              # NPTH pin [(x, y, diameter)]
+  pkg_center_pin: []            # Center pin ('type', diameter, length)
+  pkg_pin_type: ['round', 1.6, 20.5]   # Pin type, diameter, length
+  pkg_pin_number: 8             # Number of pins
+  pkg_pin_arc: 45.0             # Arch between pins
+  pkg_pin_diameter: 17.20       # Diameter of the circle where pins are located
+  pkg_socket_offset: [0.00, 0.00, 0.00]                     # Socket 3D model placement 
+  pkg_valve_offset: [0.00, 0.00, 14.50]                     # Valve 3D model placement 
+  pkg_socket: 'Valve_Octal-K8A_Belton-VT8-PT_Tap_Socket'    # 3D model of socket
+  pkg_tube: 'Valve_Tube_Octal-K8A'                          # 3D model of tube
+
+Valve_Octal-K8A_Belton-VT8-PTS_Tap_Socket:
+  pkg_description: "Valve Octal K8A Belton VT8-PTS"
+  pkg_datasheet: "http://www.belton.co.kr/inc/downfile.php?seq=58&file=pdf"
+  pkg_D: 30.00                  # Body width/diameter
+  pkg_flange: [20.0, 0, 3.5, -20.0, 0, 3.5, 50.0, 34.0, -67.5]        # "npth hole 1 x-pos, y-pos, diameter", "npth hole 2 x-pos, y-pos, diameter", width, length of flange, rotation in degree of flange
+  pkg_npth_pin: []              # NPTH pin [(x, y, diameter)]
+  pkg_center_pin: []            # Center pin ('type', diameter, length)
+  pkg_pin_type: ['round', 1.6, 9.5]   # Pin type, diameter, length
+  pkg_pin_number: 8             # Number of pins
+  pkg_pin_arc: 45.0             # Arch between pins
+  pkg_pin_diameter: 17.20       # Diameter of the circle where pins are located
+  pkg_socket_offset: [0.00, 0.00, 0.00]                     # Socket 3D model placement 
+  pkg_valve_offset: [0.00, 0.00, 14.50]                     # Valve 3D model placement 
+  pkg_socket: 'Valve_Octal-K8A_Belton-VT8-PTS_Tap_Socket'   # 3D model of socket
+  pkg_tube: 'Valve_Tube_Octal-K8A'                          # 3D model of tube
+
+Valve_Octal-K8A_Belton-VT8-PTS-PT-1_Tap_Socket:
+  pkg_description: "Valve Octal K8A Belton VT8-PTS-PT-1"
+  pkg_datasheet: "http://www.belton.co.kr/inc/downfile.php?seq=58&file=pdf"
+  pkg_D: 30.00                  # Body width/diameter
+  pkg_flange: []                # "npth hole 1 x-pos, y-pos, diameter", "npth hole 2 x-pos, y-pos, diameter", width, length of flange, rotation in degree of flange
+  pkg_npth_pin: []              # NPTH pin [(x, y, diameter)]
+  pkg_center_pin: []            # Center pin ('type', diameter, length)
+  pkg_pin_type: ['round', 1.6, 20.5]   # Pin type, diameter, length
+  pkg_pin_number: 8             # Number of pins
+  pkg_pin_arc: 45.0             # Arch between pins
+  pkg_pin_diameter: 17.20       # Diameter of the circle where pins are located
+  pkg_socket_offset: [0.00, 0.00, 0.00]                         # Socket 3D model placement 
+  pkg_valve_offset: [0.00, 0.00, 14.50]                         # Valve 3D model placement 
+  pkg_socket: 'Valve_Octal-K8A_Belton-VT8-PTS-PT-1_Tap_Socket'  # 3D model of socket
+  pkg_tube: 'Valve_Tube_Octal-K8A'                              # 3D model of tube
+
+Valve_Octal-K8A_Belton-VT8-PTS-B_Tap_Socket:
+  pkg_description: "Valve Octal K8A Belton VT8-PTS-B"
+  pkg_datasheet: "http://www.belton.co.kr/inc/downfile.php?seq=58&file=pdf"
+  pkg_D: 30.00                  # Body width/diameter
+  pkg_flange: [19.0, 0, 2.9, -19.0, 0, 2.9, 50.0, 34.0, -67.5]        # "npth hole 1 x-pos, y-pos, diameter", "npth hole 2 x-pos, y-pos, diameter", width, length of flange, rotation in degree of flange
+  pkg_npth_pin: []              # NPTH pin [(x, y, diameter)]
+  pkg_center_pin: []            # Center pin ('type', diameter, length)
+  pkg_pin_type: ['round', 1.6, 10.5]   # Pin type, diameter, length
+  pkg_pin_number: 8             # Number of pins
+  pkg_pin_arc: 45.0             # Arch between pins
+  pkg_pin_diameter: 17.20       # Diameter of the circle where pins are located
+  pkg_socket_offset: [0.00, 0.00, 0.00]                     # Socket 3D model placement 
+  pkg_valve_offset: [0.00, 0.00, 14.50]                     # Valve 3D model placement 
+  pkg_socket: 'Valve_Octal-K8A_Belton-VT8-PTS-B_Tap_Socket' # 3D model of socket
+  pkg_tube: 'Valve_Tube_Octal-K8A'                          # 3D model of tube
