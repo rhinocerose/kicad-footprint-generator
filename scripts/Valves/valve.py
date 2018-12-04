@@ -8,99 +8,232 @@ import sys
 sys.path.append(os.path.join(sys.path[0], "..", ".."))
 
 from KicadModTree import *
+        
+        
+def create_sadle(f, origo_x, origo_y, sadle, sadle_hole, sadle_pcb_hole, nlayer, wLayer):
 
-def drawOval(f, origo_x, origo_y, scx1, scy1, scr, fl_x2, fl_y2, fl_d2, bx, by, ex, ey, lcr, lgrad, fl_a, nlayer, wLayer):
     #
-    # Make mid, left
+    # sadle = [6.6, 35.5, 26.5, 14.25, 13.2, 72],        # sadle z pos, length, width, xpos r2, diameter r2, rotation
     #
-    x1 = origo_x + lcr * math.cos(math.radians(lgrad - fl_a))
-    y1 = origo_y + lcr * math.sin(math.radians(lgrad - fl_a))
-    da = 90.0 - lgrad
-    f.append(Arc(center=(round(origo_x, 2), round(origo_y, 2)), start=(round(x1, 2), round(y1, 2)), angle = round(2.0 * da, 2) , layer=nlayer, width=wLayer))
-    x2 = origo_x + lcr * math.cos(math.radians((lgrad - fl_a) + 2.0 * da))
-    y2 = origo_y + lcr * math.sin(math.radians((lgrad - fl_a) + 2.0 * da))
+    sadle_z = sadle[0]
+    sadle_w = sadle[1]
+    sadle_r1 = sadle[2] / 2.0
+    sadle_x = sadle[3]
+    sadle_r2 = sadle[4] / 2.0
+    sadle_a = sadle[5]
+    sadle_h = 0.2
     #
-    # Mirror through origo to get left mid
+    # Dummy
+#    f.append(Circle(center=(round(origo_x, 2), round(origo_y, 2)), radius=round(sadle_r1, 2), layer=nlayer, width=wLayer))
     #
-    x5 = origo_x - (x1 - origo_x)
-    y5 = origo_y - (y1 - origo_y)
-    f.append(Arc(center=(round(origo_x, 2), round(origo_y, 2)), start=(round(x5, 2), round(y5, 2)), angle =  round(2.0 * da, 2) , layer=nlayer, width=wLayer))
-    x6 = origo_x - (x2 - origo_x)
-    y6 = origo_y - (y2 - origo_y)
-    
-    
+#    f.append(Circle(center=(round(origo_x + sadle_x, 2), round(origo_y, 2)), radius=round(sadle_r2, 2), layer=nlayer, width=wLayer))
     #
-    # Upper
+#    f.append(Circle(center=(round(origo_x - sadle_x, 2), round(origo_y, 2)), radius=round(sadle_r2, 2), layer=nlayer, width=wLayer))
     #
-    llt = math.sqrt(((scx1 - 0.0) * (scx1 - 0.0)) + ((scy1 - 0.0) * (scy1 - 0.0)))
-    fl_t = math.acos(scx1 / llt) + math.radians(fl_a)
-    tx = origo_x + llt * math.cos(fl_t)
-    ty = origo_y + (0.0 - llt * math.sin(fl_t))
-    x7 = tx + scr * math.cos(math.radians((lgrad + 270) - fl_a))
-    y7 = ty + scr * math.sin(math.radians((lgrad + 270) - fl_a))
-    x8 = tx + scr * math.cos(math.radians((lgrad + 270) - fl_a + (2.0 * da)))
-    y8 = ty + scr * math.sin(math.radians((lgrad + 270) - fl_a + (2.0 * da)))
-    f.append(Arc(center=(round(tx, 2), round(ty, 2)), start=(round(x7, 2), round(y7, 2)), angle =  round(2.0 * da, 2) , layer=nlayer, width=wLayer))
+    # https://en.wikipedia.org/wiki/Tangent_lines_to_circles
     #
-    # Lower
+    x1 = 0.0 - sadle_x;
+    y1 = 0.0
+    r = sadle_r2
+    x2 = 0.0
+    y2 = 0.0
+    R = sadle_r1
     #
-    if fl_d2 > 0.01:
-        llt = math.sqrt(((fl_x2 - 0.0) * (fl_x2 - 0.0)) + ((fl_y2 - 0.0) * (fl_y2 - 0.0)))
-        fl_t = math.acos(fl_x2 / llt) + math.radians(fl_a)
-        tx = origo_x + llt * math.cos(fl_t)
-        ty = origo_y + (0.0 - llt * math.sin(fl_t))
-        x3 = tx + scr * math.cos(math.radians((lgrad + 90) - fl_a))
-        y3 = ty + scr * math.sin(math.radians((lgrad + 90) - fl_a))
-        x4 = tx + scr * math.cos(math.radians((lgrad + 90) - fl_a + (2.0 * da)))
-        y4 = ty + scr * math.sin(math.radians((lgrad + 90) - fl_a + (2.0 * da)))
-        f.append(Arc(center=(round(tx, 2), round(ty, 2)), start=(round(x3, 2), round(y3, 2)), angle =  round(2.0 * da, 2) , layer=nlayer, width=wLayer))
+    theta = 0 - math.atan((y2 - y1) / (x2 - x1))
+    beta = math.asin((R - r) / (math.sqrt(((x2 - x1)**2) + ((y2 - y1)**2))))
+    alpha = theta - beta
+    x3 = x1 + r * math.cos((math.pi / 2.0) - alpha)
+    y3 = y1 + r * math.sin((math.pi / 2.0) - alpha)
+    x4 = x2 + R * math.cos((math.pi / 2.0) - alpha)
+    y4 = y2 + R * math.sin((math.pi / 2.0) - alpha)
+  
+    #
+    th = math.sqrt((((0.0 - sadle_x) - x3)**2) + ((0.0 - y3)**2))
+    aa = math.fabs(math.degrees(math.acos((x3 - (0.0 - sadle_x)) / th))) - 90.0
+    #
+    # reflect Y in small circle
+    #
+    y5 = 0.0 - (y3 - 0.0)
+    y6 = 0.0 - (y4 - 0.0)
+    #
+    x5 = x3
+    x6 = x4
+    # Upper left line
+    #
+    # Upper part of large circle
+    th = math.sqrt(((0.0 - x6)**2) + ((0.0 - y6)**2))
+    aa2 = 90.0 - math.fabs(math.degrees(math.acos((0.0 - x6) / th)))
+    #
+    # reflect X in large circle
+    #
+    x7 = 0.0 + (0.0 - x6)
+    y7 = y6
+    #
+    # reflect small circle in the large circles origo
+    #
+    x8 = 0.0 + (0.0 - x5)
+    y8 = y5
+    #
+    #
+    # reflect small circle in the large circles origo
+    #
+    #
+    # reflect large circle in the large circles origo
+    #
+    x10 = x7
+    y10 = 0.0 + (0.0 - y7)
+    x9 = x8
+    y9 = y3
+    #
+    # Rotate all postions
+    #
+    x3n = x3 * math.cos(math.radians(sadle_a)) - (y3 * math.sin(math.radians(sadle_a)))
+    y3n = x3 * math.sin(math.radians(sadle_a)) + (y3 * math.cos(math.radians(sadle_a)))
+    #
+    x4n = x4 * math.cos(math.radians(sadle_a)) - (y4 * math.sin(math.radians(sadle_a)))
+    y4n = x4 * math.sin(math.radians(sadle_a)) + (y4 * math.cos(math.radians(sadle_a)))
+    #
+    xL1n = (0 - sadle_x) * math.cos(math.radians(sadle_a)) - (0.0 * math.sin(math.radians(sadle_a)))
+    yL1n = (0 - sadle_x) * math.sin(math.radians(sadle_a)) + (0.0 * math.cos(math.radians(sadle_a)))
+    #
+    x5n = x5 * math.cos(math.radians(sadle_a)) - (y5 * math.sin(math.radians(sadle_a)))
+    y5n = x5 * math.sin(math.radians(sadle_a)) + (y5 * math.cos(math.radians(sadle_a)))
+    #
+    x6n = x6 * math.cos(math.radians(sadle_a)) - (y6 * math.sin(math.radians(sadle_a)))
+    y6n = x6 * math.sin(math.radians(sadle_a)) + (y6 * math.cos(math.radians(sadle_a)))
+    #
+    #
+    #
+    x7n = x7 * math.cos(math.radians(sadle_a)) - (y7 * math.sin(math.radians(sadle_a)))
+    y7n = x7 * math.sin(math.radians(sadle_a)) + (y7 * math.cos(math.radians(sadle_a)))
+    #
+    x8n = x8 * math.cos(math.radians(sadle_a)) - (y8 * math.sin(math.radians(sadle_a)))
+    y8n = x8 * math.sin(math.radians(sadle_a)) + (y8 * math.cos(math.radians(sadle_a)))
+    #
+    xL2n = sadle_x * math.cos(math.radians(sadle_a)) - (0.0 * math.sin(math.radians(sadle_a)))
+    yL2n = sadle_x * math.sin(math.radians(sadle_a)) + (0.0 * math.cos(math.radians(sadle_a)))
+    #
+    #
+    #
+    x9n = x9 * math.cos(math.radians(sadle_a)) - (y9 * math.sin(math.radians(sadle_a)))
+    y9n = x9 * math.sin(math.radians(sadle_a)) + (y9 * math.cos(math.radians(sadle_a)))
+    #
+    x10n = x10 * math.cos(math.radians(sadle_a)) - (y10 * math.sin(math.radians(sadle_a)))
+    y10n = x10 * math.sin(math.radians(sadle_a)) + (y10 * math.cos(math.radians(sadle_a)))
+    #
+    # reflect x and y for large circle
+    #
+    x2n = 0.0 - x10n
+    y2n = 0.0 - y10n
+    #
+    # Translate cordinates to real origo
+    #
+    x2n = origo_x + x2n
+    y2n = origo_y + y2n
+    x3n = origo_x + x3n
+    y3n = origo_y + y3n
+    x4n = origo_x + x4n
+    y4n = origo_y + y4n
+    xL1n = origo_x + xL1n
+    yL1n = origo_y + yL1n
+    xL2n = origo_x + xL2n
+    yL2n = origo_y + yL2n
+    x5n = origo_x + x5n
+    y5n = origo_y + y5n
+    x6n = origo_x + x6n
+    y6n = origo_y + y6n
+    x7n = origo_x + x7n
+    y7n = origo_y + y7n 
+    x8n = origo_x + x8n
+    y8n = origo_y + y8n
+    x9n = origo_x + x9n
+    y9n = origo_y + y9n
+    x10n = origo_x + x10n
+    y10n = origo_y + y10n
+    #
+    f.append(Line(start=(round(x3n, 2), round(y3n, 2)), end=(round(x4n, 2), round(y4n, 2)), layer=nlayer, width=wLayer))
+    f.append(Arc(center=(round(xL1n, 2), round(yL1n, 2)), start=(round(x3n, 2), round(y3n, 2)), angle = round(2.0 * (90.0 - aa), 2) , layer=nlayer, width=wLayer))
+    f.append(Line(start=(round(x5n, 2), round(y5n, 2)), end=(round(x6n, 2), round(y6n, 2)), layer=nlayer, width=wLayer))
+    f.append(Line(start=(round(x7n, 2), round(y7n, 2)), end=(round(x8n, 2), round(y8n, 2)), layer=nlayer, width=wLayer))
+    f.append(Arc(center=(round(xL2n, 2), round(yL2n, 2)), start=(round(x8n, 2), round(y8n, 2)), angle = round(2.0 * (90.0 - aa), 2) , layer=nlayer, width=wLayer))
+    f.append(Line(start=(round(x9n, 2), round(y9n, 2)), end=(round(x10n, 2), round(y10n, 2)), layer=nlayer, width=wLayer))
+    f.append(Arc(center=(round(origo_x, 2), round(origo_y, 2)), start=(round(x10n, 2), round(y10n, 2)), angle = round(2.0 * aa2, 2) , layer=nlayer, width=wLayer))
+    f.append(Arc(center=(round(origo_x, 2), round(origo_y, 2)), start=(round(x2n, 2), round(y2n, 2)), angle = round(2.0 * aa2, 2) , layer=nlayer, width=wLayer))
+    #
+    # Min max for where to palce REF** and valve
+    #
+    maxy = 0.0
+    maxy = max(maxy, y2n)
+    maxy = max(maxy, y3n)
+    maxy = max(maxy, y4n)
+    maxy = max(maxy, yL1n + sadle_r2)
+    maxy = max(maxy, yL2n + sadle_r2)
+    maxy = max(maxy, y5n)
+    maxy = max(maxy, y6n)
+    maxy = max(maxy, y7n)
+    maxy = max(maxy, y8n)
+    maxy = max(maxy, y9n)
+    maxy = max(maxy, y10n)
+    miny = 0.0
+    miny = min(miny, y2n)
+    miny = min(miny, y3n)
+    miny = min(miny, y4n)
+    miny = min(miny, yL1n - sadle_r2)
+    miny = min(miny, yL2n - sadle_r2)
+    miny = min(miny, y5n)
+    miny = min(miny, y6n)
+    miny = min(miny, y7n)
+    miny = min(miny, y8n)
+    miny = min(miny, y9n)
+    miny = min(miny, y10n)
+    #
+    # Fix sadle PCB hole
+    #  pkg_sadle_pcb_hole: [('pad', 14.25, 1.3), ('npth', -14.25, 3.3)]  # Sadle holes in the PCB
+    #
+    if len(sadle_pcb_hole) > 0:
+        for pd in sadle_pcb_hole:
+            #
+            # Rotate all postions
+            #
+            npx = pd[1] * math.cos(math.radians(sadle_a)) - (0.0 * math.sin(math.radians(sadle_a)))
+            npy = pd[1] * math.sin(math.radians(sadle_a)) + (0.0 * math.cos(math.radians(sadle_a)))
+            #
+            # Translate cordinates to real origo
+            #
+            npx = origo_x + npx
+            npy = origo_y + npy
+            #
+            if pd[0] == 'pad':
+                #
+                f.append(Pad(number="", 
+                        type=Pad.TYPE_NPTH,
+                        shape=Pad.SHAPE_CIRCLE,
+                        at=[round(npx, 2), round(npy, 2)],
+                        size=round(pd[2], 1),
+                        layers=Pad.LAYERS_THT, 
+                        drill=round(pd[2], 1),
+                        radius_ratio=0.25))
+                        
+            if pd[0] == 'npth':
+                #
+                f.append(Pad(number="", 
+                        type=Pad.TYPE_NPTH,
+                        shape=Pad.SHAPE_CIRCLE,
+                        at=[round(npx, 2), round(npy, 2)],
+                        size=round(pd[2], 1),
+                        layers=Pad.LAYERS_THT, 
+                        drill=round(pd[2], 1),
+                        radius_ratio=0.25))
 
-    f.append(Line(start=(round(x2, 2), round(y2, 2)), end=(round(x3, 2), round(y3, 2)), layer=nlayer, width=wLayer))
-    f.append(Line(start=(round(x4, 2), round(y4, 2)), end=(round(x5, 2), round(y5, 2)), layer=nlayer, width=wLayer))
-    f.append(Line(start=(round(x8, 2), round(y8, 2)), end=(round(x1, 2), round(y1, 2)), layer=nlayer, width=wLayer))
-    f.append(Line(start=(round(x6, 2), round(y6, 2)), end=(round(x7, 2), round(y7, 2)), layer=nlayer, width=wLayer))
-    
-    
-    lsx = origo_x + x2
-    lsy = origo_y + y2
-    #
-    #
-    #
-    llt = math.sqrt(((scx1 - 0.0) * (scx1 - 0.0)) + ((scy1 - 0.0) * (scy1 - 0.0)))
-    tx = origo_x + llt * math.cos(math.radians(fl_a))
-    ty = origo_y + (0.0 - llt * math.sin(math.radians(fl_a)))
-    x3 = scr * math.cos(math.radians((lgrad + 90) - fl_a))
-    y3 = scr * math.sin(math.radians((lgrad + 90) - fl_a))
-    tsx = tx + x3
-    tsy = ty + y3
- #   f.append(Arc(center=(round(tx, 2), round(ty, 2)), start=(round(tsx, 2), round(tsy, 2)), angle = 2.0 * da, layer=nlayer, width=wLayer))
-    #
-    llt = math.sqrt(((fl_x2 - 0.0) * (fl_x2 - 0.0)) + ((fl_y2 - 0.0) * (fl_y2 - 0.0)))
-    tx = origo_x + llt * math.cos(math.radians(fl_a + 180.0))
-    ty = origo_y + (0.0 - llt * math.sin(math.radians(fl_a + 180.0)))
-    x3 = scr * math.cos(math.radians((lgrad + 90) - fl_a))
-    y3 = scr * math.sin(math.radians((lgrad + 90) - fl_a))
-    bsx = tx + x3
-    bsy = ty + y3
-#    f.append(Arc(center=(round(tx, 2), round(ty, 2)), start=(round(bsx, 2), round(bsy, 2)), angle = 2.0 * da, layer=nlayer, width=wLayer))
-    x4 = tx + scr * math.cos(math.radians(((lgrad + 90) - fl_a) + 2.0 * da))
-    y4 = ty + scr * math.sin(math.radians(((lgrad + 90) - fl_a) + 2.0 * da))
-    
-    #
-    # Draw lines between arches
-    #
-#    f.append(Line(start=(round(rsx, 2), round(rsy, 2)), end=(round(bsx, 2), round(bsy, 2)), layer=nlayer, width=wLayer))
-#    f.append(Line(start=(round(x4, 2), round(y4, 2)), end=(round(lsx, 2), round(lsy, 2)), layer=nlayer, width=wLayer))
-    
-#    f.append(Arc(center=(round(x1, 2), round(y1, 2)), start=(round(x1 + txd, 2), round(y1 + tyd, 2)), angle = 2.0 * (90 - lgrad), layer=nlayer, width=wLayer))
-    
-#    f.append(Arc(center=(round(x1, 2), round(y1, 2)), start=(round(x2, 2), round(y2, 2)), angle = 2.0 * (90 - lgrad), layer=nlayer, width=wLayer))
-#    f.append(Arc(center=(round(x1, 2), round(y1, 2)), start=(round(y2, 2), round(y2, 2)), angle = 2.0 * (90 - lgrad), layer=nlayer, width=wLayer))
+        return(miny, maxy)
 
 def bga(args):
     footprint_name = args["name"]
     description = args["pkg_description"]
-    flange = args["pkg_flange"]
+    sadle = args["pkg_sadle"]
+    sadle_hole = args["pkg_sadle_hole"]
+    sadle_shield = args["pkg_sadle_shield"]
+    sadle_pcb_hole = args["pkg_sadle_pcb_hole"]
     datasheet = args["pkg_datasheet"]
     D = args["pkg_D"]
     valve_offset = args["pkg_valve_offset"]
@@ -124,6 +257,8 @@ def bga(args):
     origo_x = 0 - origo_dx
     origo_y = origo_dy
     
+    print("origo_x origo_y " + str(round(origo_x / 2.0, 2)) + ', ' + str(round(origo_y / 2.0, 2)))
+    
     s1 = [1.0, 1.0]
     s2 = [1.0, 1.0]
     
@@ -133,17 +268,17 @@ def bga(args):
     yRef = origo_y - (D / 2.0) - (s1[1] * 1.2)
     yValue = origo_y + (D / 2.0) + (s1[1] * 1.2)
     #
-    if len(flange) > 4:
-        if len(flange) > 8:
-            if flange[8] > -45.0 and flange[8] < 45.0:
-                yRef = origo_y - (flange[7] / 2.0) - (s1[1] * 1.2)
-                yValue = origo_y + (flange[7] / 2.0) + (s1[1] * 1.2)
+    if len(sadle) > 4:
+        if len(sadle) > 4:
+            if sadle[5] > -45.0 and sadle[5] < 45.0:
+                yRef = origo_y - (sadle[4] / 2.0) - (s1[1] * 1.2)
+                yValue = origo_y + (sadle[4] / 2.0) + (s1[1] * 1.2)
             else:
-                yRef = origo_y - (flange[6] / 2.0) - (s1[1] * 1.2)
-                yValue = origo_y + (flange[6] / 2.0) + (s1[1] * 1.2)
+                yRef = origo_y - (sadle[3] / 2.0) - (s1[1] * 1.2)
+                yValue = origo_y + (sadle[3] / 2.0) + (s1[1] * 1.2)
         else:
-            yRef = origo_y - (flange[6] / 2.0) - (s1[1] * 1.2)
-            yValue = origo_y + (flange[6] / 2.0) + (s1[1] * 1.2)
+            yRef = origo_y - (sadle[3] / 2.0) - (s1[1] * 1.2)
+            yValue = origo_y + (sadle[3] / 2.0) + (s1[1] * 1.2)
 
     wFab = 0.10
     wCrtYd = 0.05
@@ -171,22 +306,7 @@ def bga(args):
 
     #
 
-    # Text
-    #
-    f.append(Text(type="reference", text="REF**",       at=[round(origo_x, 2), round(yRef, 2)],     layer="F.SilkS",    size=s1, thickness=t1))
-    f.append(Text(type="value", text=footprint_name,    at=[round(origo_x, 2), round(yValue, 2)],   layer="F.Fab",      size=s1, thickness=t1))
-    #
-    f.append(Text(type="user", text="%R",               at=[round(origo_x, 2), round(origo_y, 2)],  layer="F.Fab",      size=s2, thickness=t2))
-
-    if len(flange) < 1:
-        # Fab
-        f.append(Circle(center=(round(origo_x, 2), round(origo_y, 2)), radius=round((D / 2.0), 2), layer="F.Fab", width=wFab))
-
-        # Courtyard
-        f.append(Circle(center=(round(origo_x, 2), round(origo_y, 2)), radius=round((D / 2.0) + 0.12, 2), layer="F.CrtYd", width=wCrtYd))
-
-        # Silk
-        f.append(Circle(center=(round(origo_x, 2), round(origo_y, 2)), radius=round((D / 2.0) + 0.25, 2), layer="F.SilkS", width=wSilkS))
+    
 
     pad_size = round(pin_type[1] * 1.7, 1)
     pad_drill = round(pin_type[1] * 1.1, 1)
@@ -246,150 +366,57 @@ def bga(args):
                     layers=Pad.LAYERS_THT, 
                     drill=n[2],
                     radius_ratio=0.25))
-            
-        
+    
+    
+    #
+    f.append(Text(type="user", text="%R",               at=[round(origo_x, 2), round(origo_y, 2)],  layer="F.Fab",      size=s2, thickness=t2))
                     
+    
+    maxy = yRef
+    miny = yValue
+    
+    if len(sadle) > 1:
+   
+        create_sadle(f, origo_x, origo_y, sadle, sadle_hole, sadle_pcb_hole, "F.Fab", wFab)
+        sadle2 = sadle.copy()
+        sadle2[1] = sadle2[1] + 0.26
+        sadle2[2] = sadle2[2] + 0.26
+        sadle2[4] = sadle2[4] + 0.26
+        create_sadle(f, origo_x, origo_y, sadle2, sadle_hole, sadle_pcb_hole, "F.SilkS", wSilkS)
+        sadle3 = sadle.copy()
+        sadle3[1] = sadle3[1] + 0.50
+        sadle3[2] = sadle3[2] + 0.50
+        sadle3[4] = sadle3[4] + 0.50
+        (miny, maxy) = create_sadle(f, origo_x, origo_y, sadle3, sadle_hole, sadle_pcb_hole, "F.CrtYd", wCrtYd)
+        miny = miny - (s1[1] * 1.2) 
+        maxy = maxy + (s1[1] * 1.2) 
+        
+    else:
+    
+        DDq = D;
+        er = math.sqrt(((pad_size / 2.0) * (pad_size / 2.0)) + ((pad_size / 2.0) * (pad_size / 2.0)))
+        ar = math.sqrt((origo_x * origo_x) + (origo_y * origo_y))
+        ad = ((ar + er) * 2.0) + 0.25
 
-    if len(flange) > 4:
-        #
-        #   pkg_flange: [14.25, 0, 1.3, 0, 0, 0, 35.5, 26.5, 72]        # "npth hole 1 x-pos, y-pos, diameter", "npth hole 2 x-pos, y-pos, diameter", width, length of flange, rotation in degree of flange
-        #
-        fl_x1 = flange[0]
-        fl_y1 = flange[1]
-        fl_d1 = flange[2]
-        fl_x2 = flange[3]
-        fl_y2 = flange[4]
-        fl_d2 = flange[5]
-        fl_w = flange[6]
-        fl_l = flange[7]
-        fl_a = flange[8]
+        if DDq < ad:
+            DDq = ad
+    
+        # Fab
+        f.append(Circle(center=(round(origo_x, 2), round(origo_y, 2)), radius=round((D / 2.0), 2), layer="F.Fab", width=wFab))
+
+        # Silk
+        f.append(Circle(center=(round(origo_x, 2), round(origo_y, 2)), radius=round((DDq / 2.0) + 0.13, 2), layer="F.SilkS", width=wSilkS))
+
+        # Courtyard
+        f.append(Circle(center=(round(origo_x, 2), round(origo_y, 2)), radius=round((DDq / 2.0) + 0.25, 2), layer="F.CrtYd", width=wCrtYd))
         
-        #
-        # Add right npth hole
-        #
-        if fl_d1 > 0.01:
-            llt = math.sqrt(((fl_x1 - 0.0) * (fl_x1 - 0.0)) + ((fl_y1 - 0.0) * (fl_y1 - 0.0)))
-            x3 = origo_x + llt * math.cos(math.radians(fl_a))
-            y3 = origo_y + (0.0 - llt * math.sin(math.radians(fl_a)))
-#            print("x3 " + str(x3))
-#            print("y3 " + str(y3))
-            #
-            f.append(Pad(number="", 
-                    type=Pad.TYPE_NPTH,
-                    shape=Pad.SHAPE_CIRCLE,
-                    at=[round(x3, 2), round(y3, 2)],
-                    size=fl_d1,
-                    layers=Pad.LAYERS_THT, 
-                    drill=fl_d1,
-                    radius_ratio=0.25))
-                    
-        if fl_d2 > 0.01:
-            #
-            # Add right npth hole
-            #
-            llt = math.sqrt(((fl_x2 - 0.0) * (fl_x2 - 0.0)) + ((fl_y2 - 0.0) * (fl_y2 - 0.0)))
-            x3 = origo_x + llt * math.cos(math.radians(fl_a + 180.0))
-            y3 = origo_y + (0.0 - llt * math.sin(math.radians(fl_a + 180.0)))
-#            print("x3 " + str(x3))
-#            print("y3 " + str(y3))
-            #
-            f.append(Pad(number="", 
-                    type=Pad.TYPE_NPTH,
-                    shape=Pad.SHAPE_CIRCLE,
-                    at=[round(x3, 2), round(y3, 2)],
-                    size=fl_d2,
-                    layers=Pad.LAYERS_THT, 
-                    drill=fl_d2,
-                    radius_ratio=0.25))
-        # 
-        # Calculate it around origo so it can be easily rotated
-        #
-        #
-        # Large circle
-        #
-        lcr = fl_l / 2.0    # radie
-        lcx1 = 0.0
-        lcy1 = 0.0
-#        f.append(Circle(center=(round(lcx1, 2), round(lcy1, 2)), radius=round(lcr, 2), layer="F.CrtYd", width=wCrtYd))
-        #
-        # Small circle
-        #
-        scr = ((fl_w / 2.0) - fl_x1) # radie
-        scx1 = fl_x1
-        scy1 = fl_y1
-#        f.append(Circle(center=(round(scx1, 2), round(scy1, 2)), radius=round(scr, 2), layer="F.CrtYd", width=wCrtYd))
-        #
-        # Calculate the line between the bigger circle and the small
-        #
-        lgrad = -1.0
-        ex = -1.0
-        ey = -1.0
-        bx = -1.0
-        by = -1.0
-        circle_hit = False
-        nums = 84
-        grad_step_start = 20.0
-        grad_step = (90.0 - grad_step_start) / nums
-        grad = grad_step_start
-        for i in range(1, nums):
-            #
-            # start point on the circle
-            #
-            x1 = lcr * math.cos(math.radians(grad))
-            y1 = lcr * math.sin(math.radians(grad))
-            # Calculate the straigt line equation for the tangent
-            #
-            slope_of_radius = (y1 - 0) / (x1 - 0)
-            k = 0 - (1.0 / slope_of_radius)
-            m = y1 - (k * x1)
-            #
-#            x4 = x3 + 10
-#            y4 = k * x3 + m
-#            f.append(Line(start=(round(x3, 2), round(y3, 2)), end=(round(x4, 2), round(y4, 2)), layer="F.SilkS", width=0.05))
-            # k and m is the straight line equation of the tangent 
-            #
-            # Calculate the distance fform the point of the larger circle to the smaller origo
-            #
-            llt = math.sqrt(((scx1 - x1) * (scx1 - x1)) + ((scy1 - y1) * (scy1 - y1)))
-            x2 = x1 + (llt * math.cos(math.radians(grad)))
-            y2 = k * x2 + m
-#            f.append(Line(start=(round(x1, 2), round(y1, 2)), end=(round(x2, 2), round(y2, 2)), layer="F.SilkS", width=0.05))
-            #
-            # Check which lines ends up in the smaller circle
-            #
-            llt = math.sqrt(((scx1 - x2) * (scx1 - x2)) + ((scy1 - y2) * (scy1 - y2)))
-            if llt < scr:
-#                f.append(Line(start=(round(x4, 2), round(y4, 2)), end=(round(x5, 2), round(y5, 2)), layer="F.SilkS", width=0.05))
-#                f.append(Line(start=(round(x4, 2), round(y4, 2)), end=(round(x1, 2), round(y1, 2)), layer="F.SilkS", width=0.05))
-                #
-                # Save the latest one that hitted
-                #
-                lgrad = grad
-                bx = x1
-                by = y1
-                ex = scx1 + (scr * math.cos(math.radians(grad)))
-                ey = scy1 + (scr * math.sin(math.radians(grad)))
-                circle_hit = True
-                
-            grad = grad + grad_step
-        #
-#            f.append(Line(start=(round(bx, 2), round(by, 2)), end=(round(ex, 2), round(ey, 2)), layer="F.SilkS", width=0.05))
-        #
-        drawOval(f, origo_x, origo_y, scx1, scy1, scr, fl_x2, fl_y2, fl_d2, bx, by, ex, ey, lcr, lgrad, fl_a, "F.Fab", wFab)
-        drawOval(f, origo_x, origo_y, scx1, scy1, scr + 0.13, fl_x2, fl_y2, fl_d2 + 0.13, bx, by, ex, ey, lcr + 0.13, lgrad, fl_a, "F.SilkS", wSilkS)
-        drawOval(f, origo_x, origo_y, scx1, scy1, scr + 0.25, fl_x2, fl_y2, fl_d2 + 0.25, bx, by, ex, ey, lcr + 0.25, lgrad, fl_a, "F.CrtYd", wCrtYd)
-        #
-        bx = (lcr + 0.13) * math.cos(math.radians(grad))
-        by = (lcr + 0.13) * math.sin(math.radians(grad))
-        ex = (scr + 0.13) * math.cos(math.radians(grad))
-        ey = (scr + 0.13) * math.sin(math.radians(grad))
-#        drawOval(f, origo_x, origo_y, scx1, scy1, scr, fl_x2, fl_y2, fl_d2, bx, by, ex, ey, lcr, lgrad, fl_a, "F.SilkS", wSilkS)
-        #
-        bx = (lcr + 0.25) * math.cos(math.radians(grad))
-        by = (lcr + 0.25) * math.sin(math.radians(grad))
-        ex = (scr + 0.25) * math.cos(math.radians(grad))
-        ey = (scr + 0.25) * math.sin(math.radians(grad))
- #       drawOval(f, origo_x, origo_y, scx1, scy1, scr, fl_x2, fl_y2, fl_d2, bx, by, ex, ey, lcr, lgrad, fl_a, "F.CrtYd", wCrtYd)
+        miny = min(miny, origo_y - (DDq / 2.0) - (s1[1] * 1.2))
+        maxy = max(maxy, origo_y + (DDq / 2.0) + (s1[1] * 1.2))
+
+    # Text
+    #
+    f.append(Text(type="reference", text="REF**",    at=[round(origo_x, 2), round(miny, 2)], layer="F.SilkS", size=s1, thickness=t1))
+    f.append(Text(type="value", text=footprint_name, at=[round(origo_x, 2), round(maxy, 2)], layer="F.Fab",   size=s1, thickness=t1))
         
                     
     file_handler = KicadFileHandler(f)
@@ -401,8 +428,11 @@ if __name__ == '__main__':
     parser.add_parameter("name",                type=str,   required=True)
     parser.add_parameter("pkg_description",     type=str,   required=True)
     parser.add_parameter("pkg_datasheet",       type=str,   required=True)
-    parser.add_parameter("pkg_flange",          type=list,  required=True)
     parser.add_parameter("pkg_D",               type=float, required=True)
+    parser.add_parameter("pkg_sadle",           type=list,  required=True)
+    parser.add_parameter("pkg_sadle_hole",      type=list,  required=True)
+    parser.add_parameter("pkg_sadle_shield",    type=list,  required=True)
+    parser.add_parameter("pkg_sadle_pcb_hole",  type=list,  required=True)
     parser.add_parameter("pkg_valve_offset",    type=list,  required=True)
     parser.add_parameter("pkg_socket_offset",   type=list,  required=True)
     parser.add_parameter("pkg_npth_pin",        type=list,  required=True)
