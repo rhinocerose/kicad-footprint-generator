@@ -12,7 +12,9 @@
 # along with kicad-footprint-generator. If not, see < http://www.gnu.org/licenses/ >.
 #
 # (C) 2016 by Thomas Pointhuber, <thomas.pointhuber@gmx.at>
-
+# 
+# Created by Stefan Thorlacius stts@sencius.se
+# 
 
 #
 # This module uses a kind of "ray tracing" with a line comming from lower left
@@ -23,8 +25,9 @@ from KicadModTree.Point import *
 from KicadModTree.PolygonPoints import *
 from KicadModTree.nodes.Node import Node
 from KicadModTree.nodes.base.Line import Line
+from KicadModTree.nodes.base.Circle import Circle
 
-
+import math
 
 class KeepOutCircle(Node):
     r"""Add a Circle as a keep put area to the render tree
@@ -41,6 +44,8 @@ class KeepOutCircle(Node):
           layer on which the circle is drawn (default: 'F.SilkS')
         * *width* (``float``) --
           width of the circle line (default: None, which means auto detection)
+        * *step* (``float``) --
+          the step betwene the crossing lines (default: 1 mm)
 
     :Example:
 
@@ -57,32 +62,61 @@ class KeepOutCircle(Node):
 
         self.layer = kwargs.get('layer', 'Dwgs.User')
         self.width = kwargs.get('width')
+        self.step = kwargs.get('step', 1.0)
 
         self.virtual_childs = []
-        self.lines = []
 
         #
         # Add the circle
         #
-        self.virtual_childs.append(Cicle(center=self.center_pos, radius=self.radius, layer=self.layer, width=self.width))
+        self.virtual_childs.append(Circle(center=self.center_pos, radius=self.radius, layer=self.layer, width=self.width))
+        
+        Ax = self.center_pos[0] + (self.radius)
+        Ay = self.center_pos[1] + (self.radius * 1.1)
+        Bx = Ax + (2.5 * self.radius)
+        By = Ay - (2.5 * self.radius)
+        Cx = self.center_pos[0]
+        Cy = self.center_pos[1]
+        R = self.radius
+        while Bx > (self.center_pos[0] - self.radius):
+            Bx = Ax + (2.5 * self.radius)
+            By = Ay - (2.5 * self.radius)
+            # compute the triangle area times 2 (area = area2/2)
+            area2 = math.fabs( (Bx-Ax)*(Cy-Ay) - (Cx-Ax)*(By-Ay) )
+            # compute the AB segment length
+            LAB = math.sqrt(((Bx-Ax) * (Bx-Ax)) + ((By-Ay) * (By-Ay)))
+            # compute the triangle height
+            h = area2 / LAB
+            # if the line intersects the circle
+            if( h < R ):
+                Dx = (Bx-Ax)/LAB
+                Dy = (By-Ay)/LAB
 
-        self.virtual_childs = self._createChildNodes(self.lines)
-   
+                # compute the distance from A toward B of closest point to C
+                t = Dx*(Cx-Ax) + Dy*(Cy-Ay)
+
+                # compute the intersection point distance from t
+                dt = math.sqrt((R * R) - (h * h))
+
+                # compute first intersection point coordinate
+                Ex = Ax + (t-dt)*Dx
+                Ey = Ay + (t-dt)*Dy
+
+                # compute second intersection point coordinate
+                Fx = Ax + (t+dt)*Dx
+                Fy = Ay + (t+dt)*Dy
+
+                self.virtual_childs.append(Line(start=[round(Ex, 2), round(Ey, 2)], end=[round(Fx, 2), round(Fy, 2)], layer=self.layer, width=self.width))
+
+#            self.virtual_childs.append(Line(start=[Ax, Ay], end=[Bx, By], layer='F.SilkS'))
+
+            Ax = Ax - self.step
+
 
     def getVirtualChilds(self):
         #
         #
         return self.virtual_childs
-
-
-    def _initNodes(self, **kwargs):
-        #
-        #
-
-
-    def _createChildNodes(self, sx, sy, ex, ey):
-        new_line = Line(start=Point2D(sx, sy), end=Point2D(ex, ey), layer=self.layer, width=self.width)
-        self.virtual_childs.append(new_line)
 
 
     def calculateBoundingBox(self):
@@ -94,6 +128,7 @@ class KeepOutCircle(Node):
         return Node.calculateBoundingBox({'min': ParseXY(min_x, min_y), 'max': ParseXY(max_x, max_y)})
 
     def _getRenderTreeText(self):
+
         render_strings = ['fp_circle']
         render_strings.append(self.center_pos.render('(center {x} {y})'))
         render_strings.append(self.end_pos.render('(end {x} {y})'))
