@@ -41,7 +41,7 @@ class KeepOutCircle(Node):
         * *radius* (``float``) --
           radius of the circle
         * *layer* (``str``) --
-          layer on which the circle is drawn (default: 'F.SilkS')
+          layer on which the circle is drawn (default: 'Dwgs.User')
         * *width* (``float``) --
           width of the circle line (default: None, which means auto detection)
         * *step* (``float``) --
