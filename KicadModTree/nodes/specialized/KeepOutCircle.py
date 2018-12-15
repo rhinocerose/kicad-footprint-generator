@@ -12,9 +12,9 @@
 # along with kicad-footprint-generator. If not, see < http://www.gnu.org/licenses/ >.
 #
 # (C) 2016 by Thomas Pointhuber, <thomas.pointhuber@gmx.at>
-# 
+#
 # Created by Stefan Thorlacius stts@sencius.se
-# 
+#
 
 #
 # This module uses a kind of "ray tracing" with a line comming from lower left
@@ -49,8 +49,8 @@ class KeepOutCircle(Node):
 
     :Example:
 
-    >>> from KicadModTree import *
-    >>> KeepOutCircle(center=[0, 0], radius=1.5, layer='F.SilkS')
+        from KicadModTree import *
+        KeepOutCircle(center=[0, 0], radius=1.5, layer='F.SilkS')
     """
 
     def __init__(self, **kwargs):
@@ -63,9 +63,8 @@ class KeepOutCircle(Node):
         self.layer = kwargs.get('layer', 'Dwgs.User')
         self.width = kwargs.get('width')
         self.step = kwargs.get('step', 1.0)
-
+        #
         self.virtual_childs = []
-
         #
         # Add the circle
         #
@@ -91,33 +90,24 @@ class KeepOutCircle(Node):
             if( h < R ):
                 Dx = (Bx-Ax)/LAB
                 Dy = (By-Ay)/LAB
-
                 # compute the distance from A toward B of closest point to C
                 t = Dx*(Cx-Ax) + Dy*(Cy-Ay)
-
                 # compute the intersection point distance from t
                 dt = math.sqrt((R * R) - (h * h))
-
                 # compute first intersection point coordinate
                 Ex = Ax + (t-dt)*Dx
                 Ey = Ay + (t-dt)*Dy
-
                 # compute second intersection point coordinate
                 Fx = Ax + (t+dt)*Dx
                 Fy = Ay + (t+dt)*Dy
-
                 self.virtual_childs.append(Line(start=[round(Ex, 2), round(Ey, 2)], end=[round(Fx, 2), round(Fy, 2)], layer=self.layer, width=self.width))
-
 #            self.virtual_childs.append(Line(start=[Ax, Ay], end=[Bx, By], layer='F.SilkS'))
-
             Ax = Ax - self.step
-
 
     def getVirtualChilds(self):
         #
         #
         return self.virtual_childs
-
 
     def calculateBoundingBox(self):
         min_x = self.center_pos.x-self.radius
