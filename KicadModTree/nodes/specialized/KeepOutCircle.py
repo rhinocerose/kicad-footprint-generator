@@ -55,11 +55,16 @@ class KeepOutCircle(Node):
 
         self.end_pos = Vector2D([self.center_pos.x+self.radius, self.center_pos.y])
 
-        self.layer = kwargs.get('layer', 'F.SilkS')
+        self.layer = kwargs.get('layer', 'Dwgs.User')
         self.width = kwargs.get('width')
 
         self.virtual_childs = []
         self.lines = []
+
+        #
+        # Add the circle
+        #
+        self.virtual_childs.append(Cicle(center=self.center_pos, radius=self.radius, layer=self.layer, width=self.width))
 
         self.virtual_childs = self._createChildNodes(self.lines)
    
@@ -71,18 +76,14 @@ class KeepOutCircle(Node):
 
 
     def _initNodes(self, **kwargs):
-        if not kwargs.get('nodes'):
-            raise KeyError('No nodes are given')
-        nodes = kwargs.get('nodes')
         #
-        # Transform the polygon to an internal line format
         #
-        for n in range(0, len(nodes) - 1):
-            self._createChildNodes(nodes[n][0], nodes[n][1], nodes[n+1][0], nodes[n+1][1])
-            self.lines.append(koaLine(nodes[n][0], nodes[n][1], nodes[n+1][0], nodes[n+1][1]))
-        # Add first and second point as line
-        self._createChildNodes(nodes[len(nodes)-1][0], nodes[len(nodes) - 1][1], nodes[0][0], nodes[0][1])
-        self.lines.append(koaLine(nodes[len(nodes)-1][0], nodes[len(nodes) - 1][1], nodes[0][0], nodes[0][1]))
+
+
+    def _createChildNodes(self, sx, sy, ex, ey):
+        new_line = Line(start=Point2D(sx, sy), end=Point2D(ex, ey), layer=self.layer, width=self.width)
+        self.virtual_childs.append(new_line)
+
 
     def calculateBoundingBox(self):
         min_x = self.center_pos.x-self.radius
