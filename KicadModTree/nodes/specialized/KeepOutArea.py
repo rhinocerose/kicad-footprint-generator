@@ -289,4 +289,4 @@ class KeepOutArea(Node):
             render_text = Node._getRenderTreeText(self)
             render_text += ' ({})'.format(' '.join(render_strings))
 
-return render_text
+        return render_text
