@@ -70,7 +70,7 @@ class KeepOutCircle(Node):
         # Add the circle
         #
         self.virtual_childs.append(Circle(center=self.center_pos, radius=self.radius, layer=self.layer, width=self.width))
-        
+
         Ax = self.center_pos[0] + (self.radius)
         Ay = self.center_pos[1] + (self.radius * 1.1)
         Bx = Ax + (2.5 * self.radius)
