@@ -29,6 +29,7 @@ from KicadModTree.nodes.base.Circle import Circle
 
 import math
 
+
 class KeepOutCircle(Node):
     r"""Add a Circle as a keep put area to the render tree
 
@@ -68,7 +69,8 @@ class KeepOutCircle(Node):
         #
         # Add the circle
         #
-        self.virtual_childs.append(Circle(center=self.center_pos, radius=self.radius, layer=self.layer, width=self.width))
+        self.virtual_childs.append(Circle(center=self.center_pos, 
+                                    radius=self.radius, layer=self.layer, width=self.width))
 
         Ax = self.center_pos[0] + (self.radius)
         Ay = self.center_pos[1] + (self.radius * 1.1)
@@ -81,13 +83,13 @@ class KeepOutCircle(Node):
             Bx = Ax + (2.5 * self.radius)
             By = Ay - (2.5 * self.radius)
             # compute the triangle area times 2 (area = area2/2)
-            area2 = math.fabs( (Bx-Ax)*(Cy-Ay) - (Cx-Ax)*(By-Ay) )
+            area2 = math.fabs((Bx-Ax)*(Cy-Ay) - (Cx-Ax)*(By-Ay))
             # compute the AB segment length
             LAB = math.sqrt(((Bx-Ax) * (Bx-Ax)) + ((By-Ay) * (By-Ay)))
             # compute the triangle height
             h = area2 / LAB
             # if the line intersects the circle
-            if( h < R ):
+            if (h < R):
                 Dx = (Bx-Ax)/LAB
                 Dy = (By-Ay)/LAB
                 # compute the distance from A toward B of closest point to C
@@ -100,7 +102,9 @@ class KeepOutCircle(Node):
                 # compute second intersection point coordinate
                 Fx = Ax + (t+dt)*Dx
                 Fy = Ay + (t+dt)*Dy
-                self.virtual_childs.append(Line(start=[round(Ex, 2), round(Ey, 2)], end=[round(Fx, 2), round(Fy, 2)], layer=self.layer, width=self.width))
+                self.virtual_childs.append(Line(start=[round(Ex, 2), round(Ey, 2)], 
+                    end=[round(Fx, 2), round(Fy, 2)], 
+                    layer=self.layer, width=self.width))
 #            self.virtual_childs.append(Line(start=[Ax, Ay], end=[Bx, By], layer='F.SilkS'))
             Ax = Ax - self.step
 
