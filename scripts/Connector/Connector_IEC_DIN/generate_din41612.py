@@ -223,10 +223,10 @@ def build_pins(mod, config, pins, rows, row_direction, column_direction):
     pins_per_row = pins / len(rows)
     for row in rows.lower():
         if row_direction == Point(0,1): # horizontal
-            offset = config['series_rows'].lower().index(row) * dimensions['pin_row_offset']
+            offset = config['series_rows'].lower().index(row) * config['pin_row_offset']
         else: # vertical always uses all rows, z is index -1
             rows = "zabcde"
-            offset = (rows.index(row) - 1) * dimensions['pin_row_offset']
+            offset = (rows.index(row) - 1) * config['pin_row_offset']
         pin_one = Point(row_direction.x * offset, row_direction.y * offset)
         if pins_per_row == config['row_pins']:
             positions = range(1, config['row_pins'] + 1)
@@ -246,10 +246,9 @@ def build_pins(mod, config, pins, rows, row_direction, column_direction):
                 shape = Pad.SHAPE_ROUNDRECT
             else:
                 shape = Pad.SHAPE_CIRCLE
-            pos = Point( pin_one.x + column_direction.x * (pin - 1) *
-                    dimensions['pin_column_offset'], pin_one.y +
-                    column_direction.y * (pin - 1) *
-                    dimensions['pin_column_offset'])
+            pos = Point(
+                    pin_one.x + column_direction.x * (pin - 1) * config['pin_column_offset'],
+                    pin_one.y + column_direction.y * (pin - 1) * config['pin_column_offset'])
             mod.append(Pad(at=pos, number=number, shape=shape, **pin_args))
 
 
@@ -342,16 +341,16 @@ def build_din41612_connector_horizontal(mod, series, direction, pins, rows,
             Point(center.x - config['housing_width']/2 - cy,
                 -config['a1_housing_back'] + cy),
             Point(center.x - (config['row_pins']-1)/2 *
-                config['pin_row_offset'] - config['pin_plating_diameter']/2 - cy,
+                config['pin_column_offset'] - config['pin_plating_diameter']/2 - cy,
                 -config['a1_housing_back'] + cy),
             Point(center.x - (config['row_pins']-1)/2 *
-                config['pin_row_offset'] - config['pin_plating_diameter']/2 - cy, config['last_row_pos'] +
+                config['pin_column_offset'] - config['pin_plating_diameter']/2 - cy, config['last_row_pos'] +
                 config['pin_plating_diameter'] / 2 + cy),
             Point(center.x + (config['row_pins']-1)/2 *
-                config['pin_row_offset'] + config['pin_plating_diameter']/2 + cy, config['last_row_pos'] +
+                config['pin_column_offset'] + config['pin_plating_diameter']/2 + cy, config['last_row_pos'] +
                 config['pin_plating_diameter'] / 2 + cy),
             Point(center.x + (config['row_pins']-1)/2 *
-                config['pin_row_offset'] + config['pin_plating_diameter']/2 + cy, 
+                config['pin_column_offset'] + config['pin_plating_diameter']/2 + cy, 
                 -config['a1_housing_back'] + cy),
             Point(center.x + config['housing_width']/2 + cy,
                 -config['a1_housing_back'] + cy),
