@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import os
+import string
 import sys
 sys.path.append(os.path.join(sys.path[0], "..", "..", ".."))  # load parent path of KicadModTree
 from KicadModTree import *
@@ -51,6 +52,7 @@ dimensions = {
             'a1_edge': 5.3,
             'mounting_housing_front': 10.2, # max set by ERNI
             'mounting_housing_back': -2.54, # max set by ept
+            'gender': 'male',
             'full': {
                 'housing_width': 94,
                 'connector_width': 87.5,
@@ -545,9 +547,10 @@ def build_din41612_connector(series, direction, pins, rows, extra_args={}):
     extra_fp_name = ''
     if config.get('extra_desc') == 'rows':
         extra_fp_name += f"_Rows{rows.upper()}"
+    gender = string.capwords(config['gender'])
     footprint_name = (
         f"DIN41612_{safe_series}_{len(rows)}x{pins_per_row}"
-        f"{extra_fp_name}_{direction}" )
+        f"{extra_fp_name}_{gender}_{direction}" )
     config['footprint_name'] = footprint_name
     mod = Footprint(footprint_name)
     mod.setDescription(f"DIN41612 connector, type {series}, {direction}, "
