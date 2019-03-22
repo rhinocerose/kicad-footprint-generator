@@ -21,9 +21,6 @@ pin_max = 3
 mpn = 'TSM-SH-{pincount:02g}-01-XX'
 padsize = [3.18, 1.27]
 
-pre_pin = 2.42
-post_pin = 5.84
-
 def roundToBase(value, base):
     if base == 0:
         return value
