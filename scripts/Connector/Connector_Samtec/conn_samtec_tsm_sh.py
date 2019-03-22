@@ -16,8 +16,8 @@ series_long = 'Male Horizontal Surface Mount Single Row 2.54mm (0.1 inch) Pitch 
 manufacturer = 'Samtec'
 pitch = 2.54
 datasheet = 'http://suddendocs.samtec.com/catalog_english/tsm.pdf'
-pin_min = 3
-pin_max = 3
+pin_min = 2
+pin_max = 36
 mpn = 'TSM-SH-{pincount:02g}-01-XX'
 padsize = [3.18, 1.27]
 
