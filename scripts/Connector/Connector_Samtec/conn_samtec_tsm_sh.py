@@ -141,8 +141,8 @@ def gen_footprint(pinnum, manpart, configuration):
 	cy_offset = configuration['courtyard_offset']['connector']
 	cy_grid = configuration['courtyard_grid']
 	bounding_box={
-		'left': -6.98+padsize[0]/2-2.5/2,
-		'right': -6.98+padsize[0]/2+12.2,
+		'left': -6.98+padsize[0]/2-2.5/2 - 0.135,
+		'right': -6.98+padsize[0]/2+12.2 + 0.21,
         'top': -(pitch*(pinnum-1))/2-pitch-2.54/2+2.54,
         'bottom': -(pitch*(pinnum-1))/2-pitch-2.54/2+2.54*pinnum+2.54,
 	}
