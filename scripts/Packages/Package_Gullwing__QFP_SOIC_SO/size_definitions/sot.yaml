@@ -1,0 +1,24 @@
+FileHeader:
+  library_Suffix: 'SOT'
+  device_type: 'SOT'
+
+R-PDSO-G6_DDC:
+  size_source: 'http://www.ti.com/lit/ds/symlink/lm5050-1.pdf'
+  body_size_x:
+    minimum: 1.45
+    maximum: 1.75
+  body_size_y:
+    minimum: 2.75
+    maximum: 3.05
+  overall_size_x:
+    minimum: 2.55
+    maximum: 3.05
+  lead_width:
+    minimum: 0.30
+    maximum: 0.50
+  lead_len:
+    minimum: 0.3
+    maximum: 0.6
+  pitch: 0.95
+  num_pins_x: 0
+  num_pins_y: 3
