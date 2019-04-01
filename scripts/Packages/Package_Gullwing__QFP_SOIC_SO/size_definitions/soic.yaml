@@ -646,3 +646,30 @@ SOIC-28W_7.5x18.7mm_P1.27mm:
   pitch: 1.27
   num_pins_x: 0
   num_pins_y: 14
+  
+Infineon_PG-DSO-8-59:
+  custom_name_format: 'Infineon_PG-DSO-8-59' 
+  size_source: 'https://www.infineon.com/cms/en/product/packages/PG-DSO/PG-DSO-8-59'
+  body_size_x: 
+    nominal: 7.5
+    tolerance: 0.1
+  body_size_y:
+    minimum: 6.2
+    maximum: 6.4
+  overall_height:
+    minimum: 2.60
+    maximum: 2.65
+
+  overall_size_x: 
+    nominal: 10.3
+    tolerance: 0.3
+  lead_len:
+    minimum: 0.5
+    maximum: 0.9
+  lead_width: 
+    minimum: 0.3
+    maximum: 0.5
+
+  pitch: 1.27
+  num_pins_x: 0
+  num_pins_y: 4
