@@ -1,8 +1,8 @@
 FileHeader:
   library_Suffix: 'SOT'
-  device_type: 'SOT'
+  device_type: 'SOT-23'
 
-R-PDSO-G6_DDC:
+Texas_R-PDSO-G6_DDC:
   size_source: 'http://www.ti.com/lit/ds/symlink/lm5050-1.pdf'
   body_size_x:
     minimum: 1.45
