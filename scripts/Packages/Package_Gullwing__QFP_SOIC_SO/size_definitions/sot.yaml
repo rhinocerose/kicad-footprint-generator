@@ -1,9 +1,10 @@
 FileHeader:
-  library_Suffix: 'SOT'
+  library_Suffix: 'TO_SOT_SMD'
   device_type: 'SOT-23'
 
-Texas_R-PDSO-G6_DDC:
+TSOT-23-6:
   size_source: 'JEDEC MO-193AA, http://www.ti.com/lit/ds/symlink/lm5050-1.pdf'
+  custom_name_format: 'TSOT-23-{pincount}'
   body_size_x:
     minimum: 1.45
     maximum: 1.75
