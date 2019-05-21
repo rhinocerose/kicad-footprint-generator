@@ -490,7 +490,7 @@ def build_din41612_connector_vertical(mod, series, direction, pins, rows,
     mod.append(PolygoneLine(polygone=arrow_points, layer='F.Fab', width=.1))
 
     # highlight connector shape on silk
-    highlight_expand = .1
+    highlight_expand = 0
     he = highlight_expand
     if series == "F":
         # F series uses pins where the pads collide with the outline, so we
