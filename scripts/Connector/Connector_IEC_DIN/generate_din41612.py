@@ -312,7 +312,7 @@ def build_din41612_connector_horizontal(mod, series, direction, pins, rows,
         ], layer='F.Fab', width=.1))
 
     # add silk screen
-    sd = .2
+    sd = .11
     silk_points = [
             Point(center.x - config['housing_width']/2 - sd,
                 -config['a1_edge']),
@@ -461,7 +461,7 @@ def build_din41612_connector_vertical(mod, series, direction, pins, rows,
                   center.y - config['housing_width'] / 2 - expand)
             ]
     mod.append(PolygoneLine(polygone=housing(0), layer='F.Fab', width=.1))
-    mod.append(PolygoneLine(polygone=housing(.2), layer='F.SilkS', width=.12))
+    mod.append(PolygoneLine(polygone=housing(.11), layer='F.SilkS', width=.12))
     mod.append(PolygoneLine(polygone=list(map(round_courtyard, housing(.5))),
         layer='F.CrtYd', width=.05))
 
