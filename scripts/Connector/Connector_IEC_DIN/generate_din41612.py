@@ -334,6 +334,12 @@ def build_din41612_connector_horizontal(mod, series, direction, pins, rows,
             Point(-1.27, 0)
             ]
     mod.append(PolygoneLine(polygone=arrow_points, layer='F.SilkS', width=.12))
+    # add a1 marker on fab layer
+    marker_points = [
+            Point(-.7, -config['a1_housing_back'] - hole_part_inset - .2),
+            Point(.7, -config['a1_housing_back'] - hole_part_inset - .2),
+            ]
+    mod.append(PolygoneLine(polygone=marker_points, layer='F.Fab', width=.1))
 
     # add courtyard
     cy = .5
@@ -474,6 +480,14 @@ def build_din41612_connector_vertical(mod, series, direction, pins, rows,
             Point(arrow_tip, 0)
             ]
     mod.append(PolygoneLine(polygone=arrow_points, layer='F.SilkS', width=.12))
+    # do similar on the fab layer
+    arrow_size = .75
+    arrow_points = [
+            Point(center.x - config['housing_height'] / 2, -arrow_size),
+            Point(center.x - config['housing_height'] / 2 + arrow_size, 0),
+            Point(center.x - config['housing_height'] / 2, arrow_size),
+            ]
+    mod.append(PolygoneLine(polygone=arrow_points, layer='F.Fab', width=.1))
 
     # highlight connector shape on silk
     highlight_expand = .1
