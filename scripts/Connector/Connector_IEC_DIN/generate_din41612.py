@@ -445,7 +445,11 @@ def build_din41612_connector_vertical(mod, series, direction, pins, rows,
             mod.append(PolygoneLine(polygone=(
                     Point(center.x - config['housing_height'] / 2, height),
                     Point(mounting.x - 3, height),
-                    Point(mounting.x - 3, inner_height),
+                    Point(mounting.x - 3, inner_height)
+                    ),
+                layer='F.Fab', width=.1))
+            mod.append(PolygoneLine(polygone=(
+                    Point(conn_right - config['nodge_height'], inner_height),
                     Point(mounting.x + 3, inner_height),
                     Point(mounting.x + 3, height),
                     Point(center.x + config['housing_height'] / 2, height),
