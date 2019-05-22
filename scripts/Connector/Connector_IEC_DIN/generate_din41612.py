@@ -499,9 +499,10 @@ def build_din41612_connector_vertical(mod, series, direction, pins, rows,
     if series == "F":
         # F series uses pins where the pads collide with the outline, so we
         # need to cut the drawn line
-        highlight_depth = 2
+        highlight_depth_left = 2
+        highlight_depth_right = 2
         conn_highlight = [
-                Point(conn_left - he, conn_top + highlight_depth),
+                Point(conn_left - he, conn_top + highlight_depth_left),
                 Point(conn_left - he, conn_top - he),
                 Point(conn_right - config['nodge_height'] + he, conn_top - he),
                 Point(conn_right - config['nodge_height'] + he,
@@ -509,7 +510,7 @@ def build_din41612_connector_vertical(mod, series, direction, pins, rows,
                 Point(conn_right + he,
                       conn_top + config['nodge_width'] - he),
                 Point(conn_right + he,
-                      conn_top + config['nodge_width'] + highlight_depth),
+                      conn_top + highlight_depth_right),
                 ]
         mod.append(PolygoneLine(polygone=conn_highlight, layer='F.SilkS',
                 width=.12))
