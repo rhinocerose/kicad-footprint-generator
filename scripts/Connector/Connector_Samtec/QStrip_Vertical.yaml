@@ -1,0 +1,57 @@
+## Name:
+##   description: ""
+##   datasheet: ""
+##   tags: ""
+##   layout:
+##     type: "(Terminal|Socket)"
+##     size: # Overall connector dimensions
+##       - !!float mm # width
+##       - !!float mm # height
+##     silk_offset: mm # silkscreen offset from the F.Fab outline
+##   banks:
+##     n: !!int # number of banks in the connector
+##     pins: !!int even # number of pins in a bank
+##     diff: !!int <= n # number of differential banks
+##     space: !!float mm # distance between adjacent banks
+##     size: # Dimensions of bank outlines drawn on F.Fab
+##       - !!float mm # width
+##       - !!float mm # height
+##   pins:
+##     signal: # Signal pin parameters
+##       pitch: !!float mm
+##       size:
+##         - !!float mm # width
+##         - !!float mm # height
+##       y: !!float mm # vertical offset
+##     ground: # Ground pin parameters
+##       size:
+##         - # Ground pad widths
+##           - !!float mm # outer pins 
+##           - !!float mm # inner pins
+##         - !!float mm # height
+##       space: # Distance between ground pads within each bank
+##         - !!float mm # outer pins
+##         - !!float mm # inner pins
+##   holes: # [optional] hole pair specifications
+##     - # Hole spec. 1
+##       name: "" # [optional] name/number for plated holes
+##       drill:
+##         - !!float mm # drill diameter
+##         - !!float mm # [optional] annular ring
+##       space: !!float mm # distance between holes mirrored about the x-axis
+##       y: !!float mm # vertical offset
+##     - # Hole spec. 2
+##     - # ...
+##
+
+Samtec_QTH-090-01-x-D-A:
+  description: ""
+  datasheet: ""
+  tags: ""
+  layout: {type: "Terminal", size: [60.0,5.97], silk_offset: 0.25}
+  banks: {n: 3, pins: 60, diff: 0, space: 20.0, size: [16.4,3.9]}
+  pins:
+    signal: {pitch: 0.5, size: [0.305,1.45], y: 1.45}
+    ground: {height: 0.64, width: [2.54,4.7], space: [16.89,6.35]}
+  holes:
+    - {drill: [1.02], space: 58.48, y: 2.03}
