@@ -58,7 +58,7 @@ def generate_one_footprint(pincount, configuration):
     body_bottom = pitch + 8.5
     body_top = body_bottom - 17.4
 
-    # double digit pincount parts have leading "1" otherwise "0" for gray color (other numbers mean different colors)
+    # for gray color, a leading "0" is for <10 pins and a leading "1" for >=10 pins (other leading numbers mean different colors)
     footprint_name = 'TE_{pnp}-{pn:s}-{pns}_1x{pc:02g}_P{p}mm_Horizontal'\
         .format(pnp="1" if pincount >= 10 else "0", pn=partnumber, pns=str(pincount)[-1], pc=pincount, p=pitch)
     print('Building {:s}'.format(footprint_name))
