@@ -322,6 +322,8 @@ def build_din41612_connector_horizontal(mod, series, direction, pins, rows,
                 -config['a1_housing_back'] + sd),
             Point(center.x - config['housing_width']/2 + hole_part_width + sd,
                 -config['a1_housing_back'] - hole_part_inset + sd),
+            Point(-.2 - config['pin_plating_diameter']/2,
+                -config['a1_housing_back'] - hole_part_inset + sd),
             ]
     mod.append(PolygoneLine(polygone=silk_points, layer='F.SilkS', width=.12))
     mod.append(PolygoneLine(polygone=list(map(lambda x: mirror_x(x, center),
