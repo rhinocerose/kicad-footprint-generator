@@ -338,8 +338,10 @@ def build_din41612_connector_horizontal(mod, series, direction, pins, rows,
     mod.append(PolygoneLine(polygone=arrow_points, layer='F.SilkS', width=.12))
     # add a1 marker on fab layer
     marker_points = [
-            Point(-.7, -config['a1_housing_back'] - hole_part_inset - .2),
-            Point(.7, -config['a1_housing_back'] - hole_part_inset - .2),
+            Point(0, -config['a1_housing_back'] - hole_part_inset - .2),
+            Point(-.5, -config['a1_housing_back'] - hole_part_inset - .9),
+            Point(.5, -config['a1_housing_back'] - hole_part_inset - .9),
+            Point(0, -config['a1_housing_back'] - hole_part_inset - .2),
             ]
     mod.append(PolygoneLine(polygone=marker_points, layer='F.Fab', width=.1))
 
