@@ -67,12 +67,12 @@ Samtec_QSH-090-01-x-D_P0.5mm_Vertical: &QSH-090-01-x-D
 Samtec_QSH-090-01-x-D-A_P0.5mm_Vertical:
   <<: *QSH-090-01-x-D
   holes:
-    - {drill: 1.02, space: 61.38, y: 2.03}
+    - {drill: 1.02, space: 60.13, y: 2.03}
 
 Samtec_QSH-090-01-x-D-LC_P0.5mm_Vertical:
   <<: *QSH-090-01-x-D
   holes:
-    - {drill: 1.19, space: 61.38, y: 2.03}
+    - {drill: 1.19, space: 60.13, y: 2.03}
 
 Samtec_HSMC_ASP-122953-01_P0.5mm_Vertical:
   pn: 'ASP-122952-01'
@@ -85,7 +85,7 @@ Samtec_HSMC_ASP-122953-01_P0.5mm_Vertical:
   banks: {n: 3, pins: 60, diff: 1, space: 20.0, width: 15.89, height: 3.81}
   pins: *QSH_pins
   holes:
-    - {drill: 1.02, space: 61.38, y: 2.03}
+    - {drill: 1.02, space: 60.13, y: 2.03}
 
 # QSH family; 3 banks; differential
 Samtec_QSH-060-01-x-D-DP_P0.5mm_Vertical: &QSH-060-01-x-D-DP
@@ -99,9 +99,9 @@ Samtec_QSH-060-01-x-D-DP_P0.5mm_Vertical: &QSH-060-01-x-D-DP
 Samtec_QSH-060-01-x-D-DP-A_P0.5mm_Vertical:
   <<: *QSH-060-01-x-D-DP
   holes:
-    - {drill: 1.02, space: 61.38, y: 2.03}
+    - {drill: 1.02, space: 60.13, y: 2.03}
 
 Samtec_QSH-060-01-x-D-DP-LC_P0.5mm_Vertical:
   <<: *QSH-060-01-x-D-DP
   holes:
-    - {drill: 1.19, space: 61.38, y: 2.03}
+    - {drill: 1.19, space: 60.13, y: 2.03}

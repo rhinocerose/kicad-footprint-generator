@@ -82,6 +82,8 @@ def generate_one_footprint(param, config, library):
     # Bank parameters
     banks  = param['banks']['n']
     bank_x = param['banks']['space']
+    bank_w = param['banks']['width']
+    bank_h = param['banks']['height']
     pins_per_bank = param['banks']['pins']
 
     ############################################################################
@@ -230,6 +232,15 @@ def generate_one_footprint(param, config, library):
                               layer = "F.Fab",
                               close = False,
                               line_width = fab_line))
+
+    # Draw bank outlines
+    for b in range(banks):
+        mid = bank1_mid + b*bank_x
+        fp.append(RectLine(start = (mid-bank_w/2, -bank_h/2),
+                           end   = (mid+bank_w/2,  bank_h/2),
+                           layer = "F.Fab",
+                           width = fab_line))
+                           
         
     ############################################################################
     # Metadata
