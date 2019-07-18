@@ -1,57 +1,107 @@
-## Name:
-##   description: ""
-##   datasheet: ""
-##   tags: ""
-##   layout:
-##     type: "(Terminal|Socket)"
-##     size: # Overall connector dimensions
-##       - !!float mm # width
-##       - !!float mm # height
-##     silk_offset: mm # silkscreen offset from the F.Fab outline
-##   banks:
-##     n: !!int # number of banks in the connector
-##     pins: !!int even # number of pins in a bank
-##     diff: !!int <= n # number of differential banks
-##     space: !!float mm # distance between adjacent banks
-##     size: # Dimensions of bank outlines drawn on F.Fab
-##       - !!float mm # width
-##       - !!float mm # height
-##   pins:
-##     signal: # Signal pin parameters
-##       pitch: !!float mm
-##       size:
-##         - !!float mm # width
-##         - !!float mm # height
-##       y: !!float mm # vertical offset
-##     ground: # Ground pin parameters
-##       size:
-##         - # Ground pad widths
-##           - !!float mm # outer pins 
-##           - !!float mm # inner pins
-##         - !!float mm # height
-##       space: # Distance between ground pads within each bank
-##         - !!float mm # outer pins
-##         - !!float mm # inner pins
-##   holes: # [optional] hole pair specifications
-##     - # Hole spec. 1
-##       name: "" # [optional] name/number for plated holes
-##       drill:
-##         - !!float mm # drill diameter
-##         - !!float mm # [optional] annular ring
-##       space: !!float mm # distance between holes mirrored about the x-axis
-##       y: !!float mm # vertical offset
-##     - # Hole spec. 2
-##     - # ...
-##
+# QTH family; 3 Banks
+Samtec_QTH-090-01-x-D_P0.5mm_Vertical: &QTH-090-01-x-D
+  description: &QStrip_desc >-
+    Samtec {pn:s} {pitch:1.2f}mm Q Strip® High-Speed Ground Plane {type:s} Strip;
+    {banks:d} banks, {pins:d} pins/bank ({ds:s})
+  datasheet: 'http://suddendocs.samtec.com/prints/qth-xxx-xx-x-d-xxx-footprint.pdf'
+  tags: 'connector Samtec HSMC QTH mezzanine terminal vertical'
+  layout: &QTH_layout
+    type: 'Terminal'
+    width: 60.0
+    height: 5.97
+    silk_offset: 0.25
+  banks: {n: 3, pins: 60, diff: 0, space: 20.0, width: 16.4, height: 3.9}
+  pins: &QTH_pins
+    signal: {pitch: 0.5, y: 3.086, width: 0.305, height: 1.45}
+    ground: {height: 0.64, width: [2.54, 4.7], space: [16.89, 6.35]}
 
-Samtec_QTH-090-01-x-D-A:
-  description: ""
-  datasheet: ""
-  tags: ""
-  layout: {type: "Terminal", size: [60.0,5.97], silk_offset: 0.25}
-  banks: {n: 3, pins: 60, diff: 0, space: 20.0, size: [16.4,3.9]}
-  pins:
-    signal: {pitch: 0.5, size: [0.305,1.45], y: 1.45}
-    ground: {height: 0.64, width: [2.54,4.7], space: [16.89,6.35]}
+Samtec_QTH-090-01-x-D-A_P0.5mm_Vertical:
+  <<: *QTH-090-01-x-D
   holes:
-    - {drill: [1.02], space: 58.48, y: 2.03}
+    - {drill: 1.02, space: 58.48, y: -2.03}
+
+Samtec_HSMC_ASP-122952-01_P0.5mm_Vertical:
+  pn: 'ASP-122952-01'
+  description: >-
+    Samtec {pn:s} HSMC Card {type:s};
+    modified QTH-090-01-L-D-A, Bank 1 differential ({ds:s})
+  datasheet: 'http://suddendocs.samtec.com/prints/asp-122952-01-mkt.pdf'
+  tags: 'connector Samtec HSMC card terminal mezzanine vertical differential'
+  layout: *QTH_layout
+  banks: {n: 3, pins: 60, diff: 1, space: 20.0, width: 16.4, height: 3.9}
+  pins: *QTH_pins
+  holes:
+    - {drill: 1.02, space: 58.48, y: -2.03}
+
+# QTH family; 3 banks; differential
+Samtec_QTH-060-01-x-D-DP_P0.5mm_Vertical: &QTH-060-01-x-D-DP
+  description: &QPairs_desc >-
+    Samtec {pn:s} {pitch:1.2f}mm Q Pairs® High-Speed Ground Plane {type:s} Strip,
+    Differential Pair; {banks:d} banks, {pins:d} pairs/bank ({ds:s})
+  datasheet: 'http://suddendocs.samtec.com/prints/qth-xxx-xx-x-d-dp-xxx-footprint.pdf'
+  tags: 'connector Samtec QTH mezzanine terminal vertical differential'
+  layout: *QTH_layout
+  banks: {n: 3, pins: 60, diff: 3, space: 20.0, width: 16.4, height: 3.9}
+  pins: *QTH_pins
+
+Samtec_QTH-060-01-x-D-DP-A_P0.5mm_Vertical:
+  <<: *QTH-060-01-x-D-DP
+  holes:
+    - {drill: 1.02, space: 58.48, y: -2.03}
+
+# QSH family; 3 Banks
+Samtec_QSH-090-01-x-D_P0.5mm_Vertical: &QSH-090-01-x-D
+  description: *QStrip_desc
+  datasheet: 'http://suddendocs.samtec.com/prints/qsh-xxx-01-x-d-xx-footprint.pdf'
+  tags: 'connector Samtec QSH mezzanine socket vertical'
+  layout: &QSH_layout
+    type: 'Socket'
+    width: 61.38
+    height: 7.24
+    silk_offset: 0.25
+  banks: {n: 3, pins: 60, diff: 0, space: 20.0, width: 15.89, height: 3.81}
+  pins: &QSH_pins
+    signal: {pitch: 0.5, y: 2.67, width: 0.279, height: 2.27}
+    ground: {height: 0.43, width: [2.54, 4.7], space: [16.13, 6.35]}
+
+Samtec_QSH-090-01-x-D-A_P0.5mm_Vertical:
+  <<: *QSH-090-01-x-D
+  holes:
+    - {drill: 1.02, space: 61.38, y: 2.03}
+
+Samtec_QSH-090-01-x-D-LC_P0.5mm_Vertical:
+  <<: *QSH-090-01-x-D
+  holes:
+    - {drill: 1.19, space: 61.38, y: 2.03}
+
+Samtec_HSMC_ASP-122953-01_P0.5mm_Vertical:
+  pn: 'ASP-122952-01'
+  description: >-
+    Samtec {pn:s} HSMC Host {type:s};
+    modified QSH-090-01-L-D-A, Bank 1 differential ({ds:s})
+  datasheet: 'http://suddendocs.samtec.com/prints/asp-122953-01-mkt.pdf'
+  tags: 'connector Samtec HSMC host socket mezzanine vertical differential'
+  layout: *QSH_layout
+  banks: {n: 3, pins: 60, diff: 1, space: 20.0, width: 15.89, height: 3.81}
+  pins: *QSH_pins
+  holes:
+    - {drill: 1.02, space: 61.38, y: 2.03}
+
+# QSH family; 3 banks; differential
+Samtec_QSH-060-01-x-D-DP_P0.5mm_Vertical: &QSH-060-01-x-D-DP
+  description: *QPairs_desc
+  datasheet: 'http://suddendocs.samtec.com/prints/qsh-xxx-01-x-d-dp-xx-footprint.pdf'
+  tags: 'connector Samtec QSH mezzanine socket vertical differential'
+  layout: *QSH_layout
+  banks: {n: 3, pins: 60, diff: 3, space: 20.0, width: 15.89, height: 3.81}
+  pins: *QSH_pins
+
+Samtec_QSH-060-01-x-D-DP-A_P0.5mm_Vertical:
+  <<: *QSH-060-01-x-D-DP
+  holes:
+    - {drill: 1.02, space: 61.38, y: 2.03}
+
+Samtec_QSH-060-01-x-D-DP-LC_P0.5mm_Vertical:
+  <<: *QSH-060-01-x-D-DP
+  holes:
+    - {drill: 1.19, space: 61.38, y: 2.03}
