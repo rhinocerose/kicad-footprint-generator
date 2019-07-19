@@ -8,12 +8,12 @@ Footprint_Name:
   description: 'Brief description of the footprint'
   datasheet: 'URL to footprint datasheet'
   tags: 'KiCad tags go here'
+  add-tags: 'more tags' # [optional], used to extend the tag list
   layout:
     type: '(Terminal|Socket)'
-    size: # Overall connector dimensions
-      - !!float mm # width
-      - !!float mm # height
-    silk_offset: mm # silkscreen offset from the F.Fab outline
+    width: !!float mm # width
+    height: !!float mm # height
+  width: !!float mm # [optional] overrides layout::width
   banks:
     n: !!int # number of banks in the connector
     pins: !!int even # number of pins in a bank
@@ -49,6 +49,7 @@ Footprint_Name:
 import sys
 import os
 import argparse
+from copy import deepcopy
 import math
 import yaml
 
@@ -139,16 +140,16 @@ def generate_one_footprint(param, config, library):
     gnd_space_out = param['pins']['ground']['space'][0] / 2
     gnd_space_in  = param['pins']['ground']['space'][1] / 2
     gnd_space = [-gnd_space_out, -gnd_space_in, gnd_space_in, gnd_space_out]
-    gnd_size  = [Vector2D(gnd_width_out, gnd_height),
-                 Vector2D(gnd_width_in,  gnd_height),
-                 Vector2D(gnd_width_in,  gnd_height),
-                 Vector2D(gnd_width_out, gnd_height)]
+    gnd_size  = [(gnd_width_out, gnd_height),
+                 (gnd_width_in,  gnd_height),
+                 (gnd_width_in,  gnd_height),
+                 (gnd_width_out, gnd_height)]
     # Place ground plane pads
     for b in range(banks):
         mid = bank1_mid + b*bank_x # Bank midpoint
         for i in range(len(gnd_space)):
             pad = Pad(number = str(n),
-                      at = Vector2D(mid+gnd_space[i], 0),
+                      at = (mid+gnd_space[i], 0),
                       size = gnd_size[i],
                       type = Pad.TYPE_SMT,
                       layers = Pad.LAYERS_SMT,
@@ -174,7 +175,7 @@ def generate_one_footprint(param, config, library):
     # Fabrication layer: F.Fab
     fab_line = config['fab_line_width']
     fab_mark = pitch #config['fab_pin1_marker_length']
-    fab_width = param['layout']['width']
+    fab_width = param['layout']['width'] if 'width' not in param else param['width']
     fab_height = param['layout']['height']
     fab_y = fab_height / 2
     lEdge = -fab_width / 2
@@ -182,14 +183,15 @@ def generate_one_footprint(param, config, library):
     chamfer = fab_height / 4 # 1/4 connector height, cosmetic only
 
     if mode == 'Terminal':
-        # End outlines
-        points = [(lEdge, -fab_y),
-                  (lEdge, fab_y-chamfer),
-                  (lEdge+chamfer, fab_y)]
-        fp.append(PolygoneLine(nodes = points,
+        # Left end outline
+        lEnd = [(lEdge, -fab_y),
+                (lEdge, fab_y-chamfer),
+                (lEdge+chamfer, fab_y)]
+        fp.append(PolygoneLine(nodes = lEnd,
                                layer = "F.Fab",
                                width = fab_line))
-        fp.append(PolygoneLine(nodes = points,
+        # Right end outline (mirrors left end)
+        fp.append(PolygoneLine(nodes = lEnd,
                                layer = "F.Fab",
                                width = fab_line,
                                x_mirror = 0))
@@ -241,7 +243,70 @@ def generate_one_footprint(param, config, library):
                            layer = "F.Fab",
                            width = fab_line))
                            
-        
+    
+    ############################################################################
+    # Silkscreen: F.SilkS
+    #silk_offset = param['layout']['silk-offset']
+    silk_offset_fab = config['silk_fab_offset']
+    silk_pad = config['silk_pad_clearance'] + pad_w/2
+    silk_line = config['silk_line_width']
+    silk_y = fab_y + silk_offset_fab
+    silk_lEdge = lEdge - silk_offset_fab
+    silk_rEdge = rEdge + silk_offset_fab
+    silk_chamfer = chamfer + silk_offset_fab/2
+    silk_pin1 = pin1.x - silk_pad
+    silk_lEnd = []
+    silk_rEnd = []
+    
+    if mode == 'Terminal':
+        # Polygon left end outline points
+        silk_lEnd = [{'x': silk_pin1,  'y': -silk_y},
+                     {'x': silk_lEdge, 'y': -silk_y},
+                     {'x': silk_lEdge, 'y': silk_y-silk_chamfer},
+                     {'x': silk_lEdge+silk_chamfer, 'y': silk_y},
+                     {'x': silk_pin1,  'y': silk_y}]
+        # Pin 1 indicator
+        fp.append(Line(start = (silk_pin1, pin1.y - pad_h/2),
+                       end   = (silk_pin1, -silk_y),
+                       layer = "F.SilkS",
+                       width = silk_line))
+    elif mode == 'Socket':
+        # Left end outline points
+        silk_lEnd = [{'x': silk_pin1,  'y':  silk_y},
+                     {'x': silk_lEdge, 'y':  silk_y},
+                     {'x': silk_lEdge, 'y': -silk_y},
+                     {'x': silk_pin1,  'y': -silk_y}]
+        # Pin 1 indicator
+        r = pad_w/4
+        fp.append(Circle(center = (pin1.x, pin1.y + pad_h/2 + r + silk_pad),
+                         radius = r,
+                         layer  = "F.SilkS",
+                         width  = 2*r))
+
+    # Generate right end outline
+    silk_rEnd = deepcopy(silk_lEnd)
+    # Mirror about x axis
+    for i in range(len(silk_rEnd)):
+        silk_rEnd[i]['x'] = -silk_rEnd[i]['x']
+    # Define right outline inner offset from the last pin
+    # (if the last bank is differential, it does not perfectly mirror the first)
+    silk_rEnd[0]['x'] = silk_rEnd[-1]['x'] = pin[-1][-1].x + silk_pad
+
+    # Draw left and right end outlines
+    fp.append(PolygoneLine(nodes = silk_lEnd,
+                           layer = "F.SilkS",
+                           width = silk_line))
+    fp.append(PolygoneLine(nodes = silk_rEnd,
+                           layer = "F.SilkS",
+                           width = silk_line))
+
+    # Draw outlines between banks
+    for b in range(banks-1):
+        fp.extend([Line(start = (pin[b][-1].x  + silk_pad, m*silk_y),
+                        end   = (pin[b+1][0].x - silk_pad, m*silk_y),
+                        layer = "F.SilkS",
+                        width = silk_line) for m in (-1,1)])
+    
     ############################################################################
     # Metadata
     
@@ -266,9 +331,13 @@ def generate_one_footprint(param, config, library):
                        pitch = pitch,
                        banks = banks,
                        pins = pins_or_pairs)
-    
     fp.setDescription(desc)
-    fp.setTags(param['tags'])
+
+    # Tags
+    tags = param['tags']
+    if 'add-tags' in param:
+        tags += ' ' + param['add-tags']
+    fp.setTags(tags)
 
     ############################################################################
     # Write kicad_mod file
@@ -321,14 +390,17 @@ if __name__ == '__main__':
                     print(path, "empty, skipping...")
                     continue
 
-                for fp in footprints:
-                    print("  - Generate {}.kicad_mod".format(fp))
-                    fp_params = footprints.get(fp)
+                if '_local' in footprints:
+                    del footprints['_local']
+                
+                for fp_name in footprints:
+                    print("  - Generate {}.kicad_mod".format(fp_name))
+                    fp_params = footprints.get(fp_name)
                     
                     if 'name' in fp_params:
-                        print("WARNING: setting 'name' to", fp)
+                        print("WARNING: setting 'name' to", fp_name)
                     
-                    fp_params['name'] = fp
+                    fp_params['name'] = fp_name
                     generate_one_footprint(fp_params, config, args.library)
             except yaml.YAMLError as exc:
                 print(exc)
