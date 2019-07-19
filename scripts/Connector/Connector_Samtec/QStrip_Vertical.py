@@ -39,7 +39,7 @@ Footprint_Name:
     - # Hole spec. 1
       name: "" # [optional] name/number for plated holes
       drill: !!float mm # drill diameter
-      ring: !!float mm # [optional] annular ring
+      pad: !!float mm # [optional] PTH pad diameter
       space: !!float mm # distance between holes mirrored about the x-axis
       y: !!float mm # vertical offset
     - # Hole spec. 2
@@ -55,8 +55,11 @@ import yaml
 
 # Load parent path of KicadModTree
 sys.path.append(os.path.join(sys.path[0], "..", "..", ".."))
+sys.path.append(os.path.join(sys.path[0], "..", "..", "tools"))
 
 from KicadModTree import *
+from footprint_text_fields import addTextFields
+from helpers import *
 
 def markerArrow(x, y, width, line_width, layer, angle=0, close=True):
     node = Node()
@@ -161,26 +164,27 @@ def generate_one_footprint(param, config, library):
     # Holes
     if 'holes' in param:
         for p in param['holes']:
-            h = [Pad(number = config['mounting_pad_number'] if 'ring' in p else "",
-                     at = (m*p['space']/2, p['y']),
-                     drill = p['drill'],
-                     size = p['drill']+p['ring'] if 'ring' in p else p['drill'],
-                     type = Pad.TYPE_THT if 'ring' in p else Pad.TYPE_NPTH,
-                     layers = Pad.LAYERS_THT if 'ring' in p else Pad.LAYERS_NPTH,
-                     shape = Pad.SHAPE_CIRCLE) for m in (-1,1)]
-            fp.append(h[0])
-            fp.append(h[1])
+            drill = p['drill']
+            shape = Pad.SHAPE_CIRCLE if type(drill) is float else Pad.SHAPE_OVAL
+            h = [Pad(number = "MP" if 'pad' in p else "",
+                     at     = (m*p['space']/2, p['y']),
+                     drill  = drill,
+                     size   = p['pad'] if 'pad' in p else drill,
+                     type   = Pad.TYPE_THT if 'pad' in p else Pad.TYPE_NPTH,
+                     layers = Pad.LAYERS_THT if 'pad' in p else Pad.LAYERS_NPTH,
+                     shape  = shape) for m in (-1,1)]
+            fp.extend(h)
 
     ############################################################################
     # Fabrication layer: F.Fab
     fab_line = config['fab_line_width']
     fab_mark = pitch #config['fab_pin1_marker_length']
-    fab_width = param['layout']['width'] if 'width' not in param else param['width']
-    fab_height = param['layout']['height']
-    fab_y = fab_height / 2
-    lEdge = -fab_width / 2
-    rEdge = lEdge + fab_width
-    chamfer = fab_height / 4 # 1/4 connector height, cosmetic only
+    fab_w = param['layout']['width'] if 'width' not in param else param['width']
+    fab_h = param['layout']['height']
+    fab_y = fab_h / 2
+    lEdge = -fab_w / 2
+    rEdge = lEdge + fab_w
+    chamfer = fab_h / 4 # 1/4 connector height, cosmetic only
 
     if mode == 'Terminal':
         # Left end outline
@@ -206,7 +210,7 @@ def generate_one_footprint(param, config, library):
                        width = fab_line))
         # Pin 1 marker
         fp.append(markerArrow(x = pin1.x,
-                              y = (fab_mark-fab_height) / 2,
+                              y = (fab_mark-fab_h) / 2,
                               width = fab_mark,
                               angle = 180,
                               layer = "F.Fab",
@@ -229,7 +233,7 @@ def generate_one_footprint(param, config, library):
                        width = fab_line))
         # Pin 1 marker
         fp.append(markerArrow(x = pin1.x,
-                              y = (fab_height-fab_mark) / 2,
+                              y = (fab_h-fab_mark) / 2,
                               width = fab_mark,
                               layer = "F.Fab",
                               close = False,
@@ -255,8 +259,6 @@ def generate_one_footprint(param, config, library):
     silk_rEdge = rEdge + silk_offset_fab
     silk_chamfer = chamfer + silk_offset_fab/2
     silk_pin1 = pin1.x - silk_pad
-    silk_lEnd = []
-    silk_rEnd = []
     
     if mode == 'Terminal':
         # Polygon left end outline points
@@ -306,9 +308,33 @@ def generate_one_footprint(param, config, library):
                         end   = (pin[b+1][0].x - silk_pad, m*silk_y),
                         layer = "F.SilkS",
                         width = silk_line) for m in (-1,1)])
+
+    ############################################################################
+    # Courtyard: F.CrtYd
+    court_line = config['courtyard_line_width']
+    court_grid = config['courtyard_grid']
+    court_offset = config['courtyard_offset']['connector']
+
+    court_x = roundToBase(fab_w/2 + court_offset, court_grid)
+    court_y = roundToBase(max(fab_y, pad_y + pad_h/2) + court_offset, court_grid)
+
+    fp.append(RectLine(start  = (-court_x, -court_y),
+                       end    = ( court_x,  court_y),
+                       layer  = "F.CrtYd",
+                       width  = court_line))
     
     ############################################################################
     # Metadata
+    text_y = court_y + 1.0
+    fp.append(Text(type = 'reference', text = 'REF**',
+                   at = (0, -text_y),
+                   layer = "F.SilkS"))
+    fp.append(Text(type = 'user', text = '%R',
+                   at = (0, -text_y),
+                   layer = "F.Fab"))
+    fp.append(Text(type = 'value', text=param['name'],
+                   at = (0, text_y),
+                   layer='F.Fab'))
     
     # Part number
     if 'pn' in param:
