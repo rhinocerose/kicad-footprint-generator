@@ -37,7 +37,7 @@ Samtec_QTH-030-01-x-D-A-L_P0.5mm_Vertical:
   width: 23.0
   holes:
     - {drill: 1.02, space: 18.48, y: -2.03}
-    - {drill: 0.8, pad: 1.5, space: 21.69, y: -0.508}
+    - {drill: [0.5, 1.15], pad: [1.0, 1.65], space: 21.69, y: -0.508}
 
 # QTH family; 1 bank; differential
 Samtec_QTH-020-01-x-D-DP_P0.5mm_Vertical: &QTH-020-01-x-D-DP

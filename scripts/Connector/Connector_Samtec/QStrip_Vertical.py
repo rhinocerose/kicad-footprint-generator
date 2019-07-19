@@ -279,11 +279,11 @@ def generate_one_footprint(param, config, library):
                      {'x': silk_lEdge, 'y': -silk_y},
                      {'x': silk_pin1,  'y': -silk_y}]
         # Pin 1 indicator
-        r = pad_w/4
-        fp.append(Circle(center = (pin1.x, pin1.y + pad_h/2 + r + silk_pad),
+        r = 0.075 
+        fp.append(Circle(center = (pin1.x, pin1.y + pad_h/2 + silk_pad),
                          radius = r,
                          layer  = "F.SilkS",
-                         width  = 2*r))
+                         width  = 0.15))
 
     # Generate right end outline
     silk_rEnd = deepcopy(silk_lEnd)
@@ -324,7 +324,9 @@ def generate_one_footprint(param, config, library):
                        width  = court_line))
     
     ############################################################################
-    # Metadata
+    # Set Metadata
+    
+    # Draw reference and value
     text_y = court_y + 1.0
     fp.append(Text(type = 'reference', text = 'REF**',
                    at = (0, -text_y),
@@ -334,7 +336,10 @@ def generate_one_footprint(param, config, library):
                    layer = "F.Fab"))
     fp.append(Text(type = 'value', text=param['name'],
                    at = (0, text_y),
-                   layer='F.Fab'))
+                   layer="F.Fab"))
+    
+    # Set surface-mount attribute
+    fp.setAttribute('smd')
     
     # Part number
     if 'pn' in param:
@@ -365,11 +370,17 @@ def generate_one_footprint(param, config, library):
         tags += ' ' + param['add-tags']
     fp.setTags(tags)
 
+    # 3D model path
+    model_path = os.path.join('${KISYS3DMOD}',
+                              library + '.3dshapes',
+                              param['name'] + '.wrl')
+    fp.append(Model(filename = model_path))
+
     ############################################################################
     # Write kicad_mod file
     
     os.makedirs(library, exist_ok=True)
-    filename = os.path.join(library, param['name'] + '.kicad_mod')
+    filename = os.path.join(library+'.pretty', param['name']+'.kicad_mod')
     KicadFileHandler(fp).writeFile(filename)
 
 ################################################################################
@@ -382,8 +393,8 @@ if __name__ == '__main__':
                         default='../conn_config_KLCv3.yaml',
                         help='Series KLC configuration YAML file')
     parser.add_argument('--library', type=str, nargs='?',
-                        default='Connector_Samtec_QStrip.pretty',
-                        help='KiCad library path')
+                        default='Connector_Samtec_QStrip',
+                        help='KiCad library name (without extension)')
     parser.add_argument('files', metavar='file', type=str, nargs='*',
                         help='YAML file(s) containing footprint parameters')
     args = parser.parse_args()
