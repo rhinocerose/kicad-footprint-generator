@@ -419,44 +419,6 @@ Samtec_QTS-048-01-x-D-DP-LC_P0.635mm_Vertical:
   holes:
     - {drill: 1.16, space: 58.48, y: -2.03}
 
-# QTS family; 4 banks; differential
-Samtec_QTS-064-01-x-D-DP_P0.635mm_Vertical: &QTS-064-01-x-D-DP
-  meta: *QTS-DP_meta
-  layout: {type: 'Terminal', width: 80.0, height: 5.97}
-  banks: {n: 4, pins: 50, diff: 4, space: 20.0, width: 16.4, height: 3.94}
-  pins: *QTS_pins
-
-Samtec_QTS-064-01-x-D-DP-A_P0.635mm_Vertical:
-  <<: *QTS-064-01-x-D-DP
-  add-tags: 'alignment-pins'
-  holes:
-    - {drill: 1.02, space: 78.49, y: -2.03}
-
-Samtec_QTS-064-01-x-D-DP-LC_P0.635mm_Vertical:
-  <<: *QTS-064-01-x-D-DP
-  add-tags: 'locking-clips'
-  holes:
-    - {drill: 1.16, space: 78.49, y: -2.03}
-
-# QTS family; 4 banks; differential
-Samtec_QTS-080-01-x-D-DP_P0.635mm_Vertical: &QTS-080-01-x-D-DP
-  meta: *QTS-DP_meta
-  layout: {type: 'Terminal', width: 100.0, height: 5.97}
-  banks: {n: 5, pins: 50, diff: 5, space: 20.0, width: 16.4, height: 3.94}
-  pins: *QTS_pins
-
-Samtec_QTS-080-01-x-D-DP-A_P0.635mm_Vertical:
-  <<: *QTS-080-01-x-D-DP
-  add-tags: 'alignment-pins'
-  holes:
-    - {drill: 1.02, space: 98.49, y: -2.03}
-
-Samtec_QTS-080-01-x-D-DP-LC_P0.635mm_Vertical:
-  <<: *QTS-080-01-x-D-DP
-  add-tags: 'locking-clips'
-  holes:
-    - {drill: 1.16, space: 98.49, y: -2.03}
-
 ################################################################################
 # QSS family; 1 bank
 # QSS family; 2 banks
@@ -468,10 +430,10 @@ Samtec_QTS-080-01-x-D-DP-LC_P0.635mm_Vertical:
 
 ################################################################################
 # QTE family; 1 bank
-# QTE family; 1 bank; differential
 # QTE family; 2 banks
-# QTE family; 2 banks; differential
 # QTE family; 3 banks
+# QTE family; 1 bank; differential
+# QTE family; 2 banks; differential
 # QTE family; 3 banks; differential
 
 ################################################################################
