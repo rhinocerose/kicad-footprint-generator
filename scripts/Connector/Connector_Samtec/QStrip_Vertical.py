@@ -79,7 +79,7 @@ def markerArrow(x, y, width, line_width, layer="F.Fab", angle=0, close=True):
     node.insert(Translation(x,y))
     return node
 
-def generate_one_footprint(param, config, library):
+def generate_one_footprint(param, config, default_lib):
     fp = Footprint(param['name'])
 
     # Terminal or Socket mode
@@ -349,10 +349,11 @@ def generate_one_footprint(param, config, library):
     fp.setAttribute('smd')
     
     # Part number
-    if 'pn' in param['meta']:
-        partnum = param['meta']['pn']
-    else:
-        partnum = param['name'].split('_')[1]
+    partnum = param['meta'].get('pn', param['name'].split('_')[1])
+    #if 'pn' in param['meta']:
+    #    partnum = param['meta']['pn']
+    #else:
+    #    partnum = param['name'].split('_')[1]
         
     # Pins or pairs/bank
     if param['banks']['diff'] == banks:
@@ -378,8 +379,9 @@ def generate_one_footprint(param, config, library):
     fp.setTags(tags)
 
     # 3D model path
+    library = param.get('library', default_lib)
     model_path = os.path.join('${KISYS3DMOD}',
-                              library + '.3dshapes',
+                              library+'.3dshapes',
                               param['name'] + '.wrl')
     fp.append(Model(filename = model_path))
 
@@ -401,7 +403,7 @@ if __name__ == '__main__':
                         help='Series KLC configuration YAML file')
     parser.add_argument('--library', type=str, nargs='?',
                         default='Connector_Samtec_QStrip',
-                        help='KiCad library name (without extension)')
+                        help='Default KiCad library name (without extension)')
     parser.add_argument('files', metavar='file', type=str, nargs='*',
                         help='YAML file(s) containing footprint parameters')
     args = parser.parse_args()
@@ -422,7 +424,7 @@ if __name__ == '__main__':
         parser.print_help()
         sys.exit(1)
 
-    print("Library:", args.library)
+    print("Default Library:", args.library)
     
     for path in args.files:
         print("Reading", path)
