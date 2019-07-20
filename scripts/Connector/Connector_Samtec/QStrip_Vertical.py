@@ -5,10 +5,12 @@ YAML footprint specification
 
 ---
 Footprint_Name:
-  description: 'Brief description of the footprint'
-  datasheet: 'URL to footprint datasheet'
-  tags: 'KiCad tags go here'
-  add-tags: 'more tags' # [optional], used to extend the tag list
+  meta: # Footprint metadata
+    pn: 'part number' # [optional], overrides automatic part number detection
+    description: 'Brief description of the footprint'
+    datasheet: 'URL to footprint datasheet'
+    tags: 'KiCad tags go here'
+  tags: 'more tags' # [optional], used to extend the tag list
   layout:
     type: '(Terminal|Socket)'
     width: !!float mm # width
@@ -61,7 +63,7 @@ from KicadModTree import *
 from footprint_text_fields import addTextFields
 from helpers import *
 
-def markerArrow(x, y, width, line_width, layer, angle=0, close=True):
+def markerArrow(x, y, width, line_width, layer="F.Fab", angle=0, close=True):
     node = Node()
     points = [(-width/2, width/2),
               (0, 0),
@@ -71,7 +73,7 @@ def markerArrow(x, y, width, line_width, layer, angle=0, close=True):
         points.append((-width/2, width/2))
 
     node.append(PolygoneLine(nodes = points,
-                             layer = "F.Fab",
+                             layer = layer,
                              width = line_width))
     node.insert(Rotation(angle))
     node.insert(Translation(x,y))
@@ -117,24 +119,29 @@ def generate_one_footprint(param, config, library):
     pin = [] # Pin position list, organized by bank
     for b in range(0, banks):
         pin.append([])
-        for p in range(0, pins_per_bank):
+        for p in range(pins_per_bank):
             # Compute next pad location
             pos = Vector2D(pin1.x + (p // 2)*pitch + b*bank_x,
                            pin1.y - (p  % 2)*(2*pin1.y))
-            if b < param['banks']['diff'] and ((p+1) % 6  == 0 or (p+2) % 6 == 0):
-                # Place gaps between differential pairs
-                continue
-            else:
-                pin[b].append(pos) # Add position to list
-                # Create pad (both single-ended and differential)
-                pad = Pad(number = str(n),
-                          at = pos,
-                          size = (pad_w, pad_h),
-                          type = Pad.TYPE_SMT,
-                          layers = Pad.LAYERS_SMT,
-                          shape = Pad.SHAPE_RECT)
-                fp.append(pad)
-                n = n + 1
+
+            # Skip slots for differential banks
+            if b < param['banks']['diff']:
+                if ((p+1) % 6 == 0 or # Skip every 3rd odd pin
+                    (p+2) % 6 == 0 or # Skip every 3rd even pin
+                    (p+3) > pins_per_bank): # Skip half-pair at end of bank
+                    continue
+
+            # Create pad
+            pin[b].append(pos) # Add position to list
+            # Create pad (both single-ended and differential)
+            pad = Pad(number = str(n),
+                      at = pos,
+                      size = (pad_w, pad_h),
+                      type = Pad.TYPE_SMT,
+                      layers = Pad.LAYERS_SMT,
+                      shape = Pad.SHAPE_RECT)
+            fp.append(pad)
+            n = n + 1
     
     # Ground pad parameters
     gnd_height    = param['pins']['ground']['height']
@@ -342,8 +349,8 @@ def generate_one_footprint(param, config, library):
     fp.setAttribute('smd')
     
     # Part number
-    if 'pn' in param:
-        partnum = param['pn']
+    if 'pn' in param['meta']:
+        partnum = param['meta']['pn']
     else:
         partnum = param['name'].split('_')[1]
         
@@ -355,17 +362,17 @@ def generate_one_footprint(param, config, library):
         pins_or_pairs = pins_per_bank
 
     # Description
-    desc = param['description']
+    desc = param['meta']['description']
     desc = desc.format(pn = partnum,
                        type = mode,
-                       ds = param['datasheet'],
+                       ds = param['meta']['datasheet'],
                        pitch = pitch,
                        banks = banks,
                        pins = pins_or_pairs)
     fp.setDescription(desc)
 
     # Tags
-    tags = param['tags']
+    tags = param['meta']['tags']
     if 'add-tags' in param:
         tags += ' ' + param['add-tags']
     fp.setTags(tags)
@@ -379,7 +386,7 @@ def generate_one_footprint(param, config, library):
     ############################################################################
     # Write kicad_mod file
     
-    os.makedirs(library, exist_ok=True)
+    os.makedirs(library+'.pretty', exist_ok=True)
     filename = os.path.join(library+'.pretty', param['name']+'.kicad_mod')
     KicadFileHandler(fp).writeFile(filename)
 
