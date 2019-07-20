@@ -81,16 +81,16 @@ def markerArrow(x, y, width, line_width, layer="F.Fab", angle=0, close=True):
 
 def generate_one_footprint(param, config, default_lib):
     fp = Footprint(param['name'])
-
+    
     # Terminal or Socket mode
     mode = param['layout']['type'].capitalize()
-
+    
     # Bank parameters
     banks  = param['banks']['n']
     bank_x = param['banks']['space']
     bank_w = param['banks']['width']
     bank_h = param['banks']['height']
-    pins_per_bank = param['banks']['pins']
+    bank_slots = param['banks']['slots']
 
     ############################################################################
     # Copper layer(s)
@@ -103,7 +103,7 @@ def generate_one_footprint(param, config, default_lib):
 
     # Pin 1 position
     pin1 = Vector2D(0,0)
-    pin1.x = -(pins_per_bank / 4)*pitch + pitch/2 - ((banks-1) / 2)*bank_x
+    pin1.x = -(bank_slots / 4)*pitch + pitch/2 - ((banks-1) / 2)*bank_x
     if mode == "Terminal":
         pin1.y = -pad_y
     elif mode == "Socket":
@@ -112,23 +112,26 @@ def generate_one_footprint(param, config, default_lib):
         raise ValueError("Connector type must be either 'Terminal' or 'Socket'")
     
     # Bank 1 center point
-    bank1_mid = pin1.x - pitch/2 + (pins_per_bank / 4)*pitch
+    bank1_mid = pin1.x - pitch/2 + (bank_slots / 4)*pitch
 
     # Place signal pads
     n = 1 # Pin counter
     pin = [] # Pin position list, organized by bank
     for b in range(0, banks):
         pin.append([])
-        for p in range(pins_per_bank):
+        for slot in range(bank_slots):
             # Compute next pad location
-            pos = Vector2D(pin1.x + (p // 2)*pitch + b*bank_x,
-                           pin1.y - (p  % 2)*(2*pin1.y))
+            pos = {'x': pin1.x + (slot // 2)*pitch + b*bank_x,
+                   'y': pin1.y - (slot  % 2)*(2*pin1.y),
+                   'n': n+1, 'slot': slot}
 
             # Skip slots for differential banks
             if b < param['banks']['diff']:
-                if ((p+1) % 6 == 0 or # Skip every 3rd odd pin
-                    (p+2) % 6 == 0 or # Skip every 3rd even pin
-                    (p+3) > pins_per_bank): # Skip half-pair at end of bank
+                if ((slot+1) % 6 == 0 or # Skip every 3rd odd slot
+                    (slot+2) % 6 == 0 or # Skip every 3rd even slot
+                    # Only add end-of-bank pins if they are completing a pair
+                    (slot+2 >= bank_slots and
+                     pin[b][-2]['slot'] != slot-2)):
                     continue
 
             # Create pad
@@ -141,7 +144,7 @@ def generate_one_footprint(param, config, default_lib):
                       layers = Pad.LAYERS_SMT,
                       shape = Pad.SHAPE_RECT)
             fp.append(pad)
-            n = n + 1
+            n += 1
     
     # Ground pad parameters
     gnd_height    = param['pins']['ground']['height']
@@ -299,7 +302,7 @@ def generate_one_footprint(param, config, default_lib):
         silk_rEnd[i]['x'] = -silk_rEnd[i]['x']
     # Define right outline inner offset from the last pin
     # (if the last bank is differential, it does not perfectly mirror the first)
-    silk_rEnd[0]['x'] = silk_rEnd[-1]['x'] = pin[-1][-1].x + silk_pad
+    silk_rEnd[0]['x'] = silk_rEnd[-1]['x'] = pin[-1][-1]['x'] + silk_pad
 
     # Draw left and right end outlines
     fp.append(PolygoneLine(nodes = silk_lEnd,
@@ -311,8 +314,8 @@ def generate_one_footprint(param, config, default_lib):
 
     # Draw outlines between banks
     for b in range(banks-1):
-        fp.extend([Line(start = (pin[b][-1].x  + silk_pad, m*silk_y),
-                        end   = (pin[b+1][0].x - silk_pad, m*silk_y),
+        fp.extend([Line(start = (pin[b][-1]['x']  + silk_pad, m*silk_y),
+                        end   = (pin[b+1][0]['x'] - silk_pad, m*silk_y),
                         layer = "F.SilkS",
                         width = silk_line) for m in (-1,1)])
 
@@ -358,9 +361,9 @@ def generate_one_footprint(param, config, default_lib):
     # Pins or pairs/bank
     if param['banks']['diff'] == banks:
         # Differential mode: round up to nearest even number of pairs
-        pins_or_pairs = (pins_per_bank // 3) + (pins_per_bank // 3) % 2
+        pins_or_pairs = (bank_slots // 3) + (bank_slots // 3) % 2
     else:
-        pins_or_pairs = pins_per_bank
+        pins_or_pairs = bank_slots
 
     # Description
     desc = param['meta']['description']

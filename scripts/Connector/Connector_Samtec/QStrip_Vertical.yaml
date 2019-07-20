@@ -16,7 +16,7 @@ Samtec_QTH-030-01-x-D_P0.5mm_Vertical: &QTH-030-01-x-D
       [drawing](http://suddendocs.samtec.com/prints/qth-xxx-xx-x-d-xxx-mkt.pdf),
       [footprint](http://suddendocs.samtec.com/prints/qth-xxx-xx-x-d-xxx-footprint.pdf)
   layout: {type: 'Terminal', width: 20.0, height: 5.97}
-  banks: {n: 1, diff: 0, pins: 60, space: 20.0, width: 16.4, height: 3.9}
+  banks: {n: 1, diff: 0, slots: 60, space: 20.0, width: 16.5, height: 4.0}
   pins: &QTH_pins
     signal: {pitch: 0.5, y: 3.086, width: 0.305, height: 1.45}
     ground: {height: 0.64, width: [2.54, 4.7], space: [16.89, 6.35]}
@@ -27,26 +27,26 @@ Samtec_QTH-030-01-x-D-A_P0.5mm_Vertical:
   holes:
     - {drill: 1.02, space: 18.48, y: -2.03}
 
-Samtec_QTH-030-01-x-D-L_P0.5mm_Vertical:
-  <<: *QTH-030-01-x-D
-  add-tags: 'latching'
-  width: 23.0
-  holes:
-    - {drill: [0.5, 1.15], pad: [1.0, 1.65], space: 21.69, y: -0.508}
-
-Samtec_QTH-030-01-x-D-A-L_P0.5mm_Vertical:
-  <<: *QTH-030-01-x-D
-  add-tags: 'alignment-pins latching'
-  width: 23.0
-  holes:
-    - {drill: 1.02, space: 18.48, y: -2.03}
-    - {drill: [0.5, 1.15], pad: [1.0, 1.65], space: 21.69, y: -0.508}
+##Samtec_QTH-030-01-x-D-L_P0.5mm_Vertical:
+##  <<: *QTH-030-01-x-D
+##  add-tags: 'latching'
+##  width: 23.0
+##  holes:
+##    - {drill: [0.5, 1.15], pad: [1.0, 1.65], space: 21.69, y: -0.508}
+##
+##Samtec_QTH-030-01-x-D-A-L_P0.5mm_Vertical:
+##  <<: *QTH-030-01-x-D
+##  add-tags: 'alignment-pins latching'
+##  width: 23.0
+##  holes:
+##    - {drill: 1.02, space: 18.48, y: -2.03}
+##    - {drill: [0.5, 1.15], pad: [1.0, 1.65], space: 21.69, y: -0.508}
 
 # QTH family; 2 banks
 Samtec_QTH-060-01-x-D_P0.5mm_Vertical: &QTH-060-01-x-D
   meta: *QTH_meta
   layout: {type: 'Terminal', width: 40.0, height: 5.97}
-  banks: {n: 2, diff: 0, pins: 60, space: 20.0, width: 16.4, height: 3.9}
+  banks: {n: 2, diff: 0, slots: 60, space: 20.0, width: 16.5, height: 4.0}
   pins: *QTH_pins
 
 Samtec_QTH-060-01-x-D-A_P0.5mm_Vertical:
@@ -55,26 +55,26 @@ Samtec_QTH-060-01-x-D-A_P0.5mm_Vertical:
   holes:
     - {drill: 1.02, space: 38.48, y: -2.03}
 
-Samtec_QTH-060-01-x-D-L_P0.5mm_Vertical:
-  <<: *QTH-060-01-x-D
-  add-tags: 'latching'
-  width: 43.0
-  holes:
-    - {drill: [0.5, 1.15], pad: [1.0, 1.65], space: 41.69, y: -0.508}
-
-Samtec_QTH-060-01-x-D-A-L_P0.5mm_Vertical:
-  <<: *QTH-060-01-x-D
-  add-tags: 'alignment-pins latching'
-  width: 43.0
-  holes:
-    - {drill: 1.02, space: 38.48, y: -2.03}
-    - {drill: [0.5, 1.15], pad: [1.0, 1.65], space: 41.69, y: -0.508}
+##Samtec_QTH-060-01-x-D-L_P0.5mm_Vertical:
+##  <<: *QTH-060-01-x-D
+##  add-tags: 'latching'
+##  width: 43.0
+##  holes:
+##    - {drill: [0.5, 1.15], pad: [1.0, 1.65], space: 41.69, y: -0.508}
+##
+##Samtec_QTH-060-01-x-D-A-L_P0.5mm_Vertical:
+##  <<: *QTH-060-01-x-D
+##  add-tags: 'alignment-pins latching'
+##  width: 43.0
+##  holes:
+##    - {drill: 1.02, space: 38.48, y: -2.03}
+##    - {drill: [0.5, 1.15], pad: [1.0, 1.65], space: 41.69, y: -0.508}
 
 # QTH family; 3 banks
 Samtec_QTH-090-01-x-D_P0.5mm_Vertical: &QTH-090-01-x-D
   meta: *QTH_meta
   layout: {type: 'Terminal', width: 60.0, height: 5.97}
-  banks: {n: 3, diff: 0, pins: 60, space: 20.0, width: 16.4, height: 3.9}
+  banks: {n: 3, diff: 0, slots: 60, space: 20.0, width: 16.5, height: 4.0}
   pins: *QTH_pins
 
 Samtec_QTH-090-01-x-D-A_P0.5mm_Vertical:
@@ -92,7 +92,7 @@ Samtec_QTH-020-01-x-D-DP_P0.5mm_Vertical: &QTH-020-01-x-D-DP
       [drawing](http://suddendocs.samtec.com/prints/qth-xxx-xx-x-d-dp-xxx-mkt.pdf),
       [footprint](http://suddendocs.samtec.com/prints/qth-xxx-xx-x-d-dp-xxx-footprint.pdf)
   layout: {type: 'Terminal', width: 20.0, height: 5.97}
-  banks: {n: 1, diff: 1, pins: 60, space: 20.0, width: 16.4, height: 3.9}
+  banks: {n: 1, diff: 1, slots: 60, space: 20.0, width: 16.5, height: 4.0}
   pins: *QTH_pins
 
 Samtec_QTH-020-01-x-D-DP-A_P0.5mm_Vertical:
@@ -101,26 +101,26 @@ Samtec_QTH-020-01-x-D-DP-A_P0.5mm_Vertical:
   holes:
     - {drill: 1.02, space: 18.48, y: -2.03}
 
-Samtec_QTH-020-01-x-D-DP-L_P0.5mm_Vertical:
-  <<: *QTH-020-01-x-D-DP
-  add-tags: 'latching'
-  width: 23.0
-  holes:
-    - {drill: [0.5, 1.15], pad: [1.0, 1.65], space: 21.69, y: -0.508}
-
-Samtec_QTH-020-01-x-D-DP-A-L_P0.5mm_Vertical:
-  <<: *QTH-020-01-x-D-DP
-  add-tags: 'alignment-pins latching'
-  width: 23.0
-  holes:
-    - {drill: 1.02, space: 18.48, y: -2.03}
-    - {drill: [0.5, 1.15], pad: [1.0, 1.65], space: 21.69, y: -0.508}
+##Samtec_QTH-020-01-x-D-DP-L_P0.5mm_Vertical:
+##  <<: *QTH-020-01-x-D-DP
+##  add-tags: 'latching'
+##  width: 23.0
+##  holes:
+##    - {drill: [0.5, 1.15], pad: [1.0, 1.65], space: 21.69, y: -0.508}
+##
+##Samtec_QTH-020-01-x-D-DP-A-L_P0.5mm_Vertical:
+##  <<: *QTH-020-01-x-D-DP
+##  add-tags: 'alignment-pins latching'
+##  width: 23.0
+##  holes:
+##    - {drill: 1.02, space: 18.48, y: -2.03}
+##    - {drill: [0.5, 1.15], pad: [1.0, 1.65], space: 21.69, y: -0.508}
 
 # QTH family; 2 banks; differential
 Samtec_QTH-040-01-x-D-DP_P0.5mm_Vertical: &QTH-040-01-x-D-DP
   meta: *QTH-DP_meta
   layout: {type: 'Terminal', width: 40.0, height: 5.97}
-  banks: {n: 2, diff: 2, pins: 60, space: 20.0, width: 16.4, height: 3.9}
+  banks: {n: 2, diff: 2, slots: 60, space: 20.0, width: 16.5, height: 4.0}
   pins: *QTH_pins
 
 Samtec_QTH-040-01-x-D-DP-A_P0.5mm_Vertical:
@@ -129,26 +129,26 @@ Samtec_QTH-040-01-x-D-DP-A_P0.5mm_Vertical:
   holes:
     - {drill: 1.02, space: 38.48, y: -2.03}
 
-Samtec_QTH-040-01-x-D-DP-L_P0.5mm_Vertical:
-  <<: *QTH-040-01-x-D-DP
-  add-tags: 'latching'
-  width: 43.0
-  holes:
-    - {drill: [0.5, 1.15], pad: [1.0, 1.65], space: 41.69, y: -0.508}
-
-Samtec_QTH-040-01-x-D-DP-A-L_P0.5mm_Vertical:
-  <<: *QTH-040-01-x-D-DP
-  add-tags: 'alignment-pins latching'
-  width: 43.0
-  holes:
-    - {drill: 1.02, space: 38.48, y: -2.03}
-    - {drill: [0.5, 1.15], pad: [1.0, 1.65], space: 41.69, y: -0.508}
+##Samtec_QTH-040-01-x-D-DP-L_P0.5mm_Vertical:
+##  <<: *QTH-040-01-x-D-DP
+##  add-tags: 'latching'
+##  width: 43.0
+##  holes:
+##    - {drill: [0.5, 1.15], pad: [1.0, 1.65], space: 41.69, y: -0.508}
+##
+##Samtec_QTH-040-01-x-D-DP-A-L_P0.5mm_Vertical:
+##  <<: *QTH-040-01-x-D-DP
+##  add-tags: 'alignment-pins latching'
+##  width: 43.0
+##  holes:
+##    - {drill: 1.02, space: 38.48, y: -2.03}
+##    - {drill: [0.5, 1.15], pad: [1.0, 1.65], space: 41.69, y: -0.508}
 
 # QTH family; 3 banks; differential
 Samtec_QTH-060-01-x-D-DP_P0.5mm_Vertical: &QTH-060-01-x-D-DP
   meta: *QTH-DP_meta
   layout: {type: 'Terminal', width: 60.0, height: 5.97}
-  banks: {n: 3, diff: 3, pins: 60, space: 20.0, width: 16.4, height: 3.9}
+  banks: {n: 3, diff: 3, slots: 60, space: 20.0, width: 16.5, height: 4.0}
   pins: *QTH_pins
 
 Samtec_QTH-060-01-x-D-DP-A_P0.5mm_Vertical:
@@ -170,7 +170,7 @@ Samtec_HSMC_ASP-122952-01_P0.5mm_Vertical:
       Samtec {pn:s} HSMC Card {type:s}; modified QTH-090-01-L-D-A,
       Bank 1 differential; {ds:s}
   layout: {type: 'Terminal', width: 60.0, height: 5.97}
-  banks: {n: 3, diff: 1, pins: 60, space: 20.0, width: 16.4, height: 3.9}
+  banks: {n: 3, diff: 1, slots: 60, space: 20.0, width: 16.5, height: 4.0}
   pins: *QTH_pins
   holes:
     - {drill: 1.02, space: 58.48, y: -2.03}
@@ -185,7 +185,7 @@ Samtec_QSH-030-01-x-D_P0.5mm_Vertical: &QSH-030-01-x-D
       [drawing](http://suddendocs.samtec.com/prints/qsh-xxx-01-x-d-xxx-mkt.pdf),
       [footprint](http://suddendocs.samtec.com/prints/qsh-xxx-01-x-d-xx-footprint.pdf)
   layout: {type: 'Socket', width: 21.31, height: 7.24}
-  banks: {n: 1, diff: 0, pins: 60, space: 20.0, width: 15.89, height: 3.81}
+  banks: {n: 1, diff: 0, slots: 60, space: 20.0, width: 16.0, height: 3.8}
   pins: &QSH_pins
     signal: {pitch: 0.5, y: 2.67, width: 0.279, height: 2.27}
     ground: {height: 0.43, width: [2.54, 4.7], space: [16.13, 6.35]}
@@ -196,17 +196,17 @@ Samtec_QSH-030-01-x-D-A_P0.5mm_Vertical:
   holes:
     - {drill: 1.02, space: 20.13, y: 2.03}
 
-Samtec_QSH-030-01-x-D-LC_P0.5mm_Vertical:
-  <<: *QSH-030-01-x-D
-  add-tags: 'locking-clips'
-  holes:
-    - {drill: 1.19, space: 20.13, y: 2.03}
+##Samtec_QSH-030-01-x-D-LC_P0.5mm_Vertical:
+##  <<: *QSH-030-01-x-D
+##  add-tags: 'locking-clips'
+##  holes:
+##    - {drill: 1.19, space: 20.13, y: 2.03}
 
 # QSH family; 2 banks
 Samtec_QSH-060-01-x-D_P0.5mm_Vertical: &QSH-060-01-x-D
   meta: *QSH_meta
   layout: {type: 'Socket', width: 41.31, height: 7.24}
-  banks: {n: 2, diff: 0, pins: 60, space: 20.0, width: 15.89, height: 3.81}
+  banks: {n: 2, diff: 0, slots: 60, space: 20.0, width: 16.0, height: 3.8}
   pins: *QSH_pins
 
 Samtec_QSH-060-01-x-D-A_P0.5mm_Vertical:
@@ -215,17 +215,17 @@ Samtec_QSH-060-01-x-D-A_P0.5mm_Vertical:
   holes:
     - {drill: 1.02, space: 40.13, y: 2.03}
 
-Samtec_QSH-060-01-x-D-LC_P0.5mm_Vertical:
-  <<: *QSH-060-01-x-D
-  add-tags: 'locking-clips'
-  holes:
-    - {drill: 1.19, space: 40.13, y: 2.03}
+##Samtec_QSH-060-01-x-D-LC_P0.5mm_Vertical:
+##  <<: *QSH-060-01-x-D
+##  add-tags: 'locking-clips'
+##  holes:
+##    - {drill: 1.19, space: 40.13, y: 2.03}
 
 # QSH family; 3 banks
 Samtec_QSH-090-01-x-D_P0.5mm_Vertical: &QSH-090-01-x-D
   meta: *QSH_meta
   layout: {type: 'Socket', width: 61.38, height: 7.24}
-  banks: {n: 3, diff: 0, pins: 60, space: 20.0, width: 15.89, height: 3.81}
+  banks: {n: 3, diff: 0, slots: 60, space: 20.0, width: 16.0, height: 3.8}
   pins: *QSH_pins
 
 Samtec_QSH-090-01-x-D-A_P0.5mm_Vertical:
@@ -234,11 +234,11 @@ Samtec_QSH-090-01-x-D-A_P0.5mm_Vertical:
   holes:
     - {drill: 1.02, space: 60.13, y: 2.03}
 
-Samtec_QSH-090-01-x-D-LC_P0.5mm_Vertical:
-  <<: *QSH-090-01-x-D
-  add-tags: 'locking-clips'
-  holes:
-    - {drill: 1.19, space: 60.13, y: 2.03}
+##Samtec_QSH-090-01-x-D-LC_P0.5mm_Vertical:
+##  <<: *QSH-090-01-x-D
+##  add-tags: 'locking-clips'
+##  holes:
+##    - {drill: 1.19, space: 60.13, y: 2.03}
 
 # QSH family; 1 bank; differential
 Samtec_QSH-020-01-x-D-DP_P0.5mm_Vertical: &QSH-020-01-x-D-DP
@@ -249,7 +249,7 @@ Samtec_QSH-020-01-x-D-DP_P0.5mm_Vertical: &QSH-020-01-x-D-DP
       [drawing](http://suddendocs.samtec.com/prints/qsh-xxx-xx-x-d-dp-xxx-mkt.pdf),
       [footprint](http://suddendocs.samtec.com/prints/qsh-xxx-01-x-d-dp-xx-footprint.pdf)
   layout: {type: 'Socket', width: 21.31, height: 7.24}
-  banks: {n: 1, diff: 1, pins: 60, space: 20.0, width: 15.89, height: 3.81}
+  banks: {n: 1, diff: 1, slots: 60, space: 20.0, width: 16.0, height: 3.8}
   pins: *QSH_pins
 
 Samtec_QSH-020-01-x-D-DP-A_P0.5mm_Vertical:
@@ -258,17 +258,17 @@ Samtec_QSH-020-01-x-D-DP-A_P0.5mm_Vertical:
   holes:
     - {drill: 1.02, space: 20.13, y: 2.03}
 
-Samtec_QSH-020-01-x-D-DP-LC_P0.5mm_Vertical:
-  <<: *QSH-020-01-x-D-DP
-  add-tags: 'locking-clips'
-  holes:
-    - {drill: 1.19, space: 20.13, y: 2.03}
+##Samtec_QSH-020-01-x-D-DP-LC_P0.5mm_Vertical:
+##  <<: *QSH-020-01-x-D-DP
+##  add-tags: 'locking-clips'
+##  holes:
+##    - {drill: 1.19, space: 20.13, y: 2.03}
 
 # QSH family; 2 banks; differential
 Samtec_QSH-040-01-x-D-DP_P0.5mm_Vertical: &QSH-040-01-x-D-DP
   meta: *QSH-DP_meta
   layout: {type: 'Socket', width: 41.31, height: 7.24}
-  banks: {n: 2, diff: 2, pins: 60, space: 20.0, width: 15.89, height: 3.81}
+  banks: {n: 2, diff: 2, slots: 60, space: 20.0, width: 16.0, height: 3.8}
   pins: *QSH_pins
 
 Samtec_QSH-040-01-x-D-DP-A_P0.5mm_Vertical:
@@ -276,16 +276,16 @@ Samtec_QSH-040-01-x-D-DP-A_P0.5mm_Vertical:
   holes:
     - {drill: 1.02, space: 40.13, y: 2.03}
 
-Samtec_QSH-040-01-x-D-DP-LC_P0.5mm_Vertical:
-  <<: *QSH-040-01-x-D-DP
-  holes:
-    - {drill: 1.19, space: 40.13, y: 2.03}
+##Samtec_QSH-040-01-x-D-DP-LC_P0.5mm_Vertical:
+##  <<: *QSH-040-01-x-D-DP
+##  holes:
+##    - {drill: 1.19, space: 40.13, y: 2.03}
 
 # QSH family; 3 banks; differential
 Samtec_QSH-060-01-x-D-DP_P0.5mm_Vertical: &QSH-060-01-x-D-DP
   meta: *QSH-DP_meta
   layout: {type: 'Socket', width: 61.38, height: 7.24}
-  banks: {n: 3, diff: 3, pins: 60, space: 20.0, width: 15.89, height: 3.81}
+  banks: {n: 3, diff: 3, slots: 60, space: 20.0, width: 16.0, height: 3.8}
   pins: *QSH_pins
 
 Samtec_QSH-060-01-x-D-DP-A_P0.5mm_Vertical:
@@ -293,10 +293,10 @@ Samtec_QSH-060-01-x-D-DP-A_P0.5mm_Vertical:
   holes:
     - {drill: 1.02, space: 60.13, y: 2.03}
 
-Samtec_QSH-060-01-x-D-DP-LC_P0.5mm_Vertical:
-  <<: *QSH-060-01-x-D-DP
-  holes:
-    - {drill: 1.19, space: 60.13, y: 2.03}
+##Samtec_QSH-060-01-x-D-DP-LC_P0.5mm_Vertical:
+##  <<: *QSH-060-01-x-D-DP
+##  holes:
+##    - {drill: 1.19, space: 60.13, y: 2.03}
 
 # QSH family; 3 banks; specialized
 Samtec_HSMC_ASP-122953-01_P0.5mm_Vertical:
@@ -311,7 +311,7 @@ Samtec_HSMC_ASP-122953-01_P0.5mm_Vertical:
       Samtec {pn:s} HSMC Host {type:s}; modified QSH-090-01-L-D-A,
       Bank 1 differential; {ds:s}
   layout: {type: 'Socket', width: 61.38, height: 7.24}
-  banks: {n: 3, diff: 1, pins: 60, space: 20.0, width: 15.89, height: 3.81}
+  banks: {n: 3, diff: 1, slots: 60, space: 20.0, width: 16.0, height: 3.8}
   pins: *QSH_pins
   holes:
     - {drill: 1.02, space: 60.13, y: 2.03}
@@ -326,7 +326,7 @@ Samtec_QTS-025-01-x-D_P0.635mm_Vertical: &QTS-025-01-x-D
       [drawing](http://suddendocs.samtec.com/prints/qts-xxx-xx-xxx-d-xxx-mkt.pdf),
       [footprint](http://suddendocs.samtec.com/prints/qts-xxx-01-x-d-xx-footprint.pdf)
   layout: {type: 'Terminal', width: 20.0, height: 5.97}
-  banks: {n: 1, diff: 0, pins: 50, space: 20.0, width: 16.4, height: 3.94}
+  banks: {n: 1, diff: 0, slots: 50, space: 20.0, width: 16.5, height: 4.0}
   pins: &QTS_pins
     signal: {pitch: 0.635, y: 3.086, width: 0.406, height: 1.45}
     ground: {height: 0.635, width: [2.54, 4.7], space: [16.89, 6.35]}
@@ -341,7 +341,7 @@ Samtec_QTS-025-01-x-D-A_P0.635mm_Vertical:
 Samtec_QTS-050-01-x-D_P0.635mm_Vertical: &QTS-050-01-x-D
   meta: *QTS_meta
   layout: {type: 'Terminal', width: 40.0, height: 5.97}
-  banks: {n: 2, diff: 0, pins: 50, space: 20.0, width: 16.4, height: 3.94}
+  banks: {n: 2, diff: 0, slots: 50, space: 20.0, width: 16.5, height: 4.0}
   pins: *QTS_pins
 
 Samtec_QTS-050-01-x-D-A_P0.635mm_Vertical:
@@ -354,7 +354,7 @@ Samtec_QTS-050-01-x-D-A_P0.635mm_Vertical:
 Samtec_QTS-075-01-x-D_P0.635mm_Vertical: &QTS-075-01-x-D
   meta: *QTS_meta
   layout: {type: 'Terminal', width: 60.0, height: 5.97}
-  banks: {n: 3, diff: 0, pins: 50, space: 20.0, width: 16.4, height: 3.94}
+  banks: {n: 3, diff: 0, slots: 50, space: 20.0, width: 16.5, height: 4.0}
   pins: *QTS_pins
 
 Samtec_QTS-075-01-x-D-A_P0.635mm_Vertical:
@@ -372,7 +372,7 @@ Samtec_QTS-016-01-x-D-DP_P0.635mm_Vertical: &QTS-016-01-x-D-DP
       [drawing](http://suddendocs.samtec.com/prints/qts-xxx-xx-xxx-d-dp-xx-mkt.pdf),
       [footprint](http://suddendocs.samtec.com/prints/qts-xxx-xx-x-d-dp-xx-footprint.pdf)
   layout: {type: 'Terminal', width: 20.0, height: 5.97}
-  banks: {n: 1, diff: 1, pins: 50, space: 20.0, width: 16.4, height: 3.94}
+  banks: {n: 1, diff: 1, slots: 50, space: 20.0, width: 16.5, height: 4.0}
   pins: *QTS_pins
 
 Samtec_QTS-016-01-x-D-DP-A_P0.635mm_Vertical:
@@ -381,17 +381,17 @@ Samtec_QTS-016-01-x-D-DP-A_P0.635mm_Vertical:
   holes:
     - {drill: 1.02, space: 18.48, y: -2.03}
 
-Samtec_QTS-016-01-x-D-DP-LC_P0.635mm_Vertical:
-  <<: *QTS-016-01-x-D-DP
-  add-tags: 'locking-clips'
-  holes:
-    - {drill: 1.16, space: 18.48, y: -2.03}
+##Samtec_QTS-016-01-x-D-DP-LC_P0.635mm_Vertical:
+##  <<: *QTS-016-01-x-D-DP
+##  add-tags: 'locking-clips'
+##  holes:
+##    - {drill: 1.16, space: 18.48, y: -2.03}
 
 # QTS family; 2 banks; differential
 Samtec_QTS-032-01-x-D-DP_P0.635mm_Vertical: &QTS-032-01-x-D-DP
   meta: *QTS-DP_meta
   layout: {type: 'Terminal', width: 40.0, height: 5.97}
-  banks: {n: 2, diff: 2, pins: 50, space: 20.0, width: 16.4, height: 3.94}
+  banks: {n: 2, diff: 2, slots: 50, space: 20.0, width: 16.5, height: 4.0}
   pins: *QTS_pins
 
 Samtec_QTS-032-01-x-D-DP-A_P0.635mm_Vertical:
@@ -400,17 +400,17 @@ Samtec_QTS-032-01-x-D-DP-A_P0.635mm_Vertical:
   holes:
     - {drill: 1.02, space: 38.48, y: -2.03}
 
-Samtec_QTS-032-01-x-D-DP-LC_P0.635mm_Vertical:
-  <<: *QTS-032-01-x-D-DP
-  add-tags: 'locking-clips'
-  holes:
-    - {drill: 1.16, space: 38.48, y: -2.03}
+##Samtec_QTS-032-01-x-D-DP-LC_P0.635mm_Vertical:
+##  <<: *QTS-032-01-x-D-DP
+##  add-tags: 'locking-clips'
+##  holes:
+##    - {drill: 1.16, space: 38.48, y: -2.03}
 
 # QTS family; 3 banks; differential
 Samtec_QTS-048-01-x-D-DP_P0.635mm_Vertical: &QTS-048-01-x-D-DP
   meta: *QTS-DP_meta
   layout: {type: 'Terminal', width: 60.0, height: 5.97}
-  banks: {n: 3, diff: 3, pins: 50, space: 20.0, width: 16.4, height: 3.94}
+  banks: {n: 3, diff: 3, slots: 50, space: 20.0, width: 16.5, height: 4.0}
   pins: *QTS_pins
 
 Samtec_QTS-048-01-x-D-DP-A_P0.635mm_Vertical:
@@ -419,11 +419,11 @@ Samtec_QTS-048-01-x-D-DP-A_P0.635mm_Vertical:
   holes:
     - {drill: 1.02, space: 58.48, y: -2.03}
 
-Samtec_QTS-048-01-x-D-DP-LC_P0.635mm_Vertical:
-  <<: *QTS-048-01-x-D-DP
-  add-tags: 'locking-clips'
-  holes:
-    - {drill: 1.16, space: 58.48, y: -2.03}
+##Samtec_QTS-048-01-x-D-DP-LC_P0.635mm_Vertical:
+##  <<: *QTS-048-01-x-D-DP
+##  add-tags: 'locking-clips'
+##  holes:
+##    - {drill: 1.16, space: 58.48, y: -2.03}
 
 ################################################################################
 # QSS family; 1 bank
@@ -435,7 +435,7 @@ Samtec_QSS-025-01-x-D_P0.635mm_Vertical: &QSS-025-01-x-D
       [drawing](http://suddendocs.samtec.com/prints/qss-xxx-xx-xxx-d-xxx-mkt.pdf),
       [footprint](http://suddendocs.samtec.com/prints/qss-xxx-01-x-d-xx-footprint.pdf)
   layout: {type: 'Socket', width: 21.27, height: 7.24}
-  banks: {n: 1, diff: 0, pins: 50, space: 20.0, width: 15.89, height: 3.66}
+  banks: {n: 1, diff: 0, slots: 50, space: 20.0, width: 16.0, height: 3.66}
   pins: &QSS_pins
     signal: {pitch: 0.635, y: 2.865, width: 0.406, height: 2.273}
     ground: {height: 0.432, width: [2.8, 4.7], space: [16.13, 6.35]}
@@ -444,33 +444,33 @@ Samtec_QSS-025-01-x-D-A_P0.635mm_Vertical:
   <<: *QSS-025-01-x-D
   add-tags: 'alignment-pins'
   holes:
-    - {drill: 1.02, space: 20.0, y: 2.65}
+    - {drill: 1.02, space: 20.0, y: 2.67}
 
 # QSS family; 2 banks
 Samtec_QSS-050-01-x-D_P0.635mm_Vertical: &QSS-050-01-x-D
   meta: *QSS_meta
   layout: {type: 'Socket', width: 41.28, height: 7.24}
-  banks: {n: 2, diff: 0, pins: 50, space: 20.0, width: 15.89, height: 3.66}
+  banks: {n: 2, diff: 0, slots: 50, space: 20.0, width: 16.0, height: 3.66}
   pins: *QSS_pins
 
 Samtec_QSS-050-01-x-D-A_P0.635mm_Vertical:
   <<: *QSS-050-01-x-D
   add-tags: 'alignment-pins'
   holes:
-    - {drill: 1.02, space: 40.0, y: 2.65}
+    - {drill: 1.02, space: 40.0, y: 2.67}
 
 # QSS family; 3 banks
 Samtec_QSS-075-01-x-D_P0.635mm_Vertical: &QSS-075-01-x-D
   meta: *QSS_meta
   layout: {type: 'Socket', width: 61.28, height: 7.24}
-  banks: {n: 3, diff: 0, pins: 50, space: 20.0, width: 15.89, height: 3.66}
+  banks: {n: 3, diff: 0, slots: 50, space: 20.0, width: 16.0, height: 3.66}
   pins: *QSS_pins
 
 Samtec_QSS-075-01-x-D-A_P0.635mm_Vertical:
   <<: *QSS-075-01-x-D
   add-tags: 'alignment-pins'
   holes:
-    - {drill: 1.02, space: 60.0, y: 2.65}
+    - {drill: 1.02, space: 60.0, y: 2.67}
 
 # QSS family; 1 bank; differential
 Samtec_QSS-016-01-x-D-DP_P0.635mm_Vertical: &QSS-016-01-x-D-DP
@@ -481,58 +481,58 @@ Samtec_QSS-016-01-x-D-DP_P0.635mm_Vertical: &QSS-016-01-x-D-DP
       [drawing](http://suddendocs.samtec.com/prints/qss-xxx-xx-xxx-d-dp-xxx-mkt.pdf),
       [footprint](http://suddendocs.samtec.com/prints/qss-xxx-01-x-d-dp-xx-footprint.pdf)
   layout: {type: 'Socket', width: 21.27, height: 7.24}
-  banks: {n: 1, diff: 1, pins: 50, space: 20.0, width: 15.89, height: 3.66}
+  banks: {n: 1, diff: 1, slots: 50, space: 20.0, width: 16.0, height: 3.66}
   pins: *QSS_pins
 
 Samtec_QSS-016-01-x-D-DP-A_P0.635mm_Vertical:
   <<: *QSS-016-01-x-D-DP
   add-tags: 'alignment-pins'
   holes:
-    - {drill: 1.02, space: 20.0, y: 2.65}
+    - {drill: 1.02, space: 20.0, y: 2.67}
 
-Samtec_QSS-016-01-x-D-DP-LC_P0.635mm_Vertical:
-  <<: *QSS-016-01-x-D-DP
-  add-tags: 'locking-clips'
-  holes:
-    - {drill: 1.16, space: 20.0, y: 2.65}
+##Samtec_QSS-016-01-x-D-DP-LC_P0.635mm_Vertical:
+##  <<: *QSS-016-01-x-D-DP
+##  add-tags: 'locking-clips'
+##  holes:
+##    - {drill: 1.16, space: 20.0, y: 2.67}
 
 # QSS family; 2 banks; differential
 Samtec_QSS-032-01-x-D-DP_P0.635mm_Vertical: &QSS-032-01-x-D-DP
   meta: *QSS-DP_meta
   layout: {type: 'Socket', width: 41.28, height: 7.24}
-  banks: {n: 2, diff: 2, pins: 50, space: 20.0, width: 15.89, height: 3.66}
+  banks: {n: 2, diff: 2, slots: 50, space: 20.0, width: 16.0, height: 3.66}
   pins: *QSS_pins
 
 Samtec_QSS-032-01-x-D-DP-A_P0.635mm_Vertical:
   <<: *QSS-032-01-x-D-DP
   add-tags: 'alignment-pins'
   holes:
-    - {drill: 1.02, space: 40.0, y: 2.65}
+    - {drill: 1.02, space: 40.0, y: 2.67}
 
-Samtec_QSS-032-01-x-D-DP-LC_P0.635mm_Vertical:
-  <<: *QSS-032-01-x-D-DP
-  add-tags: 'locking-clips'
-  holes:
-    - {drill: 1.16, space: 40.0, y: 2.65}
+##Samtec_QSS-032-01-x-D-DP-LC_P0.635mm_Vertical:
+##  <<: *QSS-032-01-x-D-DP
+##  add-tags: 'locking-clips'
+##  holes:
+##    - {drill: 1.16, space: 40.0, y: 2.67}
 
 # QSS family; 3 banks; differential
 Samtec_QSS-048-01-x-D-DP_P0.635mm_Vertical: &QSS-048-01-x-D-DP
   meta: *QSS-DP_meta
   layout: {type: 'Socket', width: 61.28, height: 7.24}
-  banks: {n: 3, diff: 3, pins: 50, space: 20.0, width: 15.89, height: 3.66}
+  banks: {n: 3, diff: 3, slots: 50, space: 20.0, width: 16.0, height: 3.66}
   pins: *QSS_pins
 
 Samtec_QSS-048-01-x-D-DP-A_P0.635mm_Vertical:
   <<: *QSS-048-01-x-D-DP
   add-tags: 'alignment-pins'
   holes:
-    - {drill: 1.02, space: 60.0, y: 2.65}
+    - {drill: 1.02, space: 60.0, y: 2.67}
 
-Samtec_QSS-048-01-x-D-DP-LC_P0.635mm_Vertical:
-  <<: *QSS-048-01-x-D-DP
-  add-tags: 'locking-clips'
-  holes:
-    - {drill: 1.16, space: 60.0, y: 2.65}
+##Samtec_QSS-048-01-x-D-DP-LC_P0.635mm_Vertical:
+##  <<: *QSS-048-01-x-D-DP
+##  add-tags: 'locking-clips'
+##  holes:
+##    - {drill: 1.16, space: 60.0, y: 2.67}
 
 ################################################################################
 # QTE family; 1 bank
@@ -544,7 +544,7 @@ Samtec_QTE-020-01-x-D_P0.8mm_Vertical: &QTE-020-01-x-D
       [drawing](http://suddendocs.samtec.com/prints/qte-xxx-xx-xxx-d-xxx-mkt.pdf),
       [footprint](http://suddendocs.samtec.com/prints/qte-xxx-xx-xxx-d-xxx-footprint.pdf)
   layout: {type: 'Terminal', width: 20.0, height: 5.97}
-  banks: {n: 1, diff: 0, pins: 40, space: 20.0, width: 16.4, height: 3.94}
+  banks: {n: 1, diff: 0, slots: 40, space: 20.0, width: 16.5, height: 4.0}
   pins: &QTE_pins
     signal: {pitch: 0.8, y: 2.98, width: 0.46, height: 1.94}
     ground: {height: 0.64, width: [2.54, 4.7], space: [16.89, 6.35]}
@@ -555,11 +555,19 @@ Samtec_QTE-020-01-x-D-A_P0.8mm_Vertical:
   holes:
     - {drill: 1.02, space: 18.48, y: -2.03}
 
+##Samtec_QTE-020-01-x-D-A-L_P0.8mm_Vertical:
+##  <<: *QTE-020-01-x-D
+##  add-tags: 'alignment-pins latching'
+##  width: 23.0
+##  holes:
+##    - {drill: 1.02, space: 18.48, y: -2.03}
+##    - {drill: [0.5, 1.15], pad: [1.0, 1.65], space: 21.69, y: -0.508}
+
 # QTE family; 2 banks
 Samtec_QTE-040-01-x-D_P0.8mm_Vertical: &QTE-040-01-x-D
   meta: *QTE_meta
   layout: {type: 'Terminal', width: 40.0, height: 5.97}
-  banks: {n: 2, diff: 0, pins: 40, space: 20.0, width: 16.4, height: 3.94}
+  banks: {n: 2, diff: 0, slots: 40, space: 20.0, width: 16.5, height: 4.0}
   pins: *QTE_pins
 
 Samtec_QTE-040-01-x-D-A_P0.8mm_Vertical:
@@ -568,11 +576,19 @@ Samtec_QTE-040-01-x-D-A_P0.8mm_Vertical:
   holes:
     - {drill: 1.02, space: 38.48, y: -2.03}
 
+##Samtec_QTE-040-01-x-D-A-L_P0.8mm_Vertical:
+##  <<: *QTE-040-01-x-D
+##  add-tags: 'alignment-pins latching'
+##  width: 43.0
+##  holes:
+##    - {drill: 1.02, space: 38.48, y: -2.03}
+##    - {drill: [0.5, 1.15], pad: [1.0, 1.65], space: 41.69, y: -0.508}
+
 # QTE family; 3 banks
 Samtec_QTE-060-01-x-D_P0.8mm_Vertical: &QTE-060-01-x-D
   meta: *QTE_meta
   layout: {type: 'Terminal', width: 60.0, height: 5.97}
-  banks: {n: 3, diff: 0, pins: 40, space: 20.0, width: 16.4, height: 3.94}
+  banks: {n: 3, diff: 0, slots: 40, space: 20.0, width: 16.5, height: 4.0}
   pins: *QTE_pins
 
 Samtec_QTE-060-01-x-D-A_P0.8mm_Vertical:
@@ -590,7 +606,7 @@ Samtec_QTE-014-01-x-D-DP_P0.8mm_Vertical: &QTE-014-01-x-D-DP
       [drawing](http://suddendocs.samtec.com/prints/qte-xxx-xx-xxx-d-dp-xxx-mkt.pdf),
       [footprint](http://suddendocs.samtec.com/prints/qte-xxx-xx-x-d-dp-xx-footprint.pdf)
   layout: {type: 'Terminal', width: 20.0, height: 5.97}
-  banks: {n: 1, diff: 1, pins: 40, space: 20.0, width: 16.4, height: 3.94}
+  banks: {n: 1, diff: 1, slots: 40, space: 20.0, width: 16.5, height: 4.0}
   pins: *QTE_pins
 
 Samtec_QTE-014-01-x-D-DP-A_P0.8mm_Vertical:
@@ -599,19 +615,19 @@ Samtec_QTE-014-01-x-D-DP-A_P0.8mm_Vertical:
   holes:
     - {drill: 1.02, space: 18.48, y: -2.03}
 
-Samtec_QTE-014-01-x-D-DP-A-L_P0.8mm_Vertical:
-  <<: *QTE-014-01-x-D-DP
-  add-tags: 'alignment-pins latching'
-  width: 23.0
-  holes:
-    - {drill: 1.02, space: 18.48, y: -2.03}
-    - {drill: [0.5, 1.15], pad: [1.0, 1.65], space: 21.69, y: -0.51}
+##Samtec_QTE-014-01-x-D-DP-A-L_P0.8mm_Vertical:
+##  <<: *QTE-014-01-x-D-DP
+##  add-tags: 'alignment-pins latching'
+##  width: 23.0
+##  holes:
+##    - {drill: 1.02, space: 18.48, y: -2.03}
+##    - {drill: [0.5, 1.15], pad: [1.0, 1.65], space: 21.69, y: -0.51}
 
 # QTE family; 2 banks; differential
 Samtec_QTE-028-01-x-D-DP_P0.8mm_Vertical: &QTE-028-01-x-D-DP
   meta: *QTE-DP_meta
   layout: {type: 'Terminal', width: 40.0, height: 5.97}
-  banks: {n: 2, diff: 2, pins: 40, space: 20.0, width: 16.4, height: 3.94}
+  banks: {n: 2, diff: 2, slots: 40, space: 20.0, width: 16.5, height: 4.0}
   pins: *QTE_pins
 
 Samtec_QTE-028-01-x-D-DP-A_P0.8mm_Vertical:
@@ -620,19 +636,19 @@ Samtec_QTE-028-01-x-D-DP-A_P0.8mm_Vertical:
   holes:
     - {drill: 1.02, space: 38.48, y: -2.03}
 
-Samtec_QTE-028-01-x-D-DP-A-L_P0.8mm_Vertical:
-  <<: *QTE-028-01-x-D-DP
-  add-tags: 'alignment-pins latching'
-  width: 23.0
-  holes:
-    - {drill: 1.02, space: 38.48, y: -2.03}
-    - {drill: [0.5, 1.15], pad: [1.0, 1.65], space: 41.69, y: -0.51}
+##Samtec_QTE-028-01-x-D-DP-A-L_P0.8mm_Vertical:
+##  <<: *QTE-028-01-x-D-DP
+##  add-tags: 'alignment-pins latching'
+##  width: 23.0
+##  holes:
+##    - {drill: 1.02, space: 38.48, y: -2.03}
+##    - {drill: [0.5, 1.15], pad: [1.0, 1.65], space: 41.69, y: -0.51}
 
 # QTE family; 3 banks; differential
 Samtec_QTE-042-01-x-D-DP_P0.8mm_Vertical: &QTE-042-01-x-D-DP
   meta: *QTE-DP_meta
   layout: {type: 'Terminal', width: 60.0, height: 5.97}
-  banks: {n: 3, diff: 3, pins: 40, space: 20.0, width: 16.4, height: 3.94}
+  banks: {n: 3, diff: 3, slots: 40, space: 20.0, width: 16.5, height: 4.0}
   pins: *QTE_pins
 
 Samtec_QTE-042-01-x-D-DP-A_P0.8mm_Vertical:
@@ -643,9 +659,99 @@ Samtec_QTE-042-01-x-D-DP-A_P0.8mm_Vertical:
 
 ################################################################################
 # QSE family; 1 bank
+Samtec_QSE-020-01-x-D_P0.8mm_Vertical: &QSE-020-01-x-D
+  meta: &QSE_meta
+    description: *QStrip_desc
+    tags: 'connector Samtec QStrip QSE mezzanine socket vertical single-ended'
+    datasheet: >-
+      [drawing](http://suddendocs.samtec.com/prints/qse-xxx-01-xxx-d-xxx-mkt.pdf),
+      [footprint](http://suddendocs.samtec.com/prints/qse-xxx-01-x-d-xx-footprint.pdf)
+  layout: {type: 'Socket', width: 21.27, height: 7.24}
+  banks: {n: 1, diff: 0, slots: 40, space: 20.0, width: 16.0, height: 3.8}
+  pins: &QSE_pins
+    signal: {pitch: 0.8, y: 2.87, width: 0.41, height: 2.27}
+    ground: {height: 0.43, width: [2.54, 4.7], space: [16.13, 6.35]}
+
+Samtec_QSE-020-01-x-D-A_P0.8mm_Vertical:
+  <<: *QSE-020-01-x-D
+  add-tags: 'alignment-pins'
+  holes:
+    - {drill: 1.02, space: 20.13, y: 2.67}
+
+##Samtec_QSE-020-01-x-D-A-L_P0.8mm_Vertical:
+##  <<: *QSE-020-01-x-D
+##  add-tags: 'alignment-pins latching'
+##  width: 26.61
+##  holes:
+##    - {drill: 1.02, space: 20.13, y: 2.67}
+##    - {drill: [0.5, 1.15], pad: [1.0, 1.65], space: 24.36, y: -0.51}
+
 # QSE family; 2 banks
+Samtec_QSE-040-01-x-D_P0.8mm_Vertical: &QSE-040-01-x-D
+  meta: *QSE_meta
+  layout: {type: 'Socket', width: 41.28, height: 7.24}
+  banks: {n: 2, diff: 0, slots: 40, space: 20.0, width: 16.0, height: 3.8}
+  pins: *QSE_pins
+
+Samtec_QSE-040-01-x-D-A_P0.8mm_Vertical:
+  <<: *QSE-040-01-x-D
+  add-tags: 'alignment-pins'
+  holes:
+    - {drill: 1.02, space: 40.13, y: 2.67}
+
 # QSE family; 3 banks
+Samtec_QSE-060-01-x-D_P0.8mm_Vertical: &QSE-060-01-x-D
+  meta: *QSE_meta
+  layout: {type: 'Socket', width: 61.28, height: 7.24}
+  banks: {n: 3, diff: 0, slots: 40, space: 20.0, width: 16.0, height: 3.8}
+  pins: *QSE_pins
+
+Samtec_QSE-060-01-x-D-A_P0.8mm_Vertical:
+  <<: *QSE-060-01-x-D
+  add-tags: 'alignment-pins'
+  holes:
+    - {drill: 1.02, space: 60.13, y: 2.67}
 
 # QSE family; 1 bank; differential
+Samtec_QSE-014-01-x-D-DP_P0.8mm_Vertical: &QSE-014-01-x-D-DP
+  meta: &QSE-DP_meta
+    description: *QPairs_desc
+    tags: 'connector Samtec QPairs QSE mezzanine socket vertical differential'
+    datasheet: >-
+      [drawing](http://suddendocs.samtec.com/prints/qse-xxx-xx-xxx-d-dp-xxx-xxxxx-mkt.pdf),
+      [footprint](http://suddendocs.samtec.com/prints/qse-xxx-xx-x-d-dp-xxx-footprint.pdf)
+  layout: {type: 'Socket', width: 21.27, height: 7.24}
+  banks: {n: 1, diff: 1, slots: 40, space: 20.0, width: 16.0, height: 3.8}
+  pins: *QSE_pins
+
+Samtec_QSE-014-01-x-D-DP-A_P0.8mm_Vertical:
+  <<: *QSE-014-01-x-D-DP
+  add-tags: 'alignment-pins'
+  holes:
+    - {drill: 1.02, space: 20.13, y: 2.67}
+
 # QSE family; 2 banks; differential
+Samtec_QSE-028-01-x-D-DP_P0.8mm_Vertical: &QSE-028-01-x-D-DP
+  meta: *QSE-DP_meta
+  layout: {type: 'Socket', width: 41.28, height: 7.24}
+  banks: {n: 2, diff: 2, slots: 40, space: 20.0, width: 16.0, height: 3.8}
+  pins: *QSE_pins
+
+Samtec_QSE-028-01-x-D-DP-A_P0.8mm_Vertical:
+  <<: *QSE-028-01-x-D-DP
+  add-tags: 'alignment-pins'
+  holes:
+    - {drill: 1.02, space: 40.13, y: 2.67}
+
 # QSE family; 3 banks; differential
+Samtec_QSE-042-01-x-D-DP_P0.8mm_Vertical: &QSE-042-01-x-D-DP
+  meta: *QSE-DP_meta
+  layout: {type: 'Socket', width: 61.28, height: 7.24}
+  banks: {n: 3, diff: 3, slots: 40, space: 20.0, width: 16.0, height: 3.8}
+  pins: *QSE_pins
+
+Samtec_QSE-042-01-x-D-DP-A_P0.8mm_Vertical:
+  <<: *QSE-042-01-x-D-DP
+  add-tags: 'alignment-pins'
+  holes:
+    - {drill: 1.02, space: 60.13, y: 2.67}
