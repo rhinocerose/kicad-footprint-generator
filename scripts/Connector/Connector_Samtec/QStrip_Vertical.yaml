@@ -1,16 +1,10 @@
-_local:
-  - &QStrip_desc >-
-    Samtec {pn:s} {pitch:1.2f}mm Q Strip® High-Speed Ground Plane {type:s} Strip;
-    {banks:d} bank(s), {pins:d} pins/bank; {ds:s}
-  - &QPairs_desc >-
-    Samtec {pn:s} {pitch:1.2f}mm Q Pairs® High-Speed Ground Plane {type:s} Strip,
-    Differential Pair; {banks:d} bank(s), {pins:d} pairs/bank; {ds:s}
-
 ################################################################################
 # QTH family; 1 bank
 Samtec_QTH-030-01-x-D_P0.5mm_Vertical: &QTH-030-01-x-D
   meta: &QTH_meta
-    description: *QStrip_desc
+    description: &QStrip_desc >-
+      Samtec {pn:s} {pitch:1.2f}mm Q Strip® High-Speed Ground Plane {type:s} Strip;
+      {banks:d} bank(s), {pins:d} pins/bank; {ds:s}
     tags: 'connector Samtec QStrip QTH mezzanine terminal vertical single-ended'
     datasheet: >-
       [drawing](http://suddendocs.samtec.com/prints/qth-xxx-xx-x-d-xxx-mkt.pdf),
@@ -86,7 +80,9 @@ Samtec_QTH-090-01-x-D-A_P0.5mm_Vertical:
 # QTH family; 1 bank; differential
 Samtec_QTH-020-01-x-D-DP_P0.5mm_Vertical: &QTH-020-01-x-D-DP
   meta: &QTH-DP_meta
-    description: *QPairs_desc
+    description: &QPairs_desc >-
+      Samtec {pn:s} {pitch:1.2f}mm Q Pairs® High-Speed Ground Plane {type:s} Strip,
+      Differential Pair; {banks:d} bank(s), {pins:d} pairs/bank; {ds:s}
     tags: 'connector Samtec QPairs QTH mezzanine terminal vertical differential'
     datasheet: >-
       [drawing](http://suddendocs.samtec.com/prints/qth-xxx-xx-x-d-dp-xxx-mkt.pdf),

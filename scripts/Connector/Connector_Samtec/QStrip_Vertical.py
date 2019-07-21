@@ -5,6 +5,7 @@ YAML footprint specification
 
 ---
 Footprint_Name:
+  library: 'library name' # [optional] KiCad library to use
   meta: # Footprint metadata
     pn: 'part number' # [optional], overrides automatic part number detection
     description: 'Brief description of the footprint'
@@ -18,7 +19,7 @@ Footprint_Name:
   width: !!float mm # [optional] overrides layout::width
   banks:
     n: !!int # number of banks in the connector
-    pins: !!int even # number of pins in a bank
+    slots: !!int even # number of pin positions in a bank
     diff: !!int <= n # number of differential banks
     space: !!float mm # distance between adjacent banks
     width: !!float mm # Width of outline on F.Fab
@@ -40,11 +41,11 @@ Footprint_Name:
   holes: # [optional] hole pair specifications
     - # Hole spec. 1
       name: "" # [optional] name/number for plated holes
-      drill: !!float mm # drill diameter
-      pad: !!float mm # [optional] PTH pad diameter
+      drill: !!float mm # drill diameter (a list produces an oval)
+      pad: !!float mm # [optional] PTH pad diameter (a list produces an oval)
       space: !!float mm # distance between holes mirrored about the x-axis
       y: !!float mm # vertical offset
-    - # Hole spec. 2
+    - # Hole spec. 2...
 ...
 """
 
@@ -439,9 +440,6 @@ if __name__ == '__main__':
                     print(path, "empty, skipping...")
                     continue
 
-                if '_local' in footprints:
-                    del footprints['_local']
-                
                 for fp_name in footprints:
                     print("  - Generate {}.kicad_mod".format(fp_name))
                     fp_params = footprints.get(fp_name)
