@@ -260,14 +260,14 @@ def generate_one_footprint(param, config, default_lib):
     # Silkscreen: F.SilkS
     #silk_offset = param['layout']['silk-offset']
     silk_offset = config['silk_fab_offset']
-    silk_pad_x = config['silk_pad_clearance'] + pad_w/2
-    silk_pad_y = config['silk_pad_clearance'] + pad_h/2
+    silk_pad = {'x': config['silk_pad_clearance'] + pad_w/2,
+                'y': config['silk_pad_clearance'] + pad_h/2}
     silk_line = config['silk_line_width']
     silk_y = fab_y + silk_offset
     silk_lEdge = lEdge - silk_offset
     silk_rEdge = rEdge + silk_offset
     silk_chamfer = chamfer + silk_offset/2
-    silk_pin1 = pin1.x - silk_pad_x
+    silk_pin1 = pin1.x - silk_pad['x']
     
     if mode == 'Terminal':
         # Polygon left end outline points
@@ -289,7 +289,7 @@ def generate_one_footprint(param, config, default_lib):
                      {'x': silk_pin1,  'y': -silk_y}]
         # Pin 1 indicator
         fp.append(markerArrow(x = pin1.x,
-                              y = pin1.y + silk_pad_y,
+                              y = pin1.y + silk_pad['y'],
                               width = fab_mark / 2,
                               line_width = silk_line,
                               layer = "F.SilkS"))
@@ -301,7 +301,7 @@ def generate_one_footprint(param, config, default_lib):
         silk_rEnd[i]['x'] = -silk_rEnd[i]['x']
     # Define right outline inner offset from the last pin
     # (if the last bank is differential, it does not perfectly mirror the first)
-    silk_rEnd[0]['x'] = silk_rEnd[-1]['x'] = pin[-1][-1]['x'] + silk_pad_x
+    silk_rEnd[0]['x'] = silk_rEnd[-1]['x'] = pin[-1][-1]['x'] + silk_pad['x']
 
     # Draw left and right end outlines
     fp.append(PolygoneLine(nodes = silk_lEnd,
@@ -313,8 +313,8 @@ def generate_one_footprint(param, config, default_lib):
 
     # Draw outlines between banks
     for b in range(banks-1):
-        fp.extend([Line(start = (pin[b][-1]['x']  + silk_pad_x, m*silk_y),
-                        end   = (pin[b+1][0]['x'] - silk_pad_x, m*silk_y),
+        fp.extend([Line(start = (pin[b][-1]['x']  + silk_pad['x'], m*silk_y),
+                        end   = (pin[b+1][0]['x'] - silk_pad['x'], m*silk_y),
                         layer = "F.SilkS",
                         width = silk_line) for m in (-1,1)])
 
