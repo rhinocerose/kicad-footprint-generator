@@ -1,8 +1,22 @@
 #!/usr/bin/python
 
 """
-YAML footprint specification
+This file is part of kicad-footprint-generator.
 
+kicad-footprint-generator is free software: you can redistribute it and/or
+modify it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or (at your
+option) any later version.
+
+kicad-footprint-generator is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+more details. You should have received a copy of the GNU General Public License
+along with kicad-footprint-generator. If not, see <http://www.gnu.org/licenses/>.
+"""
+
+"""
+YAML footprint specification
 ---
 Footprint_Name:
   library: 'library name' # [optional] KiCad library to use, overrides default
