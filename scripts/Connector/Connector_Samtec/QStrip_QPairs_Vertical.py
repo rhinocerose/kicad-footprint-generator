@@ -78,22 +78,6 @@ from KicadModTree import *
 from footprint_text_fields import addTextFields
 from helpers import *
 
-def markerArrow(x, y, width, line_width, layer="F.Fab", angle=0, close=True):
-    node = Node()
-    points = [(-width/2, width/2),
-              (0, 0),
-              (width/2, width/2)]
-
-    if close:
-        points.append((-width/2, width/2))
-
-    node.append(PolygoneLine(nodes = points,
-                             layer = layer,
-                             width = line_width))
-    node.insert(Rotation(angle))
-    node.insert(Translation(x,y))
-    return node
-
 def generate_one_footprint(param, config, default_lib):
     fp = Footprint(param['name'])
     
@@ -455,7 +439,7 @@ if __name__ == '__main__':
                         
                     fp_params['name'] = fp_name
 
-                    bprint("  - ",
+                    print("  - ",
                           fp_params.get('library', args.library), ".pretty/",
                           fp_name, ".kicad_mod", sep="")
                     
