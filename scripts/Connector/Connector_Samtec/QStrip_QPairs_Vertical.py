@@ -149,24 +149,24 @@ def generate_one_footprint(param, config, default_lib):
     
     # Ground pad parameters
     gnd_h = param['pins']['ground']['height']
-    gnd_w = {'out': param['pins']['ground']['width'][0],
-             'in' : param['pins']['ground']['width'][1]}
-    gnd_s = {'out': param['pins']['ground']['space'][0] / 2,
-             'in' : param['pins']['ground']['space'][1] / 2}
-
+    # Combine spacing and width data into a zipped list: [(space,width), ...]
+    gnd_sw = [sw for sw in zip(param['pins']['ground']['space'],
+                               param['pins']['ground']['width'])]
+    gnd_sw.sort() # Sort from lowest (inner) to highest (outer) spacing
+    
     # Place ground plane pads
     for b in range(banks):
         mid = bank1_mid + b*bank_x # Bank midpoint
-        for s in (-gnd_s['out'], -gnd_s['in'], gnd_s['in'], gnd_s['out']):
-            w = gnd_w['out'] if abs(s) == gnd_s['out'] else gnd_w['in']
+        # Iterate through space/width list to generate ground pads...
+        for (space, width) in [(-s,w) for s,w in reversed(gnd_sw)] + gnd_sw:
             pad = Pad(number = str(n),
-                      at = (mid + s, 0),
-                      size = (w, gnd_h),
+                      at = (mid + space/2, 0),
+                      size = (width, gnd_h),
                       type = Pad.TYPE_SMT,
                       layers = Pad.LAYERS_SMT,
                       shape = Pad.SHAPE_RECT)
             fp.append(pad)
-            n = n + 1
+            n += 1
 
     ############################################################################
     # Holes
@@ -247,14 +247,21 @@ def generate_one_footprint(param, config, default_lib):
                               close = False,
                               line_width = fab_line))
 
-    # Draw bank outlines
+    # Draw bank and ground plane outlines
     for b in range(banks):
         mid = bank1_mid + b*bank_x
+        # Bank outline
         fp.append(RectLine(start = (mid-bank_w/2, -bank_h/2),
                            end   = (mid+bank_w/2,  bank_h/2),
                            layer = "F.Fab",
                            width = fab_line))
-                           
+        # Ground planes
+        #for m in (-1,1):
+        #    fp.append(Line(start = (mid-bank_w/2, m*gnd_h/2),
+        #                   end   = (mid+bank_w/2, m*gnd_h/2),
+        #                   layer = "F.Fab",
+        #                   width = fab_line))
+
     
     ############################################################################
     # Silkscreen: F.SilkS
