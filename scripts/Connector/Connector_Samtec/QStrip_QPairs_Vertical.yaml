@@ -3,7 +3,7 @@
 Samtec_QTH-030-xx-x-D_P0.5mm_Vertical: &QTH-030-xx-x-D
   meta: &QTH_meta
     description: &QStrip_desc >-
-      Samtec {pn:s} {pitch:1.2f}mm Q Strip® High-Speed Ground Plane {type:s} Strip;
+      Samtec {pn:s} {pitch:1.2f}mm Q Strip High-Speed Ground Plane {type:s} Strip;
       {banks:d} bank(s), {pins:d} pins/bank; {ds:s}
     tags: 'connector Samtec Q-Strip QTH mezzanine terminal vertical single-ended'
     datasheet: >-
@@ -81,7 +81,7 @@ Samtec_QTH-090-xx-x-D-A_P0.5mm_Vertical:
 Samtec_QTH-020-xx-x-D-DP_P0.5mm_Vertical: &QTH-020-xx-x-D-DP
   meta: &QTH-DP_meta
     description: &QPairs_desc >-
-      Samtec {pn:s} {pitch:1.2f}mm Q Pairs® High-Speed Ground Plane {type:s} Strip,
+      Samtec {pn:s} {pitch:1.2f}mm Q Pairs High-Speed Ground Plane {type:s} Strip,
       Differential Pair; {banks:d} bank(s), {pins:d} pairs/bank; {ds:s}
     tags: 'connector Samtec Q-Pairs QTH mezzanine terminal vertical differential'
     datasheet: >-

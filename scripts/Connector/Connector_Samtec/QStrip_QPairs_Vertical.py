@@ -5,32 +5,32 @@ YAML footprint specification
 
 ---
 Footprint_Name:
-  library: 'library name' # [optional] KiCad library to use
+  library: 'library name' # [optional] KiCad library to use, overrides default
   meta: # Footprint metadata
-    pn: 'part number' # [optional], overrides automatic part number detection
+    pn: 'part number' # [optional] overrides automatic part number detection
     description: 'Brief description of the footprint'
-    datasheet: 'URL to footprint datasheet'
+    datasheet: 'URL(s) to footprint datasheet'
     tags: 'KiCad tags go here'
-  tags: 'more tags' # [optional], used to extend the tag list
-  layout:
-    type: '(Terminal|Socket)'
-    width: !!float mm # width
-    height: !!float mm # height
-  width: !!float mm # [optional] overrides layout::width
+  add-tags: 'more tags' # [optional] extends the tag list
+  layout: # General footprint layout/drawing data
+    type: '(Terminal|Socket)' # sets Pin 1 position and drawing mode
+    width: !!float mm # [cosmetic] overall width of the connector
+    height: !!float mm # [cosmetic] overall height of the connector
+  width: !!float mm # [optional, cosmetic] overrides layout::width
   banks:
-    n: !!int # number of banks in the connector
-    slots: !!int even # number of pin positions in a bank
-    diff: !!int <= n # number of differential banks
+    n: !!uint # number of banks in the connector
+    diff: !!uint # number of differential banks
+    slots: !!uint even # number of pin positions in a bank
     space: !!float mm # distance between adjacent banks
-    width: !!float mm # Width of outline on F.Fab
-    height: !!float mm # Height of outline on F.Fab
+    width: !!float mm # width of bank outline drawn on F.Fab
+    height: !!float mm # height of bank outline drawn on F.Fab
   pins:
-    signal: # Signal pin parameters
+    signal: # signal pin parameters
       pitch: !!float mm
       width: !!float mm # Pad width
       height: !!float mm # Pad height
       y: !!float mm # vertical offset
-    ground: # Ground pin parameters
+    ground: # ground pin parameters
       width:
         - !!float mm # outer pins 
         - !!float mm # inner pins
@@ -38,12 +38,12 @@ Footprint_Name:
       space: # Distance between ground pads within each bank
         - !!float mm # outer pins
         - !!float mm # inner pins
-  holes: # [optional] hole pair specifications
+  holes: # [optional] hole pair specifications, mirrored about y axis
     - # Hole spec. 1
       name: "" # [optional] name/number for plated holes
       drill: !!float mm # drill diameter (a list produces an oval)
       pad: !!float mm # [optional] PTH pad diameter (a list produces an oval)
-      space: !!float mm # distance between holes mirrored about the x-axis
+      space: !!float mm # distance between holes mirrored about the y-axis
       y: !!float mm # vertical offset
     - # Hole spec. 2...
 ...
@@ -255,13 +255,6 @@ def generate_one_footprint(param, config, default_lib):
                            end   = (mid+bank_w/2,  bank_h/2),
                            layer = "F.Fab",
                            width = fab_line))
-        # Ground planes
-        #for m in (-1,1):
-        #    fp.append(Line(start = (mid-bank_w/2, m*gnd_h/2),
-        #                   end   = (mid+bank_w/2, m*gnd_h/2),
-        #                   layer = "F.Fab",
-        #                   width = fab_line))
-
     
     ############################################################################
     # Silkscreen: F.SilkS
@@ -359,11 +352,7 @@ def generate_one_footprint(param, config, default_lib):
     
     # Part number
     partnum = param['meta'].get('pn', param['name'].split('_')[1])
-    #if 'pn' in param['meta']:
-    #    partnum = param['meta']['pn']
-    #else:
-    #    partnum = param['name'].split('_')[1]
-        
+
     # Pins or pairs/bank
     if param['banks']['diff'] == banks:
         # Differential mode: round up to nearest even number of pairs
@@ -446,13 +435,16 @@ if __name__ == '__main__':
                     continue
 
                 for fp_name in footprints:
-                    print("  - Generate {}.kicad_mod".format(fp_name))
-                    fp_params = footprints.get(fp_name)
-                    
+                    fp_params = footprints.get(fp_name)                    
                     if 'name' in fp_params:
                         print("WARNING: setting 'name' to", fp_name)
-                    
+                        
                     fp_params['name'] = fp_name
+
+                    bprint("  - ",
+                          fp_params.get('library', args.library), ".pretty/",
+                          fp_name, ".kicad_mod", sep="")
+                    
                     generate_one_footprint(fp_params, config, args.library)
             except yaml.YAMLError as exc:
                 print(exc)
