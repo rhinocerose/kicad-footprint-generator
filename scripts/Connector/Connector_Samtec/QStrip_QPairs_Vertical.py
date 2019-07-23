@@ -14,7 +14,7 @@ or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
 more details. You should have received a copy of the GNU General Public License
 along with kicad-footprint-generator. If not, see <http://www.gnu.org/licenses/>.
 
-Copyright (C) 2019 be Caleb Reister <calebreister@gmail.com>
+Copyright (C) 2019 by Caleb Reister <calebreister@gmail.com>
 """
 
 """
