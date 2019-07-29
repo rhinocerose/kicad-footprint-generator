@@ -24,7 +24,7 @@ Samtec_QTH-030-xx-x-D_P0.5mm_Vertical: &QTH-030-xx-x-D
       [footprint](http://suddendocs.samtec.com/prints/qth-xxx-xx-x-d-xxx-footprint.pdf)
   layout: {type: 'Terminal', width: 20.0, height: 5.97}
   banks: {n: 1, diff: 0, slots: 60, space: 20.0, width: 16.5, height: 4.0}
-  pins: &QTH_pins
+  pads: &QTH_pads
     signal: {pitch: 0.5, y: 3.086, width: 0.305, height: 1.45}
     ground: {height: 0.64, width: [2.54, 4.7], space: [16.89, 6.35]}
 
@@ -54,7 +54,7 @@ Samtec_QTH-060-xx-x-D_P0.5mm_Vertical: &QTH-060-xx-x-D
   meta: *QTH_meta
   layout: {type: 'Terminal', width: 40.0, height: 5.97}
   banks: {n: 2, diff: 0, slots: 60, space: 20.0, width: 16.5, height: 4.0}
-  pins: *QTH_pins
+  pads: *QTH_pads
 
 Samtec_QTH-060-xx-x-D-A_P0.5mm_Vertical:
   <<: *QTH-060-xx-x-D
@@ -82,7 +82,7 @@ Samtec_QTH-090-xx-x-D_P0.5mm_Vertical: &QTH-090-xx-x-D
   meta: *QTH_meta
   layout: {type: 'Terminal', width: 60.0, height: 5.97}
   banks: {n: 3, diff: 0, slots: 60, space: 20.0, width: 16.5, height: 4.0}
-  pins: *QTH_pins
+  pads: *QTH_pads
 
 Samtec_QTH-090-xx-x-D-A_P0.5mm_Vertical:
   <<: *QTH-090-xx-x-D
@@ -102,7 +102,7 @@ Samtec_QTH-020-xx-x-D-DP_P0.5mm_Vertical: &QTH-020-xx-x-D-DP
       [footprint](http://suddendocs.samtec.com/prints/qth-xxx-xx-x-d-dp-xxx-footprint.pdf)
   layout: {type: 'Terminal', width: 20.0, height: 5.97}
   banks: {n: 1, diff: 1, slots: 60, space: 20.0, width: 16.5, height: 4.0}
-  pins: *QTH_pins
+  pads: *QTH_pads
 
 Samtec_QTH-020-xx-x-D-DP-A_P0.5mm_Vertical:
   <<: *QTH-020-xx-x-D-DP
@@ -130,7 +130,7 @@ Samtec_QTH-040-xx-x-D-DP_P0.5mm_Vertical: &QTH-040-xx-x-D-DP
   meta: *QTH-DP_meta
   layout: {type: 'Terminal', width: 40.0, height: 5.97}
   banks: {n: 2, diff: 2, slots: 60, space: 20.0, width: 16.5, height: 4.0}
-  pins: *QTH_pins
+  pads: *QTH_pads
 
 Samtec_QTH-040-xx-x-D-DP-A_P0.5mm_Vertical:
   <<: *QTH-040-xx-x-D-DP
@@ -158,7 +158,7 @@ Samtec_QTH-060-xx-x-D-DP_P0.5mm_Vertical: &QTH-060-xx-x-D-DP
   meta: *QTH-DP_meta
   layout: {type: 'Terminal', width: 60.0, height: 5.97}
   banks: {n: 3, diff: 3, slots: 60, space: 20.0, width: 16.5, height: 4.0}
-  pins: *QTH_pins
+  pads: *QTH_pads
 
 Samtec_QTH-060-xx-x-D-DP-A_P0.5mm_Vertical:
   <<: *QTH-060-xx-x-D-DP
@@ -180,7 +180,7 @@ Samtec_HSMC_ASP-122952-01_P0.5mm_Vertical:
       Bank 1 differential; {ds:s}
   layout: {type: 'Terminal', width: 60.0, height: 5.97}
   banks: {n: 3, diff: 1, slots: 60, space: 20.0, width: 16.5, height: 4.0}
-  pins: *QTH_pins
+  pads: *QTH_pads
   holes:
     - {drill: 1.02, space: 58.48, y: -2.03}
 
@@ -195,7 +195,7 @@ Samtec_QSH-030-xx-x-D_P0.5mm_Vertical: &QSH-030-xx-x-D
       [footprint](http://suddendocs.samtec.com/prints/qsh-xxx-xx-x-d-xx-footprint.pdf)
   layout: {type: 'Socket', width: 21.31, height: 7.24}
   banks: {n: 1, diff: 0, slots: 60, space: 20.0, width: 16.0, height: 3.8}
-  pins: &QSH_pins
+  pads: &QSH_pads
     signal: {pitch: 0.5, y: 2.67, width: 0.279, height: 2.27}
     ground: {height: 0.43, width: [2.54, 4.7], space: [16.13, 6.35]}
 
@@ -216,7 +216,7 @@ Samtec_QSH-060-xx-x-D_P0.5mm_Vertical: &QSH-060-xx-x-D
   meta: *QSH_meta
   layout: {type: 'Socket', width: 41.31, height: 7.24}
   banks: {n: 2, diff: 0, slots: 60, space: 20.0, width: 16.0, height: 3.8}
-  pins: *QSH_pins
+  pads: *QSH_pads
 
 Samtec_QSH-060-xx-x-D-A_P0.5mm_Vertical:
   <<: *QSH-060-xx-x-D
@@ -235,7 +235,7 @@ Samtec_QSH-090-xx-x-D_P0.5mm_Vertical: &QSH-090-xx-x-D
   meta: *QSH_meta
   layout: {type: 'Socket', width: 61.38, height: 7.24}
   banks: {n: 3, diff: 0, slots: 60, space: 20.0, width: 16.0, height: 3.8}
-  pins: *QSH_pins
+  pads: *QSH_pads
 
 Samtec_QSH-090-xx-x-D-A_P0.5mm_Vertical:
   <<: *QSH-090-xx-x-D
@@ -259,7 +259,7 @@ Samtec_QSH-020-xx-x-D-DP_P0.5mm_Vertical: &QSH-020-xx-x-D-DP
       [footprint](http://suddendocs.samtec.com/prints/qsh-xxx-xx-x-d-dp-xx-footprint.pdf)
   layout: {type: 'Socket', width: 21.31, height: 7.24}
   banks: {n: 1, diff: 1, slots: 60, space: 20.0, width: 16.0, height: 3.8}
-  pins: *QSH_pins
+  pads: *QSH_pads
 
 Samtec_QSH-020-xx-x-D-DP-A_P0.5mm_Vertical:
   <<: *QSH-020-xx-x-D-DP
@@ -278,7 +278,7 @@ Samtec_QSH-040-xx-x-D-DP_P0.5mm_Vertical: &QSH-040-xx-x-D-DP
   meta: *QSH-DP_meta
   layout: {type: 'Socket', width: 41.31, height: 7.24}
   banks: {n: 2, diff: 2, slots: 60, space: 20.0, width: 16.0, height: 3.8}
-  pins: *QSH_pins
+  pads: *QSH_pads
 
 Samtec_QSH-040-xx-x-D-DP-A_P0.5mm_Vertical:
   <<: *QSH-040-xx-x-D-DP
@@ -295,7 +295,7 @@ Samtec_QSH-060-xx-x-D-DP_P0.5mm_Vertical: &QSH-060-xx-x-D-DP
   meta: *QSH-DP_meta
   layout: {type: 'Socket', width: 61.38, height: 7.24}
   banks: {n: 3, diff: 3, slots: 60, space: 20.0, width: 16.0, height: 3.8}
-  pins: *QSH_pins
+  pads: *QSH_pads
 
 Samtec_QSH-060-xx-x-D-DP-A_P0.5mm_Vertical:
   <<: *QSH-060-xx-x-D-DP
@@ -321,7 +321,7 @@ Samtec_HSMC_ASP-122953-01_P0.5mm_Vertical:
       Bank 1 differential; {ds:s}
   layout: {type: 'Socket', width: 61.38, height: 7.24}
   banks: {n: 3, diff: 1, slots: 60, space: 20.0, width: 16.0, height: 3.8}
-  pins: *QSH_pins
+  pads: *QSH_pads
   holes:
     - {drill: 1.02, space: 60.13, y: 2.03}
 
@@ -336,7 +336,7 @@ Samtec_QTS-025-xx-x-D_P0.635mm_Vertical: &QTS-025-xx-x-D
       [footprint](http://suddendocs.samtec.com/prints/qts-xxx-xx-x-d-xx-footprint.pdf)
   layout: {type: 'Terminal', width: 20.0, height: 5.97}
   banks: {n: 1, diff: 0, slots: 50, space: 20.0, width: 16.5, height: 4.0}
-  pins: &QTS_pins
+  pads: &QTS_pads
     signal: {pitch: 0.635, y: 3.086, width: 0.406, height: 1.45}
     ground: {height: 0.635, width: [2.54, 4.7], space: [16.89, 6.35]}
 
@@ -351,7 +351,7 @@ Samtec_QTS-050-xx-x-D_P0.635mm_Vertical: &QTS-050-xx-x-D
   meta: *QTS_meta
   layout: {type: 'Terminal', width: 40.0, height: 5.97}
   banks: {n: 2, diff: 0, slots: 50, space: 20.0, width: 16.5, height: 4.0}
-  pins: *QTS_pins
+  pads: *QTS_pads
 
 Samtec_QTS-050-xx-x-D-A_P0.635mm_Vertical:
   <<: *QTS-050-xx-x-D
@@ -364,7 +364,7 @@ Samtec_QTS-075-xx-x-D_P0.635mm_Vertical: &QTS-075-xx-x-D
   meta: *QTS_meta
   layout: {type: 'Terminal', width: 60.0, height: 5.97}
   banks: {n: 3, diff: 0, slots: 50, space: 20.0, width: 16.5, height: 4.0}
-  pins: *QTS_pins
+  pads: *QTS_pads
 
 Samtec_QTS-075-xx-x-D-A_P0.635mm_Vertical:
   <<: *QTS-075-xx-x-D
@@ -382,7 +382,7 @@ Samtec_QTS-016-xx-x-D-DP_P0.635mm_Vertical: &QTS-016-xx-x-D-DP
       [footprint](http://suddendocs.samtec.com/prints/qts-xxx-xx-x-d-dp-xx-footprint.pdf)
   layout: {type: 'Terminal', width: 20.0, height: 5.97}
   banks: {n: 1, diff: 1, slots: 50, space: 20.0, width: 16.5, height: 4.0}
-  pins: *QTS_pins
+  pads: *QTS_pads
 
 Samtec_QTS-016-xx-x-D-DP-A_P0.635mm_Vertical:
   <<: *QTS-016-xx-x-D-DP
@@ -401,7 +401,7 @@ Samtec_QTS-032-xx-x-D-DP_P0.635mm_Vertical: &QTS-032-xx-x-D-DP
   meta: *QTS-DP_meta
   layout: {type: 'Terminal', width: 40.0, height: 5.97}
   banks: {n: 2, diff: 2, slots: 50, space: 20.0, width: 16.5, height: 4.0}
-  pins: *QTS_pins
+  pads: *QTS_pads
 
 Samtec_QTS-032-xx-x-D-DP-A_P0.635mm_Vertical:
   <<: *QTS-032-xx-x-D-DP
@@ -420,7 +420,7 @@ Samtec_QTS-048-xx-x-D-DP_P0.635mm_Vertical: &QTS-048-xx-x-D-DP
   meta: *QTS-DP_meta
   layout: {type: 'Terminal', width: 60.0, height: 5.97}
   banks: {n: 3, diff: 3, slots: 50, space: 20.0, width: 16.5, height: 4.0}
-  pins: *QTS_pins
+  pads: *QTS_pads
 
 Samtec_QTS-048-xx-x-D-DP-A_P0.635mm_Vertical:
   <<: *QTS-048-xx-x-D-DP
@@ -445,7 +445,7 @@ Samtec_QSS-025-xx-x-D_P0.635mm_Vertical: &QSS-025-xx-x-D
       [footprint](http://suddendocs.samtec.com/prints/qss-xxx-xx-x-d-xx-footprint.pdf)
   layout: {type: 'Socket', width: 21.27, height: 7.24}
   banks: {n: 1, diff: 0, slots: 50, space: 20.0, width: 16.0, height: 3.66}
-  pins: &QSS_pins
+  pads: &QSS_pads
     signal: {pitch: 0.635, y: 2.865, width: 0.406, height: 2.273}
     ground: {height: 0.432, width: [2.8, 4.7], space: [16.13, 6.35]}
 
@@ -460,7 +460,7 @@ Samtec_QSS-050-xx-x-D_P0.635mm_Vertical: &QSS-050-xx-x-D
   meta: *QSS_meta
   layout: {type: 'Socket', width: 41.28, height: 7.24}
   banks: {n: 2, diff: 0, slots: 50, space: 20.0, width: 16.0, height: 3.66}
-  pins: *QSS_pins
+  pads: *QSS_pads
 
 Samtec_QSS-050-xx-x-D-A_P0.635mm_Vertical:
   <<: *QSS-050-xx-x-D
@@ -473,7 +473,7 @@ Samtec_QSS-075-xx-x-D_P0.635mm_Vertical: &QSS-075-xx-x-D
   meta: *QSS_meta
   layout: {type: 'Socket', width: 61.28, height: 7.24}
   banks: {n: 3, diff: 0, slots: 50, space: 20.0, width: 16.0, height: 3.66}
-  pins: *QSS_pins
+  pads: *QSS_pads
 
 Samtec_QSS-075-xx-x-D-A_P0.635mm_Vertical:
   <<: *QSS-075-xx-x-D
@@ -491,7 +491,7 @@ Samtec_QSS-016-xx-x-D-DP_P0.635mm_Vertical: &QSS-016-xx-x-D-DP
       [footprint](http://suddendocs.samtec.com/prints/qss-xxx-xx-x-d-dp-xx-footprint.pdf)
   layout: {type: 'Socket', width: 21.27, height: 7.24}
   banks: {n: 1, diff: 1, slots: 50, space: 20.0, width: 16.0, height: 3.66}
-  pins: *QSS_pins
+  pads: *QSS_pads
 
 Samtec_QSS-016-xx-x-D-DP-A_P0.635mm_Vertical:
   <<: *QSS-016-xx-x-D-DP
@@ -510,7 +510,7 @@ Samtec_QSS-032-xx-x-D-DP_P0.635mm_Vertical: &QSS-032-xx-x-D-DP
   meta: *QSS-DP_meta
   layout: {type: 'Socket', width: 41.28, height: 7.24}
   banks: {n: 2, diff: 2, slots: 50, space: 20.0, width: 16.0, height: 3.66}
-  pins: *QSS_pins
+  pads: *QSS_pads
 
 Samtec_QSS-032-xx-x-D-DP-A_P0.635mm_Vertical:
   <<: *QSS-032-xx-x-D-DP
@@ -529,7 +529,7 @@ Samtec_QSS-048-xx-x-D-DP_P0.635mm_Vertical: &QSS-048-xx-x-D-DP
   meta: *QSS-DP_meta
   layout: {type: 'Socket', width: 61.28, height: 7.24}
   banks: {n: 3, diff: 3, slots: 50, space: 20.0, width: 16.0, height: 3.66}
-  pins: *QSS_pins
+  pads: *QSS_pads
 
 Samtec_QSS-048-xx-x-D-DP-A_P0.635mm_Vertical:
   <<: *QSS-048-xx-x-D-DP
@@ -554,7 +554,7 @@ Samtec_QTE-020-xx-x-D_P0.8mm_Vertical: &QTE-020-xx-x-D
       [footprint](http://suddendocs.samtec.com/prints/qte-xxx-xx-xxx-d-xxx-footprint.pdf)
   layout: {type: 'Terminal', width: 20.0, height: 5.97}
   banks: {n: 1, diff: 0, slots: 40, space: 20.0, width: 16.5, height: 4.0}
-  pins: &QTE_pins
+  pads: &QTE_pads
     signal: {pitch: 0.8, y: 2.98, width: 0.46, height: 1.94}
     ground: {height: 0.64, width: [2.54, 4.7], space: [16.89, 6.35]}
 
@@ -577,7 +577,7 @@ Samtec_QTE-040-xx-x-D_P0.8mm_Vertical: &QTE-040-xx-x-D
   meta: *QTE_meta
   layout: {type: 'Terminal', width: 40.0, height: 5.97}
   banks: {n: 2, diff: 0, slots: 40, space: 20.0, width: 16.5, height: 4.0}
-  pins: *QTE_pins
+  pads: *QTE_pads
 
 Samtec_QTE-040-xx-x-D-A_P0.8mm_Vertical:
   <<: *QTE-040-xx-x-D
@@ -598,7 +598,7 @@ Samtec_QTE-060-xx-x-D_P0.8mm_Vertical: &QTE-060-xx-x-D
   meta: *QTE_meta
   layout: {type: 'Terminal', width: 60.0, height: 5.97}
   banks: {n: 3, diff: 0, slots: 40, space: 20.0, width: 16.5, height: 4.0}
-  pins: *QTE_pins
+  pads: *QTE_pads
 
 Samtec_QTE-060-xx-x-D-A_P0.8mm_Vertical:
   <<: *QTE-060-xx-x-D
@@ -616,7 +616,7 @@ Samtec_QTE-014-xx-x-D-DP_P0.8mm_Vertical: &QTE-014-xx-x-D-DP
       [footprint](http://suddendocs.samtec.com/prints/qte-xxx-xx-x-d-dp-xx-footprint.pdf)
   layout: {type: 'Terminal', width: 20.0, height: 5.97}
   banks: {n: 1, diff: 1, slots: 40, space: 20.0, width: 16.5, height: 4.0}
-  pins: *QTE_pins
+  pads: *QTE_pads
 
 Samtec_QTE-014-xx-x-D-DP-A_P0.8mm_Vertical:
   <<: *QTE-014-xx-x-D-DP
@@ -637,7 +637,7 @@ Samtec_QTE-028-xx-x-D-DP_P0.8mm_Vertical: &QTE-028-xx-x-D-DP
   meta: *QTE-DP_meta
   layout: {type: 'Terminal', width: 40.0, height: 5.97}
   banks: {n: 2, diff: 2, slots: 40, space: 20.0, width: 16.5, height: 4.0}
-  pins: *QTE_pins
+  pads: *QTE_pads
 
 Samtec_QTE-028-xx-x-D-DP-A_P0.8mm_Vertical:
   <<: *QTE-028-xx-x-D-DP
@@ -658,7 +658,7 @@ Samtec_QTE-042-xx-x-D-DP_P0.8mm_Vertical: &QTE-042-xx-x-D-DP
   meta: *QTE-DP_meta
   layout: {type: 'Terminal', width: 60.0, height: 5.97}
   banks: {n: 3, diff: 3, slots: 40, space: 20.0, width: 16.5, height: 4.0}
-  pins: *QTE_pins
+  pads: *QTE_pads
 
 Samtec_QTE-042-xx-x-D-DP-A_P0.8mm_Vertical:
   <<: *QTE-042-xx-x-D-DP
@@ -677,7 +677,7 @@ Samtec_QSE-020-xx-x-D_P0.8mm_Vertical: &QSE-020-xx-x-D
       [footprint](http://suddendocs.samtec.com/prints/qse-xxx-xx-x-d-xx-footprint.pdf)
   layout: {type: 'Socket', width: 21.27, height: 7.24}
   banks: {n: 1, diff: 0, slots: 40, space: 20.0, width: 16.0, height: 3.8}
-  pins: &QSE_pins
+  pads: &QSE_pads
     signal: {pitch: 0.8, y: 2.87, width: 0.41, height: 2.27}
     ground: {height: 0.43, width: [2.54, 4.7], space: [16.13, 6.35]}
 
@@ -700,7 +700,7 @@ Samtec_QSE-040-xx-x-D_P0.8mm_Vertical: &QSE-040-xx-x-D
   meta: *QSE_meta
   layout: {type: 'Socket', width: 41.28, height: 7.24}
   banks: {n: 2, diff: 0, slots: 40, space: 20.0, width: 16.0, height: 3.8}
-  pins: *QSE_pins
+  pads: *QSE_pads
 
 Samtec_QSE-040-xx-x-D-A_P0.8mm_Vertical:
   <<: *QSE-040-xx-x-D
@@ -713,7 +713,7 @@ Samtec_QSE-060-xx-x-D_P0.8mm_Vertical: &QSE-060-xx-x-D
   meta: *QSE_meta
   layout: {type: 'Socket', width: 61.28, height: 7.24}
   banks: {n: 3, diff: 0, slots: 40, space: 20.0, width: 16.0, height: 3.8}
-  pins: *QSE_pins
+  pads: *QSE_pads
 
 Samtec_QSE-060-xx-x-D-A_P0.8mm_Vertical:
   <<: *QSE-060-xx-x-D
@@ -731,7 +731,7 @@ Samtec_QSE-014-xx-x-D-DP_P0.8mm_Vertical: &QSE-014-xx-x-D-DP
       [footprint](http://suddendocs.samtec.com/prints/qse-xxx-xx-x-d-dp-xxx-footprint.pdf)
   layout: {type: 'Socket', width: 21.27, height: 7.24}
   banks: {n: 1, diff: 1, slots: 40, space: 20.0, width: 16.0, height: 3.8}
-  pins: *QSE_pins
+  pads: *QSE_pads
 
 Samtec_QSE-014-xx-x-D-DP-A_P0.8mm_Vertical:
   <<: *QSE-014-xx-x-D-DP
@@ -744,7 +744,7 @@ Samtec_QSE-028-xx-x-D-DP_P0.8mm_Vertical: &QSE-028-xx-x-D-DP
   meta: *QSE-DP_meta
   layout: {type: 'Socket', width: 41.28, height: 7.24}
   banks: {n: 2, diff: 2, slots: 40, space: 20.0, width: 16.0, height: 3.8}
-  pins: *QSE_pins
+  pads: *QSE_pads
 
 Samtec_QSE-028-xx-x-D-DP-A_P0.8mm_Vertical:
   <<: *QSE-028-xx-x-D-DP
@@ -757,7 +757,7 @@ Samtec_QSE-042-xx-x-D-DP_P0.8mm_Vertical: &QSE-042-xx-x-D-DP
   meta: *QSE-DP_meta
   layout: {type: 'Socket', width: 61.28, height: 7.24}
   banks: {n: 3, diff: 3, slots: 40, space: 20.0, width: 16.0, height: 3.8}
-  pins: *QSE_pins
+  pads: *QSE_pads
 
 Samtec_QSE-042-xx-x-D-DP-A_P0.8mm_Vertical:
   <<: *QSE-042-xx-x-D-DP

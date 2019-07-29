@@ -97,10 +97,10 @@ def generate_one_footprint(param, config, default_lib):
     # Copper layer(s)
     
     # Signal pad parameters
-    pitch = param['pins']['signal']['pitch']
-    pad_w = param['pins']['signal']['width']
-    pad_h = param['pins']['signal']['height']
-    pad_y = param['pins']['signal']['y']
+    pitch = param['pads']['signal']['pitch']
+    pad_w = param['pads']['signal']['width']
+    pad_h = param['pads']['signal']['height']
+    pad_y = param['pads']['signal']['y']
 
     # Pin 1 position
     pin1 = Vector2D(0,0)
@@ -148,10 +148,10 @@ def generate_one_footprint(param, config, default_lib):
             n += 1
     
     # Ground pad parameters
-    gnd_h = param['pins']['ground']['height']
+    gnd_h = param['pads']['ground']['height']
     # Combine spacing and width data into a zipped list: [(space,width), ...]
-    gnd_sw = [sw for sw in zip(param['pins']['ground']['space'],
-                               param['pins']['ground']['width'])]
+    gnd_sw = [sw for sw in zip(param['pads']['ground']['space'],
+                               param['pads']['ground']['width'])]
     gnd_sw.sort() # Sort from lowest (inner) to highest (outer) spacing
     
     # Place ground plane pads
