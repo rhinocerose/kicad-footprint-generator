@@ -1,0 +1,29 @@
+SEAF-10-05.0-L-04-1-A-LP-K-TR_P1.27mm:
+  family: "SEAF"
+  description: "SEAF-10-05.0-L-04-1-A-LP-K-TR"
+  size_source: "http://suddendocs.samtec.com/prints/seaf-xx-xx.x-xx-xx-x-a-xx-k-tr-mkt.pdf"
+  body_size_A: 11.43
+  body_size_B: 16.28
+  body_size_C: 5.66
+  body_size_D: 3.81
+  body_size_E: 2.01
+  body_size_F: "na"
+  body_size_G: "na"
+  body_size_H: 32.05
+  body_size_J: 26.24
+  body_size_left_ref: 3.96
+  body_size_right_ref: 3.12
+  body_size_middle_ref: 5.61
+  pitch: 1.27
+  pad_diameter: 0.64
+  pad_x_center_offset: 0.0
+  pad_y_center_offset: 0.0
+  mask_margin: 0.0
+  paste_margin: 0.12
+  paste_ratio: 0.0
+  layout_x: 10
+  layout_y: 4
+  npth_drill: 1.27
+  pth_drill: 0.99
+  pth_size: 0.99 # Using paste-in-hole technology .. therefore no annular ring
+  pth_distance: 2.97
