@@ -20,12 +20,11 @@ def setup_kicad_mod(name, url):
     kicad_mod.setDescription(url)
     kicad_mod.setTags("transformer tht")
 
-    kicad_mod.append(Text(type="user", text="%R", at=[0, -1], layer="F.Fab"))
-    kicad_mod.append(Text(type='value', text=name, at=[0, 1], layer="F.Fab"))
+    kicad_mod.append(Model(filename=f"${{KISYS3DMOD}}/Transformer_THT.3dshapes/{name}.wrl"))
 
     return kicad_mod
 
-def build_outline(kicad_mod, x, y):
+def build_outline(kicad_mod, name, x, y):
     kicad_mod.append(Text(type='reference', text='REF**', at=[0, -y/2-1],
         layer="F.SilkS"))
 
@@ -35,6 +34,8 @@ def build_outline(kicad_mod, x, y):
         layer="F.SilkS", offset=.1))
     kicad_mod.append(RectLine(start=[-x/2, -y/2], end=[x/2, y/2],
         layer="F.CrtYd", offset=.25))
+    kicad_mod.append(Text(type="user", text="%R", at=[0, -1], layer="F.Fab"))
+    kicad_mod.append(Text(type='value', text=name, at=[0, 1], layer="F.Fab"))
 
 def add_pads(kicad_mod, size, drill, x_sep, pri_sep, sec_sep, pris_sep=None,
         secs_sep=None, shift=(0, 0)):
@@ -56,11 +57,15 @@ def add_pads(kicad_mod, size, drill, x_sep, pri_sep, sec_sep, pris_sep=None,
 
     pads = [(x + shift[0], y + shift[1]) for x, y in pads]
 
+    trans = Translation(-pads[0][0], -pads[0][1])
+    kicad_mod.append(trans)
     for i, pos in enumerate(pads):
         shape = Pad.SHAPE_ROUNDRECT if i == 0 else Pad.SHAPE_CIRCLE
-        kicad_mod.append(Pad(number=i+1, type=Pad.TYPE_THT, shape=shape,
+        trans.append(Pad(number=i+1, type=Pad.TYPE_THT, shape=shape,
             at=pos, size=size, drill=drill, layers=Pad.LAYERS_THT,
             radius_ratio=.25, maximum_radius=.5))
+
+    return trans
 
 def add_mounting(kicad_mod, drill, x, y):
     for pos in ((-x/2, -y/2), (-x/2, y/2), (x/2, -y/2), (x/2, y/2)):
@@ -74,15 +79,18 @@ def build_flat_transformer(core, url, A, B, C, D, E, F, G, H, I, J, K, L, M, N, 
     name = f"Transformer_Block_{core}"
     print(f"Building {name}")
     kicad_mod = setup_kicad_mod(name, url)
-    build_outline(kicad_mod, A, B)
+
     if M:
         drill = M + drill_extra
     else:
         drill = ceil(sqrt(N**2 + O**2) * 10) / 10 + drill_extra
     size = drill + size_extra
-    add_pads(kicad_mod, size=size, drill=drill, x_sep=F, pri_sep=I, pris_sep=J,
+
+    trans = add_pads(kicad_mod, size=size, drill=drill, x_sep=F, pri_sep=I, pris_sep=J,
             sec_sep=L, secs_sep=K, shift=((A-F-2*G)/2, (B-2*I-J-2*H)/2))
-    add_mounting(kicad_mod, drill=P+mounting_drill_extra, x=D, y=E)
+
+    build_outline(trans, name, A, B)
+    add_mounting(trans, drill=P+mounting_drill_extra, x=D, y=E)
 
     file_handler = KicadFileHandler(kicad_mod)
     file_handler.writeFile(f"{library}/{name}.kicad_mod")
