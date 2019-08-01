@@ -18,22 +18,105 @@ import itertools
 from string import ascii_uppercase
 
 def generateFootprint(config, fpParams, fpId):
+    # Common parameters for all types
+    size_source = "http://suddendocs.samtec.com/prints/seaf-xx-xx.x-xx-xx-x-a-xx-k-tr-mkt.pdf"
+    pitchX = 1.27
+    pitchY = pitchX
+    pitchString = str(pitchX) + "x" + str(pitchY)
+    pad_diameter = 0.64
+#  pad_x_center_offset: 0.0
+#  pad_y_center_offset: 0.0
+    mask_margin = 0.0
+    paste_margin = 0.12
+    paste_ratio = 0.0
+    layout_x = 10
+    layout_y = 4
+    npth_drill = 1.27
+    pth_drill = 0.99
+    pth_distance = 2.97
+    
+    
     print('Building footprint for parameter set: {}'.format(fpId))
     
-    pkgA = fpParams["body_size_A"]
-    pkgB = fpParams["body_size_B"]
-    pkgC = fpParams["body_size_C"]
-    pkgD = fpParams["body_size_D"]
-    pkgE = fpParams["body_size_E"]
-    pkgF = fpParams["body_size_F"]
-    pkgG = fpParams["body_size_G"]
-    pkgH = fpParams["body_size_H"]
-    pkgJ = fpParams["body_size_J"]
-    pkgLREF = fpParams["body_size_left_ref"]
-    pkgRREF = fpParams["body_size_right_ref"]
+    if fpParams["family"] == "SEAF":
+        # define the correct pin-order here according datasheet
+        # tlbr = top left to bottom right
+        # trbl = top right to bottom left
+        # bltr = bottom left to top right
+        # brtl = bottom right to top left
+        pin_order = "brtl"
+        # Parameters for SEAF-A and SEAF-A-LP used from datasheet
+        tab_DIM_A = [[10, 15, 19, 20, 25, 30, 40, 50],
+                 [11.43, 17.78, 22.86, 24.13, 30.48, 36.83, 49.53, 62.23]]
+        tab_DIM_B = [[10, 15, 19, 20, 25, 30, 40, 50],
+                 [16.28, 22.63, 27.71, 28.98, 35.33, 41.68, 54.38, 67.08]]
+        tab_DIM_C = [[4, 5, 6, 8, 10, 14],
+                 [5.66,  8.20,  8.20, 10.74, 13.28, 18.36]]
+        tab_DIM_D = [[4, 5, 6, 8, 10, 14],
+                 [3.81, 5.08, 6.35, 8.89, 11.43, 16.51]]
+        tab_DIM_E = [[4, 5, 6, 8, 10, 14],
+                 [2.01, 3.05, 3.05, 3.05, 3.05, 3.05]]
+        tab_DIM_F = [[4, 5, 6, 8, 10, 14],
+                 [3.20, 5.69, 5.69, 3.20, 5.69, 5.69]]
+        tab_DIM_G = [[4, 5, 6, 8, 10, 14],
+                 [1.35, 0.84, 0.84, 0.84, 0.84, 0.84]]
+        tab_DIM_H = [[10, 15, 19, 20, 25, 30, 40, 50],
+                 [32.05, 38.40, 43.48, 44.75, 51.10, 57.45, 70.15, 82.85]]
+        tab_DIM_J = [[10, 15, 19, 20, 25, 30, 40, 50],
+                 [26.24, 32.59, 37.67, 38.94, 45.29, 51.64, 64.34, 77.04]]
+        len_REF_A = 3.96
+        len_REF_B = 3.12
+        len_REF_C = 5.61
+        # Read the number of positions (a.k.a. number of pins of an row )
+        layoutX = fpParams["no_pins_of_row"]
+        # Read the number of rows
+        layoutY = fpParams["no_of_rows"]
 
-    layoutX = fpParams["layout_x"]
-    layoutY = fpParams["layout_y"]
+        pkg_REF_A = len_REF_A
+        pkg_REF_B = len_REF_B
+        pkg_REF_C = len_REF_C
+        
+        
+        if fpParams["design"] == "A":
+            pkg_DIM_A = getTableEntry(tab_DIM_A, layoutX)
+            if pkg_DIM_A == -1:
+                print('Error, no_pins_of_row = {} does not exist in tab_DIM_A-list'.format(fpParams["no_pins_of_row"]))
+                sys.exit()
+            pkg_DIM_B = getTableEntry(tab_DIM_B, layoutX)
+            if pkg_DIM_B == -1:
+                print('Error, no_pins_of_row = {} does not exist in tab_DIM_B-list'.format(fpParams["no_pins_of_row"]))
+                sys.exit()
+            pkg_DIM_C = getTableEntry(tab_DIM_C, layoutY)
+            if pkg_DIM_C == -1:
+                print('Error, no_of_rows = {} does not exist in tab_DIM_C-list'.format(fpParams["no_of_rows"]))
+                sys.exit()
+            pkg_DIM_D = getTableEntry(tab_DIM_D, layoutY)
+            if pkg_DIM_D == -1:
+                print('Error, no_of_rows = {} does not exist in tab_DIM_D-list'.format(fpParams["no_of_rows"]))
+                sys.exit()
+            pkg_DIM_E = getTableEntry(tab_DIM_E, layoutY)
+            if pkg_DIM_E == -1:
+                print('Error, no_of_rows = {} does not exist in tab_DIM_E-list'.format(fpParams["no_of_rows"]))
+                sys.exit()
+            pkg_DIM_F = getTableEntry(tab_DIM_F, layoutY)
+            if pkg_DIM_F == -1:
+                print('Error, no_of_rows = {} does not exist in tab_DIM_F-list'.format(fpParams["no_of_rows"]))
+                sys.exit()
+            pkg_DIM_G = getTableEntry(tab_DIM_G, layoutY)
+            if pkg_DIM_G == -1:
+                print('Error, no_of_rows = {} does not exist in tab_DIM_G-list'.format(fpParams["no_of_rows"]))
+                sys.exit()
+            pkg_DIM_H = getTableEntry(tab_DIM_H, layoutX)
+            if pkg_DIM_H == -1:
+                print('Error, no_pins_of_row = {} does not exist in tab_DIM_H-list'.format(fpParams["no_pins_of_row"]))
+                sys.exit()
+            pkg_DIM_J = getTableEntry(tab_DIM_J, layoutX)
+            if pkg_DIM_J == -1:
+                print('Error, no_pins_of_row = {} does not exist in tab_DIM_J-list'.format(fpParams["no_pins_of_row"]))
+                sys.exit()    
+
+    #layoutX = fpParams["layout_x"]
+    #layoutY = fpParams["layout_y"]
     
     if "additional_tags" in fpParams:
         additionalTag = " " + fpParams["additional_tags"]
@@ -51,20 +134,20 @@ def generateFootprint(config, fpParams, fpId):
         rowSkips = []
 
     # must be given pitch (equal in X and Y) or a unique pitch in both X and Y
-    if "pitch" in fpParams:
-        if "pitch_x" and "pitch_y" in fpParams:
-            raise KeyError('{}: Either pitch or both pitch_x and pitch_y must be given.'.format(fpId))
-        else:
-            pitchString = str(fpParams["pitch"])
-            pitchX = fpParams["pitch"]
-            pitchY = fpParams["pitch"]
-    else:
-        if "pitch_x" and "pitch_y" in fpParams:
-            pitchString = str(fpParams["pitch_x"]) + "x" + str(fpParams["pitch_y"])
-            pitchX = fpParams["pitch_x"]
-            pitchY = fpParams["pitch_y"]
-        else:
-            raise KeyError('{}: Either pitch or both pitch_x and pitch_y must be given.'.format(fpId))
+    #if "pitch" in fpParams:
+    #    if "pitch_x" and "pitch_y" in fpParams:
+    #        raise KeyError('{}: Either pitch or both pitch_x and pitch_y must be given.'.format(fpId))
+    #    else:
+    #        pitchString = str(fpParams["pitch"])
+    #        pitchX = fpParams["pitch"]
+    #        pitchY = fpParams["pitch"]
+    #else:
+    #    if "pitch_x" and "pitch_y" in fpParams:
+    #        pitchString = str(fpParams["pitch_x"]) + "x" + str(fpParams["pitch_y"])
+    #        pitchX = fpParams["pitch_x"]
+    #        pitchY = fpParams["pitch_y"]
+    #    else:
+    #        raise KeyError('{}: Either pitch or both pitch_x and pitch_y must be given.'.format(fpId))
 
     f = Footprint(fpId)
     f.setAttribute("smd")
@@ -73,7 +156,7 @@ def generateFootprint(config, fpParams, fpId):
     if "paste_ratio" in fpParams: f.setPasteMarginRatio(fpParams["paste_ratio"])
 
     s1 = [1.0, 1.0]
-    s2 = [min(1.0, round((pkgLREF + pkgA + pkgRREF) / 4.3, 2))] * 2
+    s2 = [min(1.0, round((pkg_REF_A + pkg_DIM_A + pkg_REF_B) / 4.3, 2))] * 2
 
     t1 = 0.15 * s1[0]
     t2 = 0.15 * s2[0]
@@ -106,59 +189,76 @@ def generateFootprint(config, fpParams, fpId):
     # Caution: We draw the footprint 180° rotated than in datasheet, simplifing the PAD placement algorithm
 
     # Generating Points for the "Fab"-layer (fabrication)
-    P1XFab = xCenter - ((pkgA / 2.0) + pkgRREF)
-    P2XFab = xCenter + ((pkgA / 2.0) + pkgLREF)
-    P3XFab = P2XFab
-    P4XFab = P1XFab
-    P5XFab = P1XFab
-    P6XFab = xCenter - ((pkgA / 2.0) + pkgRREF + pkgG)
-    P7XFab = P6XFab
-    P8XFab = P1XFab
-
-    P1YFab = yCenter - (pkgC / 2.0)
+    P1XFab = xCenter - ((pkg_DIM_A / 2.0) + pkg_REF_A)
+    P1YFab = yCenter - (pkg_DIM_C / 2.0)
+    
+    P2XFab = xCenter + ((pkg_DIM_A / 2.0) + pkg_REF_B)
     P2YFab = P1YFab
-    P3YFab = yCenter + (pkgC / 2.0)
+    
+    P3XFab = P2XFab
+    P3YFab = yCenter - (pkg_DIM_F / 2.0)
+    
+    P4XFab = xCenter + ((pkg_DIM_A / 2.0) + pkg_REF_B + pkg_DIM_G)
     P4YFab = P3YFab
-    P5YFab = yCenter + (pkgF / 2.0)
+    
+    P5XFab = P4XFab
+    P5YFab = yCenter + (pkg_DIM_F / 2.0)
+    
+    
+    P6XFab = P3XFab
     P6YFab = P5YFab
-    P7YFab = yCenter - (pkgF / 2.0)
+    
+    P7XFab = P6XFab
+    P7YFab = yCenter + (pkg_DIM_C / 2.0)
+    
+    P8XFab = P1XFab
     P8YFab = P7YFab
+    
 
     # Generating Points for the "crtYd"-layer (courty yard)
-    P1XcrtYd = crtYdRound(xCenter - ((pkgA / 2.0) + pkgRREF + pkgG + crtYdOffset))
-    P2XcrtYd = crtYdRound(xCenter + ((pkgA / 2.0) + pkgLREF + crtYdOffset))
-    P3XcrtYd = P2XcrtYd
-    P4XcrtYd = P1XcrtYd
-
-    P1YcrtYd = crtYdRound(yCenter - ((pkgC / 2.0) + crtYdOffset))
+    P1XcrtYd = crtYdRound(xCenter - ((pkg_DIM_A / 2.0) + pkg_REF_A + crtYdOffset))
+    P1YcrtYd = crtYdRound(yCenter - ((pkg_DIM_C / 2.0) + crtYdOffset))
+        
+    P2XcrtYd = crtYdRound(xCenter + ((pkg_DIM_A / 2.0) + pkg_REF_B + pkg_DIM_G + crtYdOffset))
     P2YcrtYd = P1YcrtYd
-    P3YcrtYd = crtYdRound(yCenter + ((pkgC / 2.0) + crtYdOffset))
+    
+    P3XcrtYd = P2XcrtYd
+    P3YcrtYd = crtYdRound(yCenter + ((pkg_DIM_C / 2.0) + crtYdOffset))
+    
+    P4XcrtYd = P1XcrtYd
     P4YcrtYd = P3YcrtYd
 
     # Generating Points for the "Silk"-layer (silkscreed)
     P1XSilk = P1XFab - silkOffset
-    P2XSilk = P2XFab + silkOffset
-    P3XSilk = P2XSilk
-    P4XSilk = P1XSilk
-    P5XSilk = P1XSilk
-    P6XSilk = xCenter - ((pkgA / 2.0) + pkgRREF + pkgG + silkOffset)
-    P7XSilk = P6XSilk
-    P8XSilk = P1XSilk
-
     P1YSilk = P1YFab - silkOffset
+    
+    P2XSilk = P2XFab + silkOffset
     P2YSilk = P1YSilk
-    P3YSilk = P3YFab + silkOffset
+    
+    P3XSilk = P2XSilk
+    P3YSilk = P3YFab - silkOffset
+    
+    P4XSilk = P4XFab + silkOffset
     P4YSilk = P3YSilk
+    
+    P5XSilk = P4XSilk
     P5YSilk = P5YFab + silkOffset
-    P6YSilk = P5YSilk
-    P7YSilk = P7YFab - silkOffset
+    
+    
+    P6XSilk = P3XSilk
+    P6YSilk = P6YFab + silkOffset
+    
+    P7XSilk = P6XSilk
+    P7YSilk = P7YFab + silkOffset
+    
+    P8XSilk = P1XSilk
     P8YSilk = P7YSilk
 
     # Define the position of pads to be placed
     xPadLeft = xCenter - pitchX * ((layoutX - 1) / 2.0)
-    #xPadRight = xCenter + pitchX * ((layoutX - 1) / 2.0)
+    xPadRight = xCenter + pitchX * ((layoutX - 1) / 2.0)
     yPadTop = yCenter - pitchY * ((layoutY - 1) / 2.0)
-    #yPadBottom = yCenter + pitchY * ((layoutY - 1) / 2.0)
+    yPadBottom = yCenter + pitchY * ((layoutY - 1) / 2.0)
 
     # Define the position of the REF** in silkscreen
     xRefSilk = xCenter
@@ -214,8 +314,14 @@ def generateFootprint(config, fpParams, fpId):
                                     [P1XSilk, P1YSilk]],
                           layer="F.SilkS", width=wSilkS))
 
-    # Pads
-    balls = layoutX * layoutY
+    
+    
+    # Pads generated according pin_order
+    # tlbr = top left to bottom right
+    # trbl = top right to bottom left
+    # bltr = bottom left to top right
+    # brtl = bottom right to top left
+    pad_array_size = layoutX * layoutY
     if rowSkips == []:
         for _ in range(layoutY):
             rowSkips.append([])
@@ -225,42 +331,72 @@ def generateFootprint(config, fpParams, fpId):
             try:
                 # If item is a range, remove that range
                 rowSet -= set(range(*item))
-                balls -= item[1] - item[0]
+                pad_array_size -= item[1] - item[0]
             except TypeError:
                 # If item is an int, remove that int
                 rowSet -= {item}
-                balls -= 1
+                pad_array_size -= 1
         for col in rowSet:
-            f.append(Pad(number="{}{}".format(row, col), type=Pad.TYPE_SMT,
+            if pin_order == "tlbr":            
+                f.append(Pad(number="{}{}".format(row, col), type=Pad.TYPE_SMT,
                          shape=padShape,
                          at=[xPadLeft + (col-1) * pitchX, yPadTop + rowNum * pitchY],
-                         size=[fpParams["pad_diameter"], fpParams["pad_diameter"]],
+                         size=[pad_diameter, pad_diameter],
                          layers=Pad.LAYERS_SMT, 
                          radius_ratio=config['round_rect_radius_ratio']))
+            elif pin_order == "trbl":
+                f.append(Pad(number="{}{}".format(row, col), type=Pad.TYPE_SMT,
+                         shape=padShape,
+                         at=[xPadRight - (col-1) * pitchX, yPadTop + rowNum * pitchY],
+                         size=[pad_diameter, pad_diameter],
+                         layers=Pad.LAYERS_SMT, 
+                         radius_ratio=config['round_rect_radius_ratio']))
+            elif pin_order == "bltr":
+                f.append(Pad(number="{}{}".format(row, col), type=Pad.TYPE_SMT,
+                         shape=padShape,
+                         at=[xPadLeft + (col-1) * pitchX, yPadBottom - rowNum * pitchY],
+                         size=[pad_diameter, pad_diameter],
+                         layers=Pad.LAYERS_SMT, 
+                         radius_ratio=config['round_rect_radius_ratio']))
+            elif pin_order == "brtl":
+                f.append(Pad(number="{}{}".format(row, col), type=Pad.TYPE_SMT,
+                         shape=padShape,
+                         at=[xPadRight - (col-1) * pitchX, yPadBottom - rowNum * pitchY],
+                         size=[pad_diameter, pad_diameter],
+                         layers=Pad.LAYERS_SMT, 
+                         radius_ratio=config['round_rect_radius_ratio']))
+            else:
+                print('Error, pin_order = {} does not exist.'.format(pin_order))
+                sys.exit()
+                
+
+
 
     # Placement Holes NPTH
-    P1XPlacementHole = xCenter - (pkgB / 2.0)
-    P1YPlacementHole = yCenter - pkgE
+    P1XPlacementHole = xCenter - (pkg_DIM_B / 2.0)
+    P1YPlacementHole = yCenter
 
     f.append(Pad(at=[P1XPlacementHole, P1YPlacementHole], number="",
-                    type=Pad.TYPE_NPTH, shape=Pad.SHAPE_CIRCLE, size=fpParams["npth_drill"],
-                    drill=fpParams["npth_drill"], layers=Pad.LAYERS_NPTH))
+                    type=Pad.TYPE_NPTH, shape=Pad.SHAPE_CIRCLE, size=npth_drill,
+                    drill=npth_drill, layers=Pad.LAYERS_NPTH))
 
-    P2XPlacementHole = xCenter + (pkgB / 2.0)
-    P2YPlacementHole = yCenter
+    P2XPlacementHole = xCenter + (pkg_DIM_B / 2.0)
+    P2YPlacementHole = yCenter + pkg_DIM_E
 
     f.append(Pad(at=[P2XPlacementHole, P2YPlacementHole], number="",
-                    type=Pad.TYPE_NPTH, shape=Pad.SHAPE_CIRCLE, size=fpParams["npth_drill"],
-                    drill=fpParams["npth_drill"], layers=Pad.LAYERS_NPTH))
+                    type=Pad.TYPE_NPTH, shape=Pad.SHAPE_CIRCLE, size=npth_drill,
+                    drill=npth_drill, layers=Pad.LAYERS_NPTH))
 
     ########################### Pin 1 - Marker #################################
     markerOffset = 0.4
-    markerLength = fpParams['pad_diameter']
+    markerLength = pad_diameter
     
-    P1XMarker = xPadLeft
-    P1YMarker = P1YSilk - markerOffset
+    P1XMarker = xPadRight
+    P1YMarker = P7YSilk + markerOffset
+    
     P2XMarker = P1XMarker - (markerLength / 2)
-    P2YMarker = P1YMarker - (markerLength / sqrt(2))
+    P2YMarker = P1YMarker + (markerLength / sqrt(2))
+    
     P3XMarker = P2XMarker + markerLength
     P3YMarker = P2YMarker
     
@@ -273,13 +409,13 @@ def generateFootprint(config, fpParams, fpId):
 
     # Prepare name variables for footprint folder, footprint name, etc.
     familiyType = fpParams['family']
-    packageType = fpParams['description']
+    packageType = fpId
 
     f.append(Model(filename="{}Connector_Samtec_{}.3dshapes/{}.wrl".format(
-                  config['3d_model_prefix'], familiyType, fpParams['description'])))
+                  config['3d_model_prefix'], familiyType, fpId)))
 
-    f.setDescription("{0}, {1}x{2}mm, {3} Ball, {4}x{5} Layout, {6}mm Pitch, {7}".format(fpParams["description"], pkgC, pkgA, balls, layoutX, layoutY, pitchString, fpParams["size_source"]))
-    f.setTags("{} {} {}{}".format(packageType, balls, pitchString, additionalTag))
+    f.setDescription("{0}, {1}x{2}mm, {3} Ball, {4}x{5} Layout, {6}mm Pitch, {7}".format(fpId, (pkg_REF_A + pkg_DIM_C + pkg_REF_B + pkg_DIM_G) , pkg_DIM_C, pad_array_size, layoutX, layoutY, pitchString, size_source))
+    f.setTags("{} {} {}{}".format(packageType, pad_array_size, pitchString, additionalTag))
 
     outputDir = 'Connector_Samtec_{lib_name:s}.pretty/'.format(lib_name=familiyType)
     if not os.path.isdir(outputDir): #returns false if path does not yet exist!! (Does not check path validity)
@@ -293,6 +429,16 @@ def rowNameGenerator(seq):
     for n in itertools.count(1):
         for s in itertools.product(seq, repeat = n):
             yield ''.join(s)
+
+def getTableEntry(table, layout):
+    pkg_val = -1
+    for i in range(len(table[0])):
+        #print('{}'.format(table[0][i]))
+        if table[0][i] == layout:
+            pkg_val = table[1][i]
+            break; # quit the for-loop when a correct match is made to reduce script duration time
+    return pkg_val
+    
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='use confing .yaml files to create footprints.')
