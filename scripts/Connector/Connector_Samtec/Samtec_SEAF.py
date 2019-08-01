@@ -17,7 +17,7 @@ from KicadModTree import *
 import itertools
 from string import ascii_uppercase
 
-def generateFootprint(config, fpParams, fpId):
+def generateFootprint_SEAM_A(config, fpParams, fpId):
     # Common parameters for all types
     size_source = "http://suddendocs.samtec.com/prints/seaf-xx-xx.x-xx-xx-x-a-xx-k-tr-mkt.pdf"
     pitchX = 1.27
@@ -29,16 +29,17 @@ def generateFootprint(config, fpParams, fpId):
     mask_margin = 0.0
     paste_margin = 0.12
     paste_ratio = 0.0
-    layout_x = 10
-    layout_y = 4
-    npth_drill = 1.27
+    npth_drill_AlignmentHole = 1.27
     pth_drill = 0.99
     pth_distance = 2.97
-    
-    
+        
     print('Building footprint for parameter set: {}'.format(fpId))
     
-    if fpParams["family"] == "SEAF":
+    if ((fpParams["family"] == "SEAF") and ((fpParams["design"] == "A") or (fpParams["design"] == "LP"))):
+        # Read the number of positions (a.k.a. number of pins of an row )
+        num_positions = fpParams["no_pins_of_row"]
+        # Read the number of rows
+        num_rows = fpParams["no_of_rows"]
         # define the correct pin-order here according datasheet
         # tlbr = top left to bottom right
         # trbl = top right to bottom left
@@ -46,77 +47,74 @@ def generateFootprint(config, fpParams, fpId):
         # brtl = bottom right to top left
         pin_order = "brtl"
         # Parameters for SEAF-A and SEAF-A-LP used from datasheet
-        tab_DIM_A = [[10, 15, 19, 20, 25, 30, 40, 50],
-                 [11.43, 17.78, 22.86, 24.13, 30.48, 36.83, 49.53, 62.23]]
+        tab_DIM_A = [[10, 15, 19, 20, 25, 30, 40, 50],                          # number of positions per row
+                     [11.43, 17.78, 22.86, 24.13, 30.48, 36.83, 49.53, 62.23]]  # dimension values for the number of positions per row
         tab_DIM_B = [[10, 15, 19, 20, 25, 30, 40, 50],
-                 [16.28, 22.63, 27.71, 28.98, 35.33, 41.68, 54.38, 67.08]]
+                     [16.28, 22.63, 27.71, 28.98, 35.33, 41.68, 54.38, 67.08]]
         tab_DIM_C = [[4, 5, 6, 8, 10, 14],
-                 [5.66,  8.20,  8.20, 10.74, 13.28, 18.36]]
+                     [5.66,  8.20,  8.20, 10.74, 13.28, 18.36]]
         tab_DIM_D = [[4, 5, 6, 8, 10, 14],
-                 [3.81, 5.08, 6.35, 8.89, 11.43, 16.51]]
+                     [3.81, 5.08, 6.35, 8.89, 11.43, 16.51]]
         tab_DIM_E = [[4, 5, 6, 8, 10, 14],
-                 [2.01, 3.05, 3.05, 3.05, 3.05, 3.05]]
+                     [2.01, 3.05, 3.05, 3.05, 3.05, 3.05]]
         tab_DIM_F = [[4, 5, 6, 8, 10, 14],
-                 [3.20, 5.69, 5.69, 3.20, 5.69, 5.69]]
+                     [3.20, 5.69, 5.69, 3.20, 5.69, 5.69]]
         tab_DIM_G = [[4, 5, 6, 8, 10, 14],
-                 [1.35, 0.84, 0.84, 0.84, 0.84, 0.84]]
+                     [1.35, 0.84, 0.84, 0.84, 0.84, 0.84]]
         tab_DIM_H = [[10, 15, 19, 20, 25, 30, 40, 50],
-                 [32.05, 38.40, 43.48, 44.75, 51.10, 57.45, 70.15, 82.85]]
+                     [32.05, 38.40, 43.48, 44.75, 51.10, 57.45, 70.15, 82.85]]
         tab_DIM_J = [[10, 15, 19, 20, 25, 30, 40, 50],
-                 [26.24, 32.59, 37.67, 38.94, 45.29, 51.64, 64.34, 77.04]]
+                     [26.24, 32.59, 37.67, 38.94, 45.29, 51.64, 64.34, 77.04]]
         len_REF_A = 3.96
         len_REF_B = 3.12
-        len_REF_C = 5.61
-        # Read the number of positions (a.k.a. number of pins of an row )
-        layoutX = fpParams["no_pins_of_row"]
-        # Read the number of rows
-        layoutY = fpParams["no_of_rows"]
-
+        len_REF_C = 4.08
+        len_REF_D = 5.61      
+        
+        pkg_DIM_A = getTableEntry(tab_DIM_A, num_positions)
+        if pkg_DIM_A == -1:
+            print('Error, no_pins_of_row = {} does not exist in tab_DIM_A-list'.format(fpParams["no_pins_of_row"]))
+            sys.exit()
+        pkg_DIM_B = getTableEntry(tab_DIM_B, num_positions)
+        if pkg_DIM_B == -1:
+            print('Error, no_pins_of_row = {} does not exist in tab_DIM_B-list'.format(fpParams["no_pins_of_row"]))
+            sys.exit()
+        pkg_DIM_C = getTableEntry(tab_DIM_C, num_rows)
+        if pkg_DIM_C == -1:
+            print('Error, no_of_rows = {} does not exist in tab_DIM_C-list'.format(fpParams["no_of_rows"]))
+            sys.exit()
+        pkg_DIM_D = getTableEntry(tab_DIM_D, num_rows)
+        if pkg_DIM_D == -1:
+            print('Error, no_of_rows = {} does not exist in tab_DIM_D-list'.format(fpParams["no_of_rows"]))
+            sys.exit()
+        pkg_DIM_E = getTableEntry(tab_DIM_E, num_rows)
+        if pkg_DIM_E == -1:
+            print('Error, no_of_rows = {} does not exist in tab_DIM_E-list'.format(fpParams["no_of_rows"]))
+            sys.exit()
+        pkg_DIM_F = getTableEntry(tab_DIM_F, num_rows)
+        if pkg_DIM_F == -1:
+            print('Error, no_of_rows = {} does not exist in tab_DIM_F-list'.format(fpParams["no_of_rows"]))
+            sys.exit()
+        pkg_DIM_G = getTableEntry(tab_DIM_G, num_rows)
+        if pkg_DIM_G == -1:
+            print('Error, no_of_rows = {} does not exist in tab_DIM_G-list'.format(fpParams["no_of_rows"]))
+            sys.exit()
+        pkg_DIM_H = getTableEntry(tab_DIM_H, num_positions)
+        if pkg_DIM_H == -1:
+            print('Error, no_pins_of_row = {} does not exist in tab_DIM_H-list'.format(fpParams["no_pins_of_row"]))
+            sys.exit()
+        pkg_DIM_J = getTableEntry(tab_DIM_J, num_positions)
+        if pkg_DIM_J == -1:
+            print('Error, no_pins_of_row = {} does not exist in tab_DIM_J-list'.format(fpParams["no_pins_of_row"]))
+            sys.exit()
+            
         pkg_REF_A = len_REF_A
         pkg_REF_B = len_REF_B
         pkg_REF_C = len_REF_C
-        
-        
-        if fpParams["design"] == "A":
-            pkg_DIM_A = getTableEntry(tab_DIM_A, layoutX)
-            if pkg_DIM_A == -1:
-                print('Error, no_pins_of_row = {} does not exist in tab_DIM_A-list'.format(fpParams["no_pins_of_row"]))
-                sys.exit()
-            pkg_DIM_B = getTableEntry(tab_DIM_B, layoutX)
-            if pkg_DIM_B == -1:
-                print('Error, no_pins_of_row = {} does not exist in tab_DIM_B-list'.format(fpParams["no_pins_of_row"]))
-                sys.exit()
-            pkg_DIM_C = getTableEntry(tab_DIM_C, layoutY)
-            if pkg_DIM_C == -1:
-                print('Error, no_of_rows = {} does not exist in tab_DIM_C-list'.format(fpParams["no_of_rows"]))
-                sys.exit()
-            pkg_DIM_D = getTableEntry(tab_DIM_D, layoutY)
-            if pkg_DIM_D == -1:
-                print('Error, no_of_rows = {} does not exist in tab_DIM_D-list'.format(fpParams["no_of_rows"]))
-                sys.exit()
-            pkg_DIM_E = getTableEntry(tab_DIM_E, layoutY)
-            if pkg_DIM_E == -1:
-                print('Error, no_of_rows = {} does not exist in tab_DIM_E-list'.format(fpParams["no_of_rows"]))
-                sys.exit()
-            pkg_DIM_F = getTableEntry(tab_DIM_F, layoutY)
-            if pkg_DIM_F == -1:
-                print('Error, no_of_rows = {} does not exist in tab_DIM_F-list'.format(fpParams["no_of_rows"]))
-                sys.exit()
-            pkg_DIM_G = getTableEntry(tab_DIM_G, layoutY)
-            if pkg_DIM_G == -1:
-                print('Error, no_of_rows = {} does not exist in tab_DIM_G-list'.format(fpParams["no_of_rows"]))
-                sys.exit()
-            pkg_DIM_H = getTableEntry(tab_DIM_H, layoutX)
-            if pkg_DIM_H == -1:
-                print('Error, no_pins_of_row = {} does not exist in tab_DIM_H-list'.format(fpParams["no_pins_of_row"]))
-                sys.exit()
-            pkg_DIM_J = getTableEntry(tab_DIM_J, layoutX)
-            if pkg_DIM_J == -1:
-                print('Error, no_pins_of_row = {} does not exist in tab_DIM_J-list'.format(fpParams["no_pins_of_row"]))
-                sys.exit()    
+        pkg_REF_D = len_REF_D
+    
 
-    #layoutX = fpParams["layout_x"]
-    #layoutY = fpParams["layout_y"]
+    #num_positions = fpParams["layout_x"]
+    #num_rows = fpParams["layout_y"]
     
     if "additional_tags" in fpParams:
         additionalTag = " " + fpParams["additional_tags"]
@@ -124,14 +122,14 @@ def generateFootprint(config, fpParams, fpId):
         additionalTag = ""
     
     if "row_names" in fpParams:
-        rowNames = fpParams["row_names"]
+        row_names = fpParams["row_names"]
     else:
-        rowNames = config['row_names']
+        row_names = config['row_names']
     
     if "row_skips" in fpParams:
-        rowSkips = fpParams["row_skips"]
+        row_skips = fpParams["row_skips"]
     else:
-        rowSkips = []
+        row_skips = []
 
     # must be given pitch (equal in X and Y) or a unique pitch in both X and Y
     #if "pitch" in fpParams:
@@ -151,9 +149,12 @@ def generateFootprint(config, fpParams, fpId):
 
     f = Footprint(fpId)
     f.setAttribute("smd")
-    if "mask_margin" in fpParams: f.setMaskMargin(fpParams["mask_margin"])
-    if "paste_margin" in fpParams: f.setPasteMargin(fpParams["paste_margin"])
-    if "paste_ratio" in fpParams: f.setPasteMarginRatio(fpParams["paste_ratio"])
+    #if "mask_margin" in fpParams: f.setMaskMargin(fpParams["mask_margin"])
+    #if "paste_margin" in fpParams: f.setPasteMargin(fpParams["paste_margin"])
+    #if "paste_ratio" in fpParams: f.setPasteMarginRatio(fpParams["paste_ratio"])
+    f.setMaskMargin(mask_margin)
+    f.setPasteMargin(paste_margin)
+    f.setPasteMarginRatio(paste_ratio)
 
     s1 = [1.0, 1.0]
     s2 = [min(1.0, round((pkg_REF_A + pkg_DIM_A + pkg_REF_B) / 4.3, 2))] * 2
@@ -173,239 +174,340 @@ def generateFootprint(config, fpParams, fpId):
     silkOffset = config['silk_fab_offset']
     crtYdOffset = config['courtyard_offset']['connector']
     
-    def crtYdRound(x):
-        # Round away from zero for proper courtyard calculation
-        neg = x < 0
-        if neg:
-            x = -x
-        x = math.ceil(x * 100) / 100.0
-        if neg:
-            x = -x
-        return x
-
-    xCenter = 0.0
-    yCenter = 0.0
-
-    # Caution: We draw the footprint 180° rotated than in datasheet, simplifing the PAD placement algorithm
-
-    # Generating Points for the "Fab"-layer (fabrication)
-    P1XFab = xCenter - ((pkg_DIM_A / 2.0) + pkg_REF_A)
-    P1YFab = yCenter - (pkg_DIM_C / 2.0)
-    
-    P2XFab = xCenter + ((pkg_DIM_A / 2.0) + pkg_REF_B)
-    P2YFab = P1YFab
-    
-    P3XFab = P2XFab
-    P3YFab = yCenter - (pkg_DIM_F / 2.0)
-    
-    P4XFab = xCenter + ((pkg_DIM_A / 2.0) + pkg_REF_B + pkg_DIM_G)
-    P4YFab = P3YFab
-    
-    P5XFab = P4XFab
-    P5YFab = yCenter + (pkg_DIM_F / 2.0)
-    
-    
-    P6XFab = P3XFab
-    P6YFab = P5YFab
-    
-    P7XFab = P6XFab
-    P7YFab = yCenter + (pkg_DIM_C / 2.0)
-    
-    P8XFab = P1XFab
-    P8YFab = P7YFab
     
 
-    # Generating Points for the "crtYd"-layer (courty yard)
-    P1XcrtYd = crtYdRound(xCenter - ((pkg_DIM_A / 2.0) + pkg_REF_A + crtYdOffset))
-    P1YcrtYd = crtYdRound(yCenter - ((pkg_DIM_C / 2.0) + crtYdOffset))
-        
-    P2XcrtYd = crtYdRound(xCenter + ((pkg_DIM_A / 2.0) + pkg_REF_B + pkg_DIM_G + crtYdOffset))
-    P2YcrtYd = P1YcrtYd
+    X_Center = 0.0
+    Y_Center = 0.0
+
+    if ((fpParams["family"] == "SEAF") and (fpParams["design"] == "A")):
+        # Generating Points for the "Fab"-layer (fabrication)
+        P1_X_Fabrication = X_Center - ((pkg_DIM_A / 2.0) + pkg_REF_A)
+        P1_Y_Fabrication = Y_Center - (pkg_DIM_C / 2.0)        
+        P2_X_Fabrication = X_Center + ((pkg_DIM_A / 2.0) + pkg_REF_B)
+        P2_Y_Fabrication = P1_Y_Fabrication        
+        P3_X_Fabrication = P2_X_Fabrication
+        P3_Y_Fabrication = Y_Center - (pkg_DIM_F / 2.0)
+        P4_X_Fabrication = X_Center + ((pkg_DIM_A / 2.0) + pkg_REF_B + pkg_DIM_G)
+        P4_Y_Fabrication = P3_Y_Fabrication
+        P5_X_Fabrication = P4_X_Fabrication
+        P5_Y_Fabrication = Y_Center + (pkg_DIM_F / 2.0)
+        P6_X_Fabrication = P3_X_Fabrication
+        P6_Y_Fabrication = P5_Y_Fabrication
+        P7_X_Fabrication = P6_X_Fabrication
+        P7_Y_Fabrication = Y_Center + (pkg_DIM_C / 2.0)
+        P8_X_Fabrication = P1_X_Fabrication
+        P8_Y_Fabrication = P7_Y_Fabrication
+        # Generating Points for the "crtYd"-layer (courty yard)
+        P1_X_Courtyard = crtYdRound(X_Center - ((pkg_DIM_A / 2.0) + pkg_REF_A + crtYdOffset))
+        P1_Y_Courtyard = crtYdRound(Y_Center - ((pkg_DIM_C / 2.0) + crtYdOffset))
+        P2_X_Courtyard = crtYdRound(X_Center + ((pkg_DIM_A / 2.0) + pkg_REF_B + pkg_DIM_G + crtYdOffset))
+        P2_Y_Courtyard = P1_Y_Courtyard
+        P3_X_Courtyard = P2_X_Courtyard
+        P3_Y_Courtyard = crtYdRound(Y_Center + ((pkg_DIM_C / 2.0) + crtYdOffset))
+        P4_X_Courtyard = P1_X_Courtyard
+        P4_Y_Courtyard = P3_Y_Courtyard
+        # Generating Points for the "Silk"-layer (silkscreed)
+        P1_X_Silk = P1_X_Fabrication - silkOffset
+        P1_Y_Silk = P1_Y_Fabrication - silkOffset
+        P2_X_Silk = P2_X_Fabrication + silkOffset
+        P2_Y_Silk = P1_Y_Silk
+        P3_X_Silk = P2_X_Silk
+        P3_Y_Silk = P3_Y_Fabrication - silkOffset
+        P4_X_Silk = P4_X_Fabrication + silkOffset
+        P4_Y_Silk = P3_Y_Silk
+        P5_X_Silk = P4_X_Silk
+        P5_Y_Silk = P5_Y_Fabrication + silkOffset
+        P6_X_Silk = P3_X_Silk
+        P6_Y_Silk = P6_Y_Fabrication + silkOffset
+        P7_X_Silk = P6_X_Silk
+        P7_Y_Silk = P7_Y_Fabrication + silkOffset
+        P8_X_Silk = P1_X_Silk
+        P8_Y_Silk = P7_Y_Silk
+        # Define the position of pads to be placed
+        Pad_X_Left = X_Center - pitchX * ((num_positions - 1) / 2.0)
+        Pad_X_Right = X_Center + pitchX * ((num_positions - 1) / 2.0)
+        Pad_Y_Top = Y_Center - pitchY * ((num_rows - 1) / 2.0)
+        Pad_Y_Bottom = Y_Center + pitchY * ((num_rows - 1) / 2.0)
+        # Define the position of the REF** in silkscreen
+        Ref_X_Silk = X_Center
+        Ref_Y_Silk = P1_Y_Fabrication - 2.0
+        # Define the position of the REF** in fabrication
+        Ref_X_Fab = X_Center
+        Ref_Y_Fab = Y_Center
+        # Define the position of the VALUE in fabrication
+        Value_X_Fabrication = X_Center
+        Value_Y_Fabrication = P4_Y_Fabrication + 2.0
+        # Setting the correct line width for fabrication, courtyard and silk layers
+        width_Line_Fabrication = configuration['fab_line_width']
+        width_Line_Courtyard = configuration['courtyard_line_width']
+        width_line_Silk = configuration['silk_line_width']
+        # Place the Text
+        f.append(Text(type="reference",
+                      text="REF**",
+                      at=[Ref_X_Silk, Ref_Y_Silk],
+                      layer="F.SilkS",
+                      size=s1,
+                      thickness=t1))
     
-    P3XcrtYd = P2XcrtYd
-    P3YcrtYd = crtYdRound(yCenter + ((pkg_DIM_C / 2.0) + crtYdOffset))
+        f.append(Text(type="value",
+                      text=fpId,
+                      at=[Value_X_Fabrication, Value_Y_Fabrication],
+                      layer="F.Fab",
+                      size=s1,
+                      thickness=t1))
     
-    P4XcrtYd = P1XcrtYd
-    P4YcrtYd = P3YcrtYd
-
-    # Generating Points for the "Silk"-layer (silkscreed)
-    P1XSilk = P1XFab - silkOffset
-    P1YSilk = P1YFab - silkOffset
+        f.append(Text(type="user",
+                      text="%R",
+                      at=[Ref_X_Fab, Ref_Y_Fab],
+                      layer="F.Fab",
+                      size=s2,
+                      thickness=t2))
+        # Place the fabrication layer line
+        f.append(PolygoneLine(polygone=[[P1_X_Fabrication, P1_Y_Fabrication],
+                                        [P2_X_Fabrication, P2_Y_Fabrication],
+                                        [P3_X_Fabrication, P3_Y_Fabrication],
+                                        [P4_X_Fabrication, P4_Y_Fabrication],
+                                        [P5_X_Fabrication, P5_Y_Fabrication],
+                                        [P6_X_Fabrication, P6_Y_Fabrication],
+                                        [P7_X_Fabrication, P7_Y_Fabrication],
+                                        [P8_X_Fabrication, P8_Y_Fabrication],
+                                        [P1_X_Fabrication, P1_Y_Fabrication]],
+                              layer="F.Fab",
+                              width=width_Line_Fabrication))
     
-    P2XSilk = P2XFab + silkOffset
-    P2YSilk = P1YSilk
+        # Place the courtyard layer line
+        f.append(RectLine(start=[P1_X_Courtyard, P1_Y_Courtyard],
+                          end=[P3_X_Courtyard, P3_Y_Courtyard],
+                          layer="F.CrtYd",
+                          width=width_Line_Courtyard))
+        # Place the silk layer line
+        f.append(PolygoneLine(polygone=[[P1_X_Silk, P1_Y_Silk],
+                                        [P2_X_Silk, P2_Y_Silk],
+                                        [P3_X_Silk, P3_Y_Silk],
+                                        [P4_X_Silk, P4_Y_Silk],
+                                        [P5_X_Silk, P5_Y_Silk],
+                                        [P6_X_Silk, P6_Y_Silk],
+                                        [P7_X_Silk, P7_Y_Silk],
+                                        [P8_X_Silk, P8_Y_Silk],
+                                        [P1_X_Silk, P1_Y_Silk]],
+                              layer="F.SilkS",
+                              width=width_line_Silk))
+    if ((fpParams["family"] == "SEAF") and (fpParams["design"] == "LP")):
+        # Generating Points for the "Fab"-layer (fabrication)
+        P1_X_Fabrication = X_Center - ((pkg_DIM_A / 2.0) + pkg_REF_A)
+        P1_Y_Fabrication = Y_Center - (pkg_DIM_C / 2.0)        
+        P2_X_Fabrication = X_Center + ((pkg_DIM_A / 2.0) + pkg_REF_B)
+        P2_Y_Fabrication = P1_Y_Fabrication        
+        P3_X_Fabrication = P2_X_Fabrication
+        P3_Y_Fabrication = Y_Center - (pkg_DIM_F / 2.0)
+        P4_X_Fabrication = X_Center + ((pkg_DIM_A / 2.0) + pkg_REF_B + pkg_DIM_G)
+        P4_Y_Fabrication = P3_Y_Fabrication
+        P5_X_Fabrication = P4_X_Fabrication
+        P5_Y_Fabrication = Y_Center + (pkg_DIM_F / 2.0)
+        P6_X_Fabrication = P3_X_Fabrication
+        P6_Y_Fabrication = P5_Y_Fabrication
+        P7_X_Fabrication = P6_X_Fabrication
+        P7_Y_Fabrication = Y_Center + (pkg_DIM_C / 2.0)
+        P8_X_Fabrication = P1_X_Fabrication
+        P8_Y_Fabrication = P7_Y_Fabrication
+        # Generating Points for the "crtYd"-layer (courty yard)
+        P1_X_Courtyard = crtYdRound(X_Center - ((pkg_DIM_A / 2.0) + pkg_REF_A + crtYdOffset))
+        P1_Y_Courtyard = crtYdRound(Y_Center - ((pkg_DIM_C / 2.0) + crtYdOffset))
+        P2_X_Courtyard = crtYdRound(X_Center + ((pkg_DIM_A / 2.0) + pkg_REF_B + pkg_DIM_G + crtYdOffset))
+        P2_Y_Courtyard = P1_Y_Courtyard
+        P3_X_Courtyard = P2_X_Courtyard
+        P3_Y_Courtyard = crtYdRound(Y_Center + ((pkg_DIM_C / 2.0) + crtYdOffset))
+        P4_X_Courtyard = P1_X_Courtyard
+        P4_Y_Courtyard = P3_Y_Courtyard
+        # Generating Points for the "Silk"-layer (silkscreed)
+        P1_X_Silk = P1_X_Fabrication - silkOffset
+        P1_Y_Silk = P1_Y_Fabrication - silkOffset
+        P2_X_Silk = P2_X_Fabrication + silkOffset
+        P2_Y_Silk = P1_Y_Silk
+        P3_X_Silk = P2_X_Silk
+        P3_Y_Silk = P3_Y_Fabrication - silkOffset
+        P4_X_Silk = P4_X_Fabrication + silkOffset
+        P4_Y_Silk = P3_Y_Silk
+        P5_X_Silk = P4_X_Silk
+        P5_Y_Silk = P5_Y_Fabrication + silkOffset
+        P6_X_Silk = P3_X_Silk
+        P6_Y_Silk = P6_Y_Fabrication + silkOffset
+        P7_X_Silk = P6_X_Silk
+        P7_Y_Silk = P7_Y_Fabrication + silkOffset
+        P8_X_Silk = P1_X_Silk
+        P8_Y_Silk = P7_Y_Silk
+        # Define the position of pads to be placed
+        Pad_X_Left = X_Center - pitchX * ((num_positions - 1) / 2.0)
+        Pad_X_Right = X_Center + pitchX * ((num_positions - 1) / 2.0)
+        Pad_Y_Top = Y_Center - pitchY * ((num_rows - 1) / 2.0)
+        Pad_Y_Bottom = Y_Center + pitchY * ((num_rows - 1) / 2.0)
+        # Define the position of the REF** in silkscreen
+        Ref_X_Silk = X_Center
+        Ref_Y_Silk = P1_Y_Fabrication - 2.0
+        # Define the position of the REF** in fabrication
+        Ref_X_Fab = X_Center
+        Ref_Y_Fab = Y_Center
+        # Define the position of the VALUE in fabrication
+        Value_X_Fabrication = X_Center
+        Value_Y_Fabrication = P4_Y_Fabrication + 2.0
+        # Setting the correct line width for fabrication, courtyard and silk layers
+        width_Line_Fabrication = configuration['fab_line_width']
+        width_Line_Courtyard = configuration['courtyard_line_width']
+        width_line_Silk = configuration['silk_line_width']
+        # Place the Text
+        f.append(Text(type="reference",
+                      text="REF**",
+                      at=[Ref_X_Silk, Ref_Y_Silk],
+                      layer="F.SilkS",
+                      size=s1,
+                      thickness=t1))
     
-    P3XSilk = P2XSilk
-    P3YSilk = P3YFab - silkOffset
+        f.append(Text(type="value",
+                      text=fpId,
+                      at=[Value_X_Fabrication, Value_Y_Fabrication],
+                      layer="F.Fab",
+                      size=s1,
+                      thickness=t1))
     
-    P4XSilk = P4XFab + silkOffset
-    P4YSilk = P3YSilk
+        f.append(Text(type="user",
+                      text="%R",
+                      at=[Ref_X_Fab, Ref_Y_Fab],
+                      layer="F.Fab",
+                      size=s2,
+                      thickness=t2))
+        # Place the fabrication layer line
+        f.append(PolygoneLine(polygone=[[P1_X_Fabrication, P1_Y_Fabrication],
+                                        [P2_X_Fabrication, P2_Y_Fabrication],
+                                        [P3_X_Fabrication, P3_Y_Fabrication],
+                                        [P4_X_Fabrication, P4_Y_Fabrication],
+                                        [P5_X_Fabrication, P5_Y_Fabrication],
+                                        [P6_X_Fabrication, P6_Y_Fabrication],
+                                        [P7_X_Fabrication, P7_Y_Fabrication],
+                                        [P8_X_Fabrication, P8_Y_Fabrication],
+                                        [P1_X_Fabrication, P1_Y_Fabrication]],
+                              layer="F.Fab",
+                              width=width_Line_Fabrication))
     
-    P5XSilk = P4XSilk
-    P5YSilk = P5YFab + silkOffset
-    
-    
-    P6XSilk = P3XSilk
-    P6YSilk = P6YFab + silkOffset
-    
-    P7XSilk = P6XSilk
-    P7YSilk = P7YFab + silkOffset
-    
-    P8XSilk = P1XSilk
-    P8YSilk = P7YSilk
-
-    # Define the position of pads to be placed
-    xPadLeft = xCenter - pitchX * ((layoutX - 1) / 2.0)
-    xPadRight = xCenter + pitchX * ((layoutX - 1) / 2.0)
-    yPadTop = yCenter - pitchY * ((layoutY - 1) / 2.0)
-    yPadBottom = yCenter + pitchY * ((layoutY - 1) / 2.0)
-
-    # Define the position of the REF** in silkscreen
-    xRefSilk = xCenter
-    yRefSilk = P1YFab - 2.0
-
-    # Define the position of the REF** in fabrication
-    xRefFab = xCenter
-    yRefFab = yCenter
-
-    # Define the position of the VALUE in fabrication
-    xValueFab = xCenter
-    yValueFab = P4YFab + 2.0
-
-    
-
-    wFab = configuration['fab_line_width']
-    wCrtYd = configuration['courtyard_line_width']
-    wSilkS = configuration['silk_line_width']
-
-    # Text
-    f.append(Text(type="reference", text="REF**", at=[xRefSilk, yRefSilk], layer="F.SilkS", size=s1, thickness=t1))
-
-    f.append(Text(type="value", text=fpId, at=[xValueFab, yValueFab], layer="F.Fab", size=s1, thickness=t1))
-
-    f.append(Text(type="user", text="%R", at=[xRefFab, yRefFab], layer="F.Fab", size=s2, thickness=t2))
-
-    # Fab
-    f.append(PolygoneLine(polygone=[[P1XFab, P1YFab],
-                                    [P2XFab, P2YFab],
-                                    [P3XFab, P3YFab],
-                                    [P4XFab, P4YFab],
-                                    [P5XFab, P5YFab],
-                                    [P6XFab, P6YFab],
-                                    [P7XFab, P7YFab],
-                                    [P8XFab, P8YFab],
-                                    [P1XFab, P1YFab]],
-                          layer="F.Fab", width=wFab))
-
-    # Courtyard
-    f.append(RectLine(start=[P1XcrtYd, P1YcrtYd],
-                      end=[P3XcrtYd, P3YcrtYd],
-                      layer="F.CrtYd", width=wCrtYd))
-
-    # Silk
-    f.append(PolygoneLine(polygone=[[P1XSilk, P1YSilk],
-                                    [P2XSilk, P2YSilk],
-                                    [P3XSilk, P3YSilk],
-                                    [P4XSilk, P4YSilk],
-                                    [P5XSilk, P5YSilk],
-                                    [P6XSilk, P6YSilk],
-                                    [P7XSilk, P7YSilk],
-                                    [P8XSilk, P8YSilk],
-                                    [P1XSilk, P1YSilk]],
-                          layer="F.SilkS", width=wSilkS))
-
-    
-    
+        # Place the courtyard layer line
+        f.append(RectLine(start=[P1_X_Courtyard, P1_Y_Courtyard],
+                          end=[P3_X_Courtyard, P3_Y_Courtyard],
+                          layer="F.CrtYd",
+                          width=width_Line_Courtyard))
+        # Place the silk layer line
+        f.append(PolygoneLine(polygone=[[P1_X_Silk, P1_Y_Silk],
+                                        [P2_X_Silk, P2_Y_Silk],
+                                        [P3_X_Silk, P3_Y_Silk],
+                                        [P4_X_Silk, P4_Y_Silk],
+                                        [P5_X_Silk, P5_Y_Silk],
+                                        [P6_X_Silk, P6_Y_Silk],
+                                        [P7_X_Silk, P7_Y_Silk],
+                                        [P8_X_Silk, P8_Y_Silk],
+                                        [P1_X_Silk, P1_Y_Silk]],
+                              layer="F.SilkS",
+                              width=width_line_Silk))
     # Pads generated according pin_order
     # tlbr = top left to bottom right
     # trbl = top right to bottom left
     # bltr = bottom left to top right
     # brtl = bottom right to top left
-    pad_array_size = layoutX * layoutY
-    if rowSkips == []:
-        for _ in range(layoutY):
-            rowSkips.append([])
-    for rowNum, row in zip(range(layoutY), rowNames):
-        rowSet = set(range(1, layoutX + 1))
-        for item in rowSkips[rowNum]:
+    pad_array_size = num_positions * num_rows
+    if row_skips == []:
+        for _ in range(num_rows):
+            row_skips.append([])
+    for row_num, row in zip(range(num_rows), row_names):
+        row_set = set(range(1, num_positions + 1))
+        for item in row_skips[row_num]:
             try:
                 # If item is a range, remove that range
-                rowSet -= set(range(*item))
+                row_set -= set(range(*item))
                 pad_array_size -= item[1] - item[0]
             except TypeError:
                 # If item is an int, remove that int
-                rowSet -= {item}
+                row_set -= {item}
                 pad_array_size -= 1
-        for col in rowSet:
+        for col in row_set:
             if pin_order == "tlbr":            
-                f.append(Pad(number="{}{}".format(row, col), type=Pad.TYPE_SMT,
-                         shape=padShape,
-                         at=[xPadLeft + (col-1) * pitchX, yPadTop + rowNum * pitchY],
-                         size=[pad_diameter, pad_diameter],
-                         layers=Pad.LAYERS_SMT, 
-                         radius_ratio=config['round_rect_radius_ratio']))
+                f.append(Pad(number="{}{}".format(row, col),
+                             type=Pad.TYPE_SMT,
+                             shape=padShape,
+                             at=[Pad_X_Left + (col-1) * pitchX, Pad_Y_Top + row_num * pitchY],
+                             size=[pad_diameter, pad_diameter],
+                             layers=Pad.LAYERS_SMT, 
+                             radius_ratio=config['round_rect_radius_ratio']))
             elif pin_order == "trbl":
-                f.append(Pad(number="{}{}".format(row, col), type=Pad.TYPE_SMT,
-                         shape=padShape,
-                         at=[xPadRight - (col-1) * pitchX, yPadTop + rowNum * pitchY],
-                         size=[pad_diameter, pad_diameter],
-                         layers=Pad.LAYERS_SMT, 
-                         radius_ratio=config['round_rect_radius_ratio']))
+                f.append(Pad(number="{}{}".format(row, col),
+                             type=Pad.TYPE_SMT,
+                             shape=padShape,
+                             at=[Pad_X_Right - (col-1) * pitchX, Pad_Y_Top + row_num * pitchY],
+                             size=[pad_diameter, pad_diameter],
+                             layers=Pad.LAYERS_SMT, 
+                             radius_ratio=config['round_rect_radius_ratio']))
             elif pin_order == "bltr":
-                f.append(Pad(number="{}{}".format(row, col), type=Pad.TYPE_SMT,
-                         shape=padShape,
-                         at=[xPadLeft + (col-1) * pitchX, yPadBottom - rowNum * pitchY],
-                         size=[pad_diameter, pad_diameter],
-                         layers=Pad.LAYERS_SMT, 
-                         radius_ratio=config['round_rect_radius_ratio']))
+                f.append(Pad(number="{}{}".format(row, col),
+                             type=Pad.TYPE_SMT,
+                             shape=padShape,
+                             at=[Pad_X_Left + (col-1) * pitchX, Pad_Y_Bottom - row_num * pitchY],
+                             size=[pad_diameter, pad_diameter],
+                             layers=Pad.LAYERS_SMT, 
+                             radius_ratio=config['round_rect_radius_ratio']))
             elif pin_order == "brtl":
-                f.append(Pad(number="{}{}".format(row, col), type=Pad.TYPE_SMT,
-                         shape=padShape,
-                         at=[xPadRight - (col-1) * pitchX, yPadBottom - rowNum * pitchY],
-                         size=[pad_diameter, pad_diameter],
-                         layers=Pad.LAYERS_SMT, 
-                         radius_ratio=config['round_rect_radius_ratio']))
+                f.append(Pad(number="{}{}".format(row, col),
+                             type=Pad.TYPE_SMT,
+                             shape=padShape,
+                             at=[Pad_X_Right - (col-1) * pitchX, Pad_Y_Bottom - row_num * pitchY],
+                             size=[pad_diameter, pad_diameter],
+                             layers=Pad.LAYERS_SMT, 
+                             radius_ratio=config['round_rect_radius_ratio']))
             else:
                 print('Error, pin_order = {} does not exist.'.format(pin_order))
                 sys.exit()
                 
-
-
-
-    # Placement Holes NPTH
-    P1XPlacementHole = xCenter - (pkg_DIM_B / 2.0)
-    P1YPlacementHole = yCenter
-
-    f.append(Pad(at=[P1XPlacementHole, P1YPlacementHole], number="",
-                    type=Pad.TYPE_NPTH, shape=Pad.SHAPE_CIRCLE, size=npth_drill,
-                    drill=npth_drill, layers=Pad.LAYERS_NPTH))
-
-    P2XPlacementHole = xCenter + (pkg_DIM_B / 2.0)
-    P2YPlacementHole = yCenter + pkg_DIM_E
-
-    f.append(Pad(at=[P2XPlacementHole, P2YPlacementHole], number="",
-                    type=Pad.TYPE_NPTH, shape=Pad.SHAPE_CIRCLE, size=npth_drill,
-                    drill=npth_drill, layers=Pad.LAYERS_NPTH))
-
-    ########################### Pin 1 - Marker #################################
-    markerOffset = 0.4
-    markerLength = pad_diameter
     
-    P1XMarker = xPadRight
-    P1YMarker = P7YSilk + markerOffset
     
-    P2XMarker = P1XMarker - (markerLength / 2)
-    P2YMarker = P1YMarker + (markerLength / sqrt(2))
     
-    P3XMarker = P2XMarker + markerLength
-    P3YMarker = P2YMarker
+        # Alignment Holes NPTH
+        PAH1_X_AlignmentHole = X_Center - (pkg_DIM_B / 2.0)
+        PAH1_Y_AlignmentHole = Y_Center
     
-    # Silk
-    f.append(PolygoneLine(polygone=[[P1XMarker, P1YMarker],
-                                    [P2XMarker, P2YMarker],
-                                    [P3XMarker, P3YMarker],
-                                    [P1XMarker, P1YMarker]],
-                          layer="F.SilkS", width=wSilkS))
+        f.append(Pad(at=[PAH1_X_AlignmentHole, PAH1_Y_AlignmentHole],
+                     number="",
+                     type=Pad.TYPE_NPTH,
+                     shape=Pad.SHAPE_CIRCLE,
+                     size=npth_drill_AlignmentHole,
+                     drill=npth_drill_AlignmentHole,
+                     layers=Pad.LAYERS_NPTH))
+    
+        PAH2_X_AlignmentHole = X_Center + (pkg_DIM_B / 2.0)
+        PAH2_Y_AlignmentHole = Y_Center + pkg_DIM_E
+    
+        f.append(Pad(at=[PAH2_X_AlignmentHole, PAH2_Y_AlignmentHole],
+                     number="",
+                     type=Pad.TYPE_NPTH,
+                     shape=Pad.SHAPE_CIRCLE,
+                     size=npth_drill_AlignmentHole,
+                     drill=npth_drill_AlignmentHole,
+                     layers=Pad.LAYERS_NPTH))
+    
+        ########################### Pin 1 - Marker #################################
+        markerOffset = 0.4
+        markerLength = pad_diameter
+        
+        PM1_X_Pin1Marker = Pad_X_Right
+        PM1_Y_Pin1Marker = P7_Y_Silk + markerOffset
+        
+        PM2_X_Pin1Marker = PM1_X_Pin1Marker - (markerLength / 2)
+        PM2_Y_Pin1Marker = PM1_Y_Pin1Marker + (markerLength / sqrt(2))
+        
+        PM3_X_Pin1Marker = PM2_X_Pin1Marker + markerLength
+        PM3_Y_Pin1Marker = PM2_Y_Pin1Marker
+        
+        # Silk
+        f.append(PolygoneLine(polygone=[[PM1_X_Pin1Marker, PM1_Y_Pin1Marker],
+                                        [PM2_X_Pin1Marker, PM2_Y_Pin1Marker],
+                                        [PM3_X_Pin1Marker, PM3_Y_Pin1Marker],
+                                        [PM1_X_Pin1Marker, PM1_Y_Pin1Marker]],
+                              layer="F.SilkS",
+                              width=width_line_Silk))
 
     # Prepare name variables for footprint folder, footprint name, etc.
     familiyType = fpParams['family']
@@ -414,8 +516,20 @@ def generateFootprint(config, fpParams, fpId):
     f.append(Model(filename="{}Connector_Samtec_{}.3dshapes/{}.wrl".format(
                   config['3d_model_prefix'], familiyType, fpId)))
 
-    f.setDescription("{0}, {1}x{2}mm, {3} Ball, {4}x{5} Layout, {6}mm Pitch, {7}".format(fpId, (pkg_REF_A + pkg_DIM_C + pkg_REF_B + pkg_DIM_G) , pkg_DIM_C, pad_array_size, layoutX, layoutY, pitchString, size_source))
-    f.setTags("{} {} {}{}".format(packageType, pad_array_size, pitchString, additionalTag))
+    f.setDescription("{0}, {1}x{2}mm, {3} Ball, {4}x{5} Layout, {6}mm Pitch, {7}".format(
+                     fpId,
+                     (pkg_REF_A + pkg_DIM_C + pkg_REF_B + pkg_DIM_G),
+                     pkg_DIM_C,
+                     pad_array_size,
+                     num_positions,
+                     num_rows,
+                     pitchString,
+                     size_source))
+    f.setTags("{} {} {}{}".format(
+              packageType,
+              pad_array_size,
+              pitchString,
+              additionalTag))
 
     outputDir = 'Connector_Samtec_{lib_name:s}.pretty/'.format(lib_name=familiyType)
     if not os.path.isdir(outputDir): #returns false if path does not yet exist!! (Does not check path validity)
@@ -425,16 +539,29 @@ def generateFootprint(config, fpParams, fpId):
     file_handler = KicadFileHandler(f)
     file_handler.writeFile(filename)
 
+def generateFootprint_SEAM_RA(config, fpParams, fpId):
+    print('Building footprint for parameter set: {} NOT YET SUPPORTED'.format(fpId))
+
+def crtYdRound(x):
+        # Round away from zero for proper courtyard calculation
+        neg = x < 0
+        if neg:
+            x = -x
+        x = math.ceil(x * 100) / 100.0
+        if neg:
+            x = -x
+        return x
+    
 def rowNameGenerator(seq):
     for n in itertools.count(1):
         for s in itertools.product(seq, repeat = n):
             yield ''.join(s)
 
-def getTableEntry(table, layout):
+def getTableEntry(table, number):
     pkg_val = -1
     for i in range(len(table[0])):
         #print('{}'.format(table[0][i]))
-        if table[0][i] == layout:
+        if table[0][i] == number:
             pkg_val = table[1][i]
             break; # quit the for-loop when a correct match is made to reduce script duration time
     return pkg_val
@@ -472,4 +599,7 @@ if __name__ == '__main__':
             except yaml.YAMLError as exc:
                 print(exc)
         for pkg in cmd_file:
-            generateFootprint(configuration, cmd_file[pkg], pkg)
+            if cmd_file[pkg]["design"] == "A":
+                generateFootprint_SEAM_A(configuration, cmd_file[pkg], pkg)
+            if cmd_file[pkg]["design"] == "RA":
+                generateFootprint_SEAM_RA(configuration, cmd_file[pkg], pkg)
