@@ -86,7 +86,7 @@ TQFP-48-1EP_7x7mm_P0.5mm_EP3.62x3.62mm:
     nominal: 3.62
     maximum: 5.72
   # EP_paste_coverage: 0.65
-  EP_num_paste_pads: [4, 4]
+  EP_num_paste_pads: [2, 2]
   #heel_reduction: 0.1 #for relatively large EP pads (increase clearance)
   # EP_size_limit_x: 3.6  #for relatively large EP pads (increase clearance)
   # EP_size_limit_y: 3.6  #for relatively large EP pads (increase clearance)
@@ -100,7 +100,7 @@ TQFP-48-1EP_7x7mm_P0.5mm_EP3.62x3.62mm:
     #paste_between_vias: 1
     #paste_rings_outside: 1
     #EP_paste_coverage: 0.65
-    grid: [1, 1]
+    #grid: [1, 1]
     # bottom_pad_size:
     # paste_avoid_via: True
 
