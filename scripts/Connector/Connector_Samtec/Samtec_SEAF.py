@@ -295,25 +295,33 @@ def generateFootprint_SEAM_A(config, fpParams, fpId):
     if ((fpParams["family"] == "SEAF") and (fpParams["design"] == "LP")):
         # Generating Points for the "Fab"-layer (fabrication)
         P1_X_Fabrication = X_Center - ((pkg_DIM_A / 2.0) + pkg_REF_A)
-        P1_Y_Fabrication = Y_Center - (pkg_DIM_C / 2.0)        
+        P1_Y_Fabrication = Y_Center - (pkg_DIM_C / 2.0) 
         P2_X_Fabrication = X_Center + ((pkg_DIM_A / 2.0) + pkg_REF_B)
         P2_Y_Fabrication = P1_Y_Fabrication        
         P3_X_Fabrication = P2_X_Fabrication
-        P3_Y_Fabrication = Y_Center - (pkg_DIM_F / 2.0)
-        P4_X_Fabrication = X_Center + ((pkg_DIM_A / 2.0) + pkg_REF_B + pkg_DIM_G)
+        P3_Y_Fabrication = Y_Center - (pkg_REF_D / 2.0)
+        P4_X_Fabrication = X_Center + (pkg_DIM_H / 2.0)
         P4_Y_Fabrication = P3_Y_Fabrication
         P5_X_Fabrication = P4_X_Fabrication
-        P5_Y_Fabrication = Y_Center + (pkg_DIM_F / 2.0)
+        P5_Y_Fabrication = Y_Center + (pkg_REF_D / 2.0)
         P6_X_Fabrication = P3_X_Fabrication
         P6_Y_Fabrication = P5_Y_Fabrication
         P7_X_Fabrication = P6_X_Fabrication
         P7_Y_Fabrication = Y_Center + (pkg_DIM_C / 2.0)
         P8_X_Fabrication = P1_X_Fabrication
         P8_Y_Fabrication = P7_Y_Fabrication
+        P9_X_Fabrication = P8_X_Fabrication
+        P9_Y_Fabrication = P6_Y_Fabrication
+        P10_X_Fabrication = X_Center - (pkg_DIM_H / 2.0)
+        P10_Y_Fabrication = P9_Y_Fabrication
+        P11_X_Fabrication = P10_X_Fabrication
+        P11_Y_Fabrication = P4_Y_Fabrication
+        P12_X_Fabrication = P1_X_Fabrication
+        P12_Y_Fabrication = P11_Y_Fabrication
         # Generating Points for the "crtYd"-layer (courty yard)
-        P1_X_Courtyard = crtYdRound(X_Center - ((pkg_DIM_A / 2.0) + pkg_REF_A + crtYdOffset))
+        P1_X_Courtyard = crtYdRound(X_Center - ((pkg_DIM_H / 2.0) + crtYdOffset))
         P1_Y_Courtyard = crtYdRound(Y_Center - ((pkg_DIM_C / 2.0) + crtYdOffset))
-        P2_X_Courtyard = crtYdRound(X_Center + ((pkg_DIM_A / 2.0) + pkg_REF_B + pkg_DIM_G + crtYdOffset))
+        P2_X_Courtyard = crtYdRound(X_Center + ((pkg_DIM_H / 2.0) + crtYdOffset))
         P2_Y_Courtyard = P1_Y_Courtyard
         P3_X_Courtyard = P2_X_Courtyard
         P3_Y_Courtyard = crtYdRound(Y_Center + ((pkg_DIM_C / 2.0) + crtYdOffset))
@@ -323,19 +331,27 @@ def generateFootprint_SEAM_A(config, fpParams, fpId):
         P1_X_Silk = P1_X_Fabrication - silkOffset
         P1_Y_Silk = P1_Y_Fabrication - silkOffset
         P2_X_Silk = P2_X_Fabrication + silkOffset
-        P2_Y_Silk = P1_Y_Silk
-        P3_X_Silk = P2_X_Silk
+        P2_Y_Silk = P2_Y_Fabrication + silkOffset
+        P3_X_Silk = P3_X_Fabrication + silkOffset
         P3_Y_Silk = P3_Y_Fabrication - silkOffset
         P4_X_Silk = P4_X_Fabrication + silkOffset
-        P4_Y_Silk = P3_Y_Silk
-        P5_X_Silk = P4_X_Silk
+        P4_Y_Silk = P4_Y_Fabrication - silkOffset
+        P5_X_Silk = P5_X_Fabrication + silkOffset
         P5_Y_Silk = P5_Y_Fabrication + silkOffset
-        P6_X_Silk = P3_X_Silk
+        P6_X_Silk = P6_X_Fabrication + silkOffset
         P6_Y_Silk = P6_Y_Fabrication + silkOffset
-        P7_X_Silk = P6_X_Silk
+        P7_X_Silk = P7_X_Fabrication + silkOffset
         P7_Y_Silk = P7_Y_Fabrication + silkOffset
-        P8_X_Silk = P1_X_Silk
-        P8_Y_Silk = P7_Y_Silk
+        P8_X_Silk = P8_X_Fabrication - silkOffset
+        P8_Y_Silk = P8_Y_Fabrication - silkOffset
+        P9_X_Silk = P9_X_Fabrication - silkOffset
+        P9_Y_Silk = P9_Y_Fabrication + silkOffset
+        P10_X_Silk = P10_X_Fabrication - silkOffset
+        P10_Y_Silk = P10_Y_Fabrication + silkOffset
+        P11_X_Silk = P11_X_Fabrication - silkOffset
+        P11_Y_Silk = P11_Y_Fabrication - silkOffset
+        P12_X_Silk = P12_X_Fabrication - silkOffset
+        P12_Y_Silk = P12_Y_Fabrication - silkOffset
         # Define the position of pads to be placed
         Pad_X_Left = X_Center - pitchX * ((num_positions - 1) / 2.0)
         Pad_X_Right = X_Center + pitchX * ((num_positions - 1) / 2.0)
@@ -384,6 +400,10 @@ def generateFootprint_SEAM_A(config, fpParams, fpId):
                                         [P6_X_Fabrication, P6_Y_Fabrication],
                                         [P7_X_Fabrication, P7_Y_Fabrication],
                                         [P8_X_Fabrication, P8_Y_Fabrication],
+                                        [P9_X_Fabrication, P9_Y_Fabrication],
+                                        [P10_X_Fabrication, P10_Y_Fabrication],
+                                        [P11_X_Fabrication, P11_Y_Fabrication],
+                                        [P12_X_Fabrication, P12_Y_Fabrication],
                                         [P1_X_Fabrication, P1_Y_Fabrication]],
                               layer="F.Fab",
                               width=width_Line_Fabrication))
