@@ -1,5 +1,5 @@
-SEAF-30-01-L-08-1-RA-GP-TR_P1.27mm:
-  family: "SEAF"
+SEAM-30-01-L-08-1-RA-GP-TR_P1.27mm:
+  family: "SEAM"
   no_pins_of_row: 30
   lead_style: 01.0
   plating_option: "L"
@@ -9,10 +9,9 @@ SEAF-30-01-L-08-1-RA-GP-TR_P1.27mm:
   option: "GP"
   pick_and_place_pad: "NONE"
   tape_and_reel: "TR"
-  pad_shape: "oval"
-
-SEAF-40-01-L-10-1-RA-GP-TR_P1.27mm:
-  family: "SEAF"
+  
+SEAM-40-01-L-10-1-RA-GP-TR_P1.27mm:
+  family: "SEAM"
   no_pins_of_row: 40
   lead_style: 01.0
   plating_option: "L"
@@ -22,10 +21,9 @@ SEAF-40-01-L-10-1-RA-GP-TR_P1.27mm:
   option: "GP"
   pick_and_place_pad: "NONE"
   tape_and_reel: "TR"
-  pad_shape: "oval"
   
-SEAF-50-01-L-08-1-RA-GP-TR_P1.27mm:
-  family: "SEAF"
+SEAM-50-01-L-08-1-RA-GP-TR_P1.27mm:
+  family: "SEAM"
   no_pins_of_row: 50
   lead_style: 01.0
   plating_option: "L"
@@ -35,4 +33,3 @@ SEAF-50-01-L-08-1-RA-GP-TR_P1.27mm:
   option: "GP"
   pick_and_place_pad: "NONE"
   tape_and_reel: "TR"
-  pad_shape: "oval"
