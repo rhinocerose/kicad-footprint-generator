@@ -29,18 +29,23 @@ def setup_kicad_mod(name, url):
 
     return kicad_mod
 
-def build_outline(kicad_mod, name, x, y):
+def build_outline(kicad_mod, name, x, y, pad1height):
     kicad_mod.append(Text(type='reference', text='REF**', at=[0, -y/2-1],
         layer="F.SilkS"))
 
     kicad_mod.append(RectLine(start=[-x/2, -y/2], end=[x/2, y/2],
         layer="F.Fab"))
+    kicad_mod.append(PolygoneLine(layer="F.Fab", polygone=[
+        (-x/2, pad1height - 1),
+        (-x/2+1.5, pad1height),
+        (-x/2, pad1height + 1)
+    ]))
     kicad_mod.append(RectLine(start=[-x/2, -y/2], end=[x/2, y/2],
         layer="F.SilkS", offset=.1))
     kicad_mod.append(RectLine(start=[-x/2, -y/2], end=[x/2, y/2],
         layer="F.CrtYd", offset=.25))
-    kicad_mod.append(Text(type="user", text="%R", at=[0, -1], layer="F.Fab"))
-    kicad_mod.append(Text(type='value', text=name, at=[0, 1], layer="F.Fab"))
+    kicad_mod.append(Text(type="user", text="%R", at=[0, 0], layer="F.Fab"))
+    kicad_mod.append(Text(type='value', text=name, at=[0, y/2+1], layer="F.Fab"))
 
 def add_pads(kicad_mod, size, drill, x_sep, pris_sep, secs_sep, pri_sep=None,
         sec_sep=None, shift=(0, 0)):
@@ -70,7 +75,12 @@ def add_pads(kicad_mod, size, drill, x_sep, pris_sep, secs_sep, pri_sep=None,
             at=pos, size=size, drill=drill, layers=Pad.LAYERS_THT,
             radius_ratio=.25, maximum_radius=.5))
 
-    return trans
+    kicad_mod.append(PolygoneLine(
+        polygone=[(-2, 0), (-3, .75), (-3, -.75), (-2, 0)],
+        layer="F.SilkS"
+    ))
+
+    return trans, pads[0][1]
 
 def add_mounting(kicad_mod, drill, x, y):
     for pos in ((-x/2, -y/2), (-x/2, y/2), (x/2, -y/2), (x/2, y/2)):
@@ -94,10 +104,10 @@ def build_regular_transformer(series, url, A, B, C, D, E, F, G, H, Pin):
     drill = Pin + drill_extra
     size = drill + size_extra
 
-    trans = add_pads(kicad_mod, size=size, drill=drill, x_sep=E, pris_sep=D,
-            secs_sep=F, sec_sep=G)
+    trans, pad1height = add_pads(kicad_mod, size=size, drill=drill,
+            x_sep=E, pris_sep=D, secs_sep=F, sec_sep=G)
 
-    build_outline(trans, name, A, B)
+    build_outline(trans, name, A, B, pad1height)
 
     file_handler = KicadFileHandler(kicad_mod)
     file_handler.writeFile(f"{library}/{name}.kicad_mod")
@@ -115,11 +125,11 @@ def build_flat_transformer(series, url, A, B, C, D, E, F, G, H, I, J, K, L, M, N
         drill = ceil(sqrt(N**2 + O**2) * 10) / 10 + drill_extra
     size = drill + size_extra
 
-    trans = add_pads(kicad_mod, size=size, drill=drill, x_sep=F, pri_sep=I,
-            pris_sep=J,
-            secs_sep=K, sec_sep=L, shift=((A-F-2*G)/2, (B-2*I-J-2*H)/2))
+    trans, pad1height = add_pads(kicad_mod, size=size, drill=drill,
+            x_sep=F, pri_sep=I, pris_sep=J, secs_sep=K, sec_sep=L,
+            shift=((A-F-2*G)/2, (B-2*I-J-2*H)/2))
 
-    build_outline(trans, name, A, B)
+    build_outline(trans, name, A, B, pad1height)
     add_mounting(trans, drill=P+mounting_drill_extra, x=D, y=E)
 
     file_handler = KicadFileHandler(kicad_mod)
