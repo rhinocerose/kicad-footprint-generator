@@ -1,5 +1,10 @@
 #!/usr/bin/env python
 
+# the values in this library are taken from the full Block catalogue. It
+# contains listings per series and the corresponding dimensions. The THT
+# transformers start at page 250.
+# https://www.block.eu/fileadmin/Blaetterkatalog_und_ebook/eBook.pdf
+
 import csv
 import sys
 import os
