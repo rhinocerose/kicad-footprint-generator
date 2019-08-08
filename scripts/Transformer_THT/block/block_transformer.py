@@ -37,23 +37,23 @@ def build_outline(kicad_mod, name, x, y):
     kicad_mod.append(Text(type="user", text="%R", at=[0, -1], layer="F.Fab"))
     kicad_mod.append(Text(type='value', text=name, at=[0, 1], layer="F.Fab"))
 
-def add_pads(kicad_mod, size, drill, x_sep, pri_sep, sec_sep, pris_sep=None,
-        secs_sep=None, shift=(0, 0)):
-    if pris_sep:
+def add_pads(kicad_mod, size, drill, x_sep, pris_sep, secs_sep, pri_sep=None,
+        sec_sep=None, shift=(0, 0)):
+    if pri_sep:
         # dual input coils
-        pads = [(-x_sep/2, y) for y in [-pri_sep - pris_sep/2, -pris_sep/2,
-            pris_sep/2, pri_sep + pris_sep/2]]
+        pads = [(-x_sep/2, y) for y in [-pris_sep/2 - pri_sep, -pris_sep/2,
+            pris_sep/2, pris_sep/2 + pri_sep]]
     else:
         # single input coil
-        pads = [(-x_sep/2, y) for y in [-pri_sep/2, pri_sep/2]]
+        pads = [(-x_sep/2, y) for y in [-pris_sep/2, pris_sep/2]]
 
-    if secs_sep:
+    if sec_sep:
         # dual output coils
-        pads += [(x_sep/2, -y) for y in [-sec_sep - secs_sep/2, -secs_sep/2,
-            secs_sep/2, sec_sep + secs_sep/2]]
+        pads += [(x_sep/2, -y) for y in [-secs_sep/2 - sec_sep, -secs_sep/2,
+            secs_sep/2, secs_sep/2 + sec_sep]]
     else:
         # single output coil
-        pads += [(x_sep/2, -y) for y in [-sec_sep/2, sec_sep/2]]
+        pads += [(x_sep/2, -y) for y in [-secs_sep/2, secs_sep/2]]
 
     pads = [(x + shift[0], y + shift[1]) for x, y in pads]
 
@@ -73,10 +73,34 @@ def add_mounting(kicad_mod, drill, x, y):
             type=Pad.TYPE_NPTH, shape=Pad.SHAPE_CIRCLE, size=drill, drill=drill,
             layers=Pad.LAYERS_NPTH))
 
-def build_flat_transformer(core, url, A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P):
+def format_number(num):
+    if int(num) == num:
+        return int(num)
+    else:
+        return num
+
+def build_regular_transformer(series, url, A, B, C, D, E, F, G, H, Pin):
     # names are based on the listing in the catalogue on pages 281 and
     # following
-    name = f"Transformer_Block_{core}"
+    name = f"Transformer_Block_{series}_{format_number(A)}x{format_number(B)}x{format_number(C)}mm"
+    print(f"Building {name}")
+    kicad_mod = setup_kicad_mod(name, url)
+
+    drill = Pin + drill_extra
+    size = drill + size_extra
+
+    trans = add_pads(kicad_mod, size=size, drill=drill, x_sep=E, pris_sep=D,
+            secs_sep=F, sec_sep=G)
+
+    build_outline(trans, name, A, B)
+
+    file_handler = KicadFileHandler(kicad_mod)
+    file_handler.writeFile(f"{library}/{name}.kicad_mod")
+
+def build_flat_transformer(series, url, A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P):
+    # names are based on the listing in the catalogue on pages 281 and
+    # following
+    name = f"Transformer_Block_{series}_{format_number(A)}x{format_number(B)}x{format_number(C)}mm"
     print(f"Building {name}")
     kicad_mod = setup_kicad_mod(name, url)
 
@@ -86,8 +110,9 @@ def build_flat_transformer(core, url, A, B, C, D, E, F, G, H, I, J, K, L, M, N, 
         drill = ceil(sqrt(N**2 + O**2) * 10) / 10 + drill_extra
     size = drill + size_extra
 
-    trans = add_pads(kicad_mod, size=size, drill=drill, x_sep=F, pri_sep=I, pris_sep=J,
-            sec_sep=L, secs_sep=K, shift=((A-F-2*G)/2, (B-2*I-J-2*H)/2))
+    trans = add_pads(kicad_mod, size=size, drill=drill, x_sep=F, pri_sep=I,
+            pris_sep=J,
+            secs_sep=K, sec_sep=L, shift=((A-F-2*G)/2, (B-2*I-J-2*H)/2))
 
     build_outline(trans, name, A, B)
     add_mounting(trans, drill=P+mounting_drill_extra, x=D, y=E)
@@ -97,10 +122,19 @@ def build_flat_transformer(core, url, A, B, C, D, E, F, G, H, I, J, K, L, M, N, 
 
 
 def load_csvs():
-    with open("./flats.csv", "r") as f:
-        for row in csv.reader(f,delimiter=";"):
-            args = [float(arg) for arg in row[2:]]
-            build_flat_transformer(row[0], row[1], *args)
+    flat_series = ["fl"]
+    regular_series = ["vb", "vc"]
+    for series in flat_series:
+        with open(f"./series_information/{series}.csv", "r") as f:
+            for row in csv.reader(f,delimiter=";"):
+                args = [float(arg) for arg in row[2:]]
+                build_flat_transformer(row[0], row[1], *args)
+    for series in regular_series:
+        with open(f"./series_information/{series}.csv", "r") as f:
+            for row in csv.reader(f,delimiter=";"):
+                args = [float(arg) for arg in row[2:]]
+                build_regular_transformer(row[0], row[1], *args)
+
 
 if __name__ == "__main__":
     try:
