@@ -19,7 +19,7 @@ from string import ascii_uppercase
 
 def generateFootprint(config, fpParams, fpId):
     # Common parameters for all types
-    size_source = "http://suddendocs.samtec.com/prints/seaf-xx-xx.x-xx-xx-x-a-xx-k-tr-mkt.pdf"
+    size_source = "http://suddendocs.samtec.com/prints/seaf-xx-xx.x-xx-xx-x-ra-xx-footprint.pdf"
     pitchX = 1.27
     pitchY = pitchX
     pitchString = str(pitchX) + "x" + str(pitchY)

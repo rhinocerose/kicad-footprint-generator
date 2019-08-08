@@ -19,7 +19,7 @@ from string import ascii_uppercase
 
 def generateFootprint(config, fpParams, fpId):
     # Common parameters for all types
-    size_source = "http://suddendocs.samtec.com/prints/seaf-xx-xx.x-xx-xx-x-a-xx-footprint.pdf"
+    size_source = "http://suddendocs.samtec.com/prints/seam-xx-xx.x-xx-xx-x-a-xx-footprint.pdf"
     pitchX = 1.27
     pitchY = pitchX
     pitchString = str(pitchX) + "x" + str(pitchY)    
@@ -44,27 +44,18 @@ def generateFootprint(config, fpParams, fpId):
         print('Skipping {0} => This connector is not orderable.'.format(fpId))
         sys.exit()
     # checking-clause
-    # (-15 only available in 04 or 10 row with -05.0 lead style)
+    # (-15 only available in 4 Row with -02.0 lead style and 10 row with any lead style)
     elif ((fpParams["no_pins_of_row"] == 15) and 
-        ((fpParams["no_of_rows"] != 4) or (fpParams["no_of_rows"] != 10)) and
-        (fpParams["lead_style"] != "05.0")):
+          (fpParams["no_of_rows"] != 4) and
+        (fpParams["lead_style"] != "02.0")):
         print('Skipping {0} => This connector is not orderable.'.format(fpId))
         sys.exit()
     # checking-clause
-    # (Available with -05.0 lead style and -04, -06, -08 & -10 rows only)
-    # Actual entries in Table 2 datasheet page 1 : -04, -05, -06, -08, -10, -14
-    elif (
-          ((fpParams["option"] == "LP") and (fpParams["lead_style"] != "05.0")) and 
-          ((fpParams["no_of_rows"] == 5) or (fpParams["no_of_rows"] == 14))
-         ):
-        print('Skipping {0} => This connector is not orderable.'.format(fpId))
-        sys.exit()
-    # checking-clause
-    # (Not available with -10 and -15 pins with -LP Latch post)
-    elif (
-          ((fpParams["option"] == "LP") and (fpParams["pick_and_place_pad"] == "K")) and
-          ((fpParams["no_pins_of_row"] == 10) or (fpParams["no_pins_of_row"] == 15))
-          ):
+    # (Four Rows, -06.5 not available)
+    # (Five Rows, -06.5 not available)
+    # (Six Rows, -06.5 not available)
+    elif (((fpParams["no_of_rows"] == 4) or (fpParams["no_of_rows"] == 5) or (fpParams["no_of_rows"] == 6)) and 
+          (fpParams["lead_style"] == "06.5")):
         print('Skipping {0} => This connector is not orderable.'.format(fpId))
         sys.exit()
     else:
@@ -80,31 +71,115 @@ def generateFootprint(config, fpParams, fpId):
     # trbl = top right to bottom left
     # bltr = bottom left to top right
     # brtl = bottom right to top left
-    pin_order = "brtl"
-    # Parameters for SEAF-A and SEAF-A-LP used from datasheet
+    pin_order = "trbl"
+    # Parameters for SEAM-A and SEAM-A-GP used from datasheet
     tab_DIM_A = [[10, 15, 19, 20, 25, 30, 40, 50],                          # number of positions per row
-                 [11.43, 17.78, 22.86, 24.13, 30.48, 36.83, 49.53, 62.23]]  # dimension values for the number of positions per row
+                 [17.86, 24.03, 29.11, 30.38, 36.73, 43.08, 55.78, 68.48]]  # dimension values for the number of positions per row
     tab_DIM_B = [[10, 15, 19, 20, 25, 30, 40, 50],
+                 [11.43, 17.78, 22.86, 24.13, 30.48, 36.83, 49.53, 62.23]]
+    tab_DIM_C = [[10, 15, 19, 20, 25, 30, 40, 50],
                  [16.28, 22.63, 27.71, 28.98, 35.33, 41.68, 54.38, 67.08]]
-    tab_DIM_C = [[4, 5, 6, 8, 10, 14],
-                 [5.66,  8.20,  8.20, 10.74, 13.28, 18.36]]
-    tab_DIM_D = [[4, 5, 6, 8, 10, 14],
-                 [3.81, 5.08, 6.35, 8.89, 11.43, 16.51]]
-    tab_DIM_E = [[4, 5, 6, 8, 10, 14],
-                 [2.01, 3.05, 3.05, 3.05, 3.05, 3.05]]
-    tab_DIM_F = [[4, 5, 6, 8, 10, 14],
-                 [3.20, 5.69, 5.69, 3.20, 5.69, 5.69]]
-    tab_DIM_G = [[4, 5, 6, 8, 10, 14],
-                 [1.35, 0.84, 0.84, 0.84, 0.84, 0.84]]
-    tab_DIM_H = [[10, 15, 19, 20, 25, 30, 40, 50],
-                 [32.05, 38.40, 43.48, 44.75, 51.10, 57.45, 70.15, 82.85]]
-    tab_DIM_J = [[10, 15, 19, 20, 25, 30, 40, 50],
-                 [26.24, 32.59, 37.67, 38.94, 45.29, 51.64, 64.34, 77.04]]
-    len_REF_A = 3.96 # Dimension left side from DIM "A" in datasheet page 1
-    len_REF_B = 3.12 # Dimension right side from DIM "A" in datasheet page 1
-    len_REF_C = 4.08 # Dimension upper to DIM "E" in datasheet page 3 for 05-row connectors
+    if ((fpParams["lead_style"] == "02.0") and (fpParams["no_of_rows"] != 14)):
+        tab_DIM_D = [[4, 5, 6, 8, 10], # Row
+                     [7.06, 9.60, 9.60, 12.14, 14.68]]
+        tab_DIM_E = [[4, 5, 6, 8, 10],
+                     [3.81, 5.08, 6.35, 8.89, 11.43]]
+        tab_DIM_F = [[4, 5, 6, 8, 10],
+                     [2.01, 3.05, 3.05, 3.05, 3.05]]
+        tab_DIM_M = [[4, 5, 6, 8, 10],
+                     [1.60, 0.89, 0.89, 0.89, 0.89]]
+    elif ((fpParams["lead_style"] == "03.0") and (fpParams["no_of_rows"] != 14)):
+        tab_DIM_D = [[4, 5, 6, 8, 10], # Row
+                     [7.06, 9.60, 9.60, 12.14, 14.68]]
+        tab_DIM_E = [[4, 5, 6, 8, 10],
+                     [3.81, 5.08, 6.35, 8.89, 11.43]]
+        tab_DIM_F = [[4, 5, 6, 8, 10],
+                     [2.01, 3.05, 3.05, 3.05, 3.05]]
+        tab_DIM_M = [[4, 5, 6, 8, 10],
+                     [1.60, 0.89, 0.89, 0.89, 0.89]]
+    elif (fpParams["lead_style"] == "03.5"):
+        tab_DIM_D = [[4, 5, 6, 8, 10, 14], # Row
+                     [7.06, 9.60, 9.60, 12.14, 14.68, 19.76]]
+        tab_DIM_E = [[4, 5, 6, 8, 10, 14],
+                     [3.81, 5.08, 6.35, 8.89, 11.43, 16.51]]
+        tab_DIM_F = [[4, 5, 6, 8, 10, 14],
+                     [2.01, 3.05, 3.05, 3.05, 3.05, 3.05]]
+        tab_DIM_M = [[4, 5, 6, 8, 10, 14],
+                     [1.60, 0.89, 0.89, 0.89, 0.89, 0.89]]
+    elif ((fpParams["lead_style"] == "05.5") and 
+          ((fpParams["no_of_rows"] == 5) or (fpParams["no_of_rows"] == 6))):   
+        tab_DIM_D = [[5, 6], # Row
+                     [9.60, 9.60]]
+        tab_DIM_E = [[5, 6],
+                     [5.08, 6.35]]
+        tab_DIM_F = [[5, 6],
+                     [3.05, 3.05]]
+        tab_DIM_M = [[5, 6],
+                     [0.89, 0.89]]
+    elif ((fpParams["lead_style"] == "06.0") and (fpParams["no_of_rows"] == 6)):
+        tab_DIM_D = [[6], # Row
+                     [10.87]]
+        tab_DIM_E = [[6],
+                     [6.35]]
+        tab_DIM_F = [[6],
+                     [3.05]]
+        tab_DIM_M = [[6],
+                     [0.89]]
+    elif ((fpParams["lead_style"] == "06.5") and 
+          ((fpParams["no_of_rows"] == 8) or (fpParams["no_of_rows"] == 10))):    
+        tab_DIM_D = [[8, 10], # Row
+                     [13.41, 15.95]]
+        tab_DIM_E = [[8, 10],
+                     [8.89, 11.43]]
+        tab_DIM_F = [[8, 10],
+                     [3.05, 3.05]]
+        tab_DIM_M = [[8, 10],
+                     [0.89, 0.89]]
+    elif ((fpParams["lead_style"] == "07.0") and 
+          ((fpParams["no_of_rows"] != 5) or (fpParams["no_of_rows"] != 14))):
+        tab_DIM_D = [[4, 6, 8, 10], # Row
+                     [8.33, 10.87, 13.41, 15.95]]
+        tab_DIM_E = [[4, 6, 8, 10],
+                     [3.81, 6.35, 8.89, 11.43]]
+        tab_DIM_F = [[4, 6, 8, 10],
+                     [2.01, 3.05, 3.05, 3.05]]
+        tab_DIM_M = [[4, 6, 8, 10],
+                     [1.60, 0.89, 0.89, 0.89]]
+    elif ((fpParams["lead_style"] == "09.0") and 
+          ((fpParams["no_of_rows"] != 5) or (fpParams["no_of_rows"] != 14))):
+        tab_DIM_D = [[4, 6, 8, 10], # Row
+                     [8.33, 10.87, 13.41, 15.95]]
+        tab_DIM_E = [[4, 6, 8, 10],
+                     [3.81, 6.35, 8.89, 11.43]]
+        tab_DIM_F = [[4, 6, 8, 10],
+                     [2.01, 3.05, 3.05, 3.05]]
+        tab_DIM_M = [[4, 6, 8, 10],
+                     [1.60, 0.89, 0.89, 0.89]]
+        
+    elif ((fpParams["lead_style"] == "11.0") and 
+          ((fpParams["no_of_rows"] != 5) or (fpParams["no_of_rows"] != 14))):    
+        tab_DIM_D = [[4, 6, 8, 10], # Row
+                     [8.33, 10.87, 13.41, 15.95]]
+        tab_DIM_E = [[4, 6, 8, 10],
+                     [3.81, 6.35, 8.89, 11.43]]
+        tab_DIM_F = [[4, 6, 8, 10],
+                     [2.01, 3.05, 3.05, 3.05]]
+        tab_DIM_M = [[4, 6, 8, 10],
+                     [1.60, 0.89, 0.89, 0.89]]
+    else:
+        print('Error, the lead_style={} is not defined with no_of_rows={}'.format(fpParams["lead_style"], fpParams["no_of_rows"]))
+        sys.exit()
+    
+    tab_DIM_G = [[20, 30, 40, 50],
+                 [44.86, 57.56, 70.26, 82.96]]
+    tab_DIM_H = [[20, 30, 40, 50],
+                 [38.94, 51.64, 64.34, 77.04]]
+
+    len_REF_A = 1.52 # Dimension right side "nose" in datasheet page 1
+    #len_REF_B = 3.12 # Dimension right side from DIM "A" in datasheet page 1
+    #len_REF_C = 4.08 # Dimension upper to DIM "E" in datasheet page 3 for 05-row connectors
     len_REF_D = 1.91 # Dimension near DIM "C" in datasheet page 3 for 05-row connectors (upper left pin distance)
-    len_REF_E = 5.61 # Dimension replacement for DIM "F" for SEAF-A-LP types connectors in datasheet page 5
+    len_REF_E = 5.61 # Dimension replacement for right and left side "nose" for SEAF-A-GP types connectors in datasheet page 5
     
     pkg_DIM_A = getTableEntry(tab_DIM_A, num_positions)
     if pkg_DIM_A == -1:
@@ -114,9 +189,9 @@ def generateFootprint(config, fpParams, fpId):
     if pkg_DIM_B == -1:
         print('Error, no_pins_of_row = {} does not exist in tab_DIM_B-list'.format(fpParams["no_pins_of_row"]))
         sys.exit()
-    pkg_DIM_C = getTableEntry(tab_DIM_C, num_rows)
+    pkg_DIM_C = getTableEntry(tab_DIM_C, num_positions)
     if pkg_DIM_C == -1:
-        print('Error, no_of_rows = {} does not exist in tab_DIM_C-list'.format(fpParams["no_of_rows"]))
+        print('Error, no_pins_of_row = {} does not exist in tab_DIM_C-list'.format(fpParams["no_pins_of_row"]))
         sys.exit()
     pkg_DIM_D = getTableEntry(tab_DIM_D, num_rows)
     if pkg_DIM_D == -1:
@@ -130,18 +205,22 @@ def generateFootprint(config, fpParams, fpId):
     if pkg_DIM_F == -1:
         print('Error, no_of_rows = {} does not exist in tab_DIM_F-list'.format(fpParams["no_of_rows"]))
         sys.exit()
-    pkg_DIM_G = getTableEntry(tab_DIM_G, num_rows)
+    pkg_DIM_M = getTableEntry(tab_DIM_M, num_rows)
+    if pkg_DIM_F == -1:
+        print('Error, no_of_rows = {} does not exist in tab_DIM_M-list'.format(fpParams["no_of_rows"]))
+        sys.exit()
+
+    
+    
+    pkg_DIM_G = getTableEntry(tab_DIM_G, num_positions)
     if pkg_DIM_G == -1:
-        print('Error, no_of_rows = {} does not exist in tab_DIM_G-list'.format(fpParams["no_of_rows"]))
+        print('Error, no_pins_of_row = {} does not exist in tab_DIM_G-list'.format(fpParams["no_pins_of_row"]))
         sys.exit()
     pkg_DIM_H = getTableEntry(tab_DIM_H, num_positions)
     if pkg_DIM_H == -1:
         print('Error, no_pins_of_row = {} does not exist in tab_DIM_H-list'.format(fpParams["no_pins_of_row"]))
         sys.exit()
-    pkg_DIM_J = getTableEntry(tab_DIM_J, num_positions)
-    if pkg_DIM_J == -1:
-        print('Error, no_pins_of_row = {} does not exist in tab_DIM_J-list'.format(fpParams["no_pins_of_row"]))
-        sys.exit()
+
 
     #num_positions = fpParams["layout_x"]
     #num_rows = fpParams["layout_y"]
@@ -187,7 +266,7 @@ def generateFootprint(config, fpParams, fpId):
     f.setPasteMarginRatio(paste_ratio)
 
     s1 = [1.0, 1.0]
-    s2 = [min(1.0, round((len_REF_A + pkg_DIM_A + len_REF_B) / 4.3, 2))] * 2
+    s2 = [min(1.0, round(pkg_DIM_A / 4.3, 2))] * 2
 
     t1 = 0.15 * s1[0]
     t2 = 0.15 * s2[0]
@@ -215,48 +294,48 @@ def generateFootprint(config, fpParams, fpId):
     ########################### Fabrication, Courtyard and Silk  #################################   
     if (fpParams["option"] == "NONE"):
         # Generating Points for the "Fab"-layer (fabrication)
-        P1_X_Fabrication = X_Center - ((pkg_DIM_A / 2.0) + len_REF_A)
-        P1_Y_Fabrication = Y_Center - (pkg_DIM_C / 2.0)        
-        P2_X_Fabrication = X_Center + ((pkg_DIM_A / 2.0) + len_REF_B)
-        P2_Y_Fabrication = P1_Y_Fabrication        
+        P1_X_Fabrication = X_Center - (pkg_DIM_A / 2.0)
+        P1_Y_Fabrication = Y_Center - (pkg_DIM_D / 2.0)
+        P2_X_Fabrication = X_Center + (pkg_DIM_A / 2.0)
+        P2_Y_Fabrication = P1_Y_Fabrication
         P3_X_Fabrication = P2_X_Fabrication
-        P3_Y_Fabrication = Y_Center - (pkg_DIM_F / 2.0)
-        P4_X_Fabrication = X_Center + ((pkg_DIM_A / 2.0) + len_REF_B + pkg_DIM_G)
+        P3_Y_Fabrication = Y_Center - (len_REF_A / 2.0) 
+        P4_X_Fabrication = X_Center + ((pkg_DIM_A / 2.0) + pkg_DIM_M)
         P4_Y_Fabrication = P3_Y_Fabrication
         P5_X_Fabrication = P4_X_Fabrication
-        P5_Y_Fabrication = Y_Center + (pkg_DIM_F / 2.0)
+        P5_Y_Fabrication = Y_Center + (len_REF_A / 2.0)
         P6_X_Fabrication = P3_X_Fabrication
         P6_Y_Fabrication = P5_Y_Fabrication
-        P7_X_Fabrication = P6_X_Fabrication
-        P7_Y_Fabrication = Y_Center + (pkg_DIM_C / 2.0)
+        P7_X_Fabrication = P2_X_Fabrication
+        P7_Y_Fabrication = Y_Center + (pkg_DIM_D / 2.0)
         P8_X_Fabrication = P1_X_Fabrication
         P8_Y_Fabrication = P7_Y_Fabrication
         # Generating Points for the "crtYd"-layer (courty yard)
-        P1_X_Courtyard = crtYdRound(X_Center - ((pkg_DIM_A / 2.0) + len_REF_A + crtYdOffset))
-        P1_Y_Courtyard = crtYdRound(Y_Center - ((pkg_DIM_C / 2.0) + crtYdOffset))
-        P2_X_Courtyard = crtYdRound(X_Center + ((pkg_DIM_A / 2.0) + len_REF_B + pkg_DIM_G + crtYdOffset))
+        P1_X_Courtyard = crtYdRound(P1_X_Fabrication - crtYdOffset)
+        P1_Y_Courtyard = crtYdRound(P1_Y_Fabrication - crtYdOffset)
+        P2_X_Courtyard = crtYdRound(P4_X_Fabrication + crtYdOffset)
         P2_Y_Courtyard = P1_Y_Courtyard
         P3_X_Courtyard = P2_X_Courtyard
-        P3_Y_Courtyard = crtYdRound(Y_Center + ((pkg_DIM_C / 2.0) + crtYdOffset))
+        P3_Y_Courtyard = crtYdRound(P7_Y_Fabrication + crtYdOffset)
         P4_X_Courtyard = P1_X_Courtyard
-        P4_Y_Courtyard = P3_Y_Courtyard
+        P4_Y_Courtyard = P3_Y_Courtyard        
         # Generating Points for the "Silk"-layer (silkscreed)
         P1_X_Silk = P1_X_Fabrication - silkOffset
         P1_Y_Silk = P1_Y_Fabrication - silkOffset
         P2_X_Silk = P2_X_Fabrication + silkOffset
-        P2_Y_Silk = P1_Y_Silk
-        P3_X_Silk = P2_X_Silk
+        P2_Y_Silk = P2_Y_Fabrication - silkOffset
+        P3_X_Silk = P3_X_Fabrication + silkOffset
         P3_Y_Silk = P3_Y_Fabrication - silkOffset
         P4_X_Silk = P4_X_Fabrication + silkOffset
-        P4_Y_Silk = P3_Y_Silk
-        P5_X_Silk = P4_X_Silk
+        P4_Y_Silk = P4_Y_Fabrication - silkOffset
+        P5_X_Silk = P5_X_Fabrication + silkOffset
         P5_Y_Silk = P5_Y_Fabrication + silkOffset
-        P6_X_Silk = P3_X_Silk
+        P6_X_Silk = P6_X_Fabrication + silkOffset
         P6_Y_Silk = P6_Y_Fabrication + silkOffset
-        P7_X_Silk = P6_X_Silk
+        P7_X_Silk = P7_X_Fabrication + silkOffset
         P7_Y_Silk = P7_Y_Fabrication + silkOffset
-        P8_X_Silk = P1_X_Silk
-        P8_Y_Silk = P7_Y_Silk
+        P8_X_Silk = P8_X_Fabrication - silkOffset
+        P8_Y_Silk = P8_Y_Fabrication + silkOffset
         if (fpParams["no_of_rows"] != 5):
             # Define the position of pads to be placed
             Pad_X_Left = X_Center - pitchX * ((num_positions - 1) / 2.0)
@@ -266,8 +345,8 @@ def generateFootprint(config, fpParams, fpId):
         else: # connectors with rows = 5 are not symmetric about horizontal line
             Pad_X_Left = X_Center - pitchX * ((num_positions - 1) / 2.0)
             Pad_X_Right = X_Center + pitchX * ((num_positions - 1) / 2.0)
-            Pad_Y_Top = Y_Center - len_REF_D
-            Pad_Y_Bottom = Y_Center - len_REF_D + pkg_DIM_D
+            Pad_Y_Top = Y_Center + len_REF_D - pkg_DIM_E
+            Pad_Y_Bottom = Y_Center + len_REF_D
         # Define the position of the REF** in silkscreen
         Ref_X_Silk = X_Center
         Ref_Y_Silk = P1_Y_Courtyard - 2.0
@@ -332,42 +411,42 @@ def generateFootprint(config, fpParams, fpId):
                                         [P1_X_Silk, P1_Y_Silk]],
                               layer="F.SilkS",
                               width=width_line_Silk))
-    elif (fpParams["option"] == "GP"):
-        print('Error, this type of option={} is not defined implemented'.format(fpParams["option"]))
-        sys.exit()
     elif (fpParams["option"] == "LP"):
+        print('Error, this type of option={} is not defined nor implemented'.format(fpParams["option"]))
+        sys.exit()
+    elif (fpParams["option"] == "GP"):
         # Generating Points for the "Fab"-layer (fabrication)
-        P1_X_Fabrication = X_Center - ((pkg_DIM_A / 2.0) + len_REF_A)
-        P1_Y_Fabrication = Y_Center - (pkg_DIM_C / 2.0) 
-        P2_X_Fabrication = X_Center + ((pkg_DIM_A / 2.0) + len_REF_B)
-        P2_Y_Fabrication = P1_Y_Fabrication        
+        P1_X_Fabrication = X_Center - (pkg_DIM_A / 2.0)
+        P1_Y_Fabrication = Y_Center - (pkg_DIM_D / 2.0)
+        P2_X_Fabrication = X_Center + (pkg_DIM_A / 2.0)
+        P2_Y_Fabrication = P1_Y_Fabrication
         P3_X_Fabrication = P2_X_Fabrication
         P3_Y_Fabrication = Y_Center - (len_REF_E / 2.0)
-        P4_X_Fabrication = X_Center + (pkg_DIM_H / 2.0)
+        P4_X_Fabrication = X_Center + (pkg_DIM_G / 2.0)
         P4_Y_Fabrication = P3_Y_Fabrication
         P5_X_Fabrication = P4_X_Fabrication
         P5_Y_Fabrication = Y_Center + (len_REF_E / 2.0)
         P6_X_Fabrication = P3_X_Fabrication
         P6_Y_Fabrication = P5_Y_Fabrication
-        P7_X_Fabrication = P6_X_Fabrication
-        P7_Y_Fabrication = Y_Center + (pkg_DIM_C / 2.0)
+        P7_X_Fabrication = P2_X_Fabrication
+        P7_Y_Fabrication = Y_Center + (pkg_DIM_D / 2.0)
         P8_X_Fabrication = P1_X_Fabrication
         P8_Y_Fabrication = P7_Y_Fabrication
         P9_X_Fabrication = P8_X_Fabrication
         P9_Y_Fabrication = P6_Y_Fabrication
-        P10_X_Fabrication = X_Center - (pkg_DIM_H / 2.0)
+        P10_X_Fabrication = X_Center - (pkg_DIM_G / 2.0)
         P10_Y_Fabrication = P9_Y_Fabrication
         P11_X_Fabrication = P10_X_Fabrication
         P11_Y_Fabrication = P4_Y_Fabrication
         P12_X_Fabrication = P1_X_Fabrication
-        P12_Y_Fabrication = P11_Y_Fabrication
+        P12_Y_Fabrication = P11_Y_Fabrication        
         # Generating Points for the "crtYd"-layer (courty yard)
-        P1_X_Courtyard = crtYdRound(X_Center - ((pkg_DIM_H / 2.0) + crtYdOffset))
-        P1_Y_Courtyard = crtYdRound(Y_Center - ((pkg_DIM_C / 2.0) + crtYdOffset))
-        P2_X_Courtyard = crtYdRound(X_Center + ((pkg_DIM_H / 2.0) + crtYdOffset))
+        P1_X_Courtyard = crtYdRound(P11_X_Fabrication - crtYdOffset)
+        P1_Y_Courtyard = crtYdRound(P1_Y_Fabrication - crtYdOffset)
+        P2_X_Courtyard = crtYdRound(P4_X_Fabrication + crtYdOffset)
         P2_Y_Courtyard = P1_Y_Courtyard
         P3_X_Courtyard = P2_X_Courtyard
-        P3_Y_Courtyard = crtYdRound(Y_Center + ((pkg_DIM_C / 2.0) + crtYdOffset))
+        P3_Y_Courtyard = crtYdRound(P7_Y_Fabrication + crtYdOffset)
         P4_X_Courtyard = P1_X_Courtyard
         P4_Y_Courtyard = P3_Y_Courtyard
         # Generating Points for the "Silk"-layer (silkscreed)
@@ -481,10 +560,10 @@ def generateFootprint(config, fpParams, fpId):
     markerLength = pad_diameter
     
     PM1_X_Pin1Marker = Pad_X_Right
-    PM1_Y_Pin1Marker = P7_Y_Silk + markerOffset
+    PM1_Y_Pin1Marker = P1_Y_Silk - markerOffset
     
     PM2_X_Pin1Marker = PM1_X_Pin1Marker - (markerLength / 2)
-    PM2_Y_Pin1Marker = PM1_Y_Pin1Marker + (markerLength / sqrt(2))
+    PM2_Y_Pin1Marker = PM1_Y_Pin1Marker - (markerLength / sqrt(2))
     
     PM3_X_Pin1Marker = PM2_X_Pin1Marker + markerLength
     PM3_Y_Pin1Marker = PM2_Y_Pin1Marker
@@ -557,8 +636,8 @@ def generateFootprint(config, fpParams, fpId):
                 
     ##################  Alignment Holes NPTH  ########################
     # Those are all the same for "NONE", "GP" or "LP"
-    PAH1_X_AlignmentHole = X_Center - (pkg_DIM_B / 2.0)
-    PAH1_Y_AlignmentHole = Y_Center
+    PAH1_X_AlignmentHole = X_Center - (pkg_DIM_C / 2.0)
+    PAH1_Y_AlignmentHole = Y_Center + pkg_DIM_F
 
     f.append(Pad(at=[PAH1_X_AlignmentHole, PAH1_Y_AlignmentHole],
                  number="",
@@ -568,8 +647,8 @@ def generateFootprint(config, fpParams, fpId):
                  drill=npth_drill_AlignmentHole,
                  layers=Pad.LAYERS_NPTH))
 
-    PAH2_X_AlignmentHole = X_Center + (pkg_DIM_B / 2.0)
-    PAH2_Y_AlignmentHole = Y_Center + pkg_DIM_E
+    PAH2_X_AlignmentHole = X_Center + (pkg_DIM_C / 2.0)
+    PAH2_Y_AlignmentHole = Y_Center
 
     f.append(Pad(at=[PAH2_X_AlignmentHole, PAH2_Y_AlignmentHole],
                  number="",
@@ -580,11 +659,11 @@ def generateFootprint(config, fpParams, fpId):
                  layers=Pad.LAYERS_NPTH))
         
     ##################  Latch Post Holes PTH  ########################
-    if (fpParams["option"] == "LP"):
+    if (fpParams["option"] == "GP"):
         # Left side Latch post holes
-        PAH1_X_LatchPostHoleLeftSide = X_Center - ((pkg_DIM_J / 2.0) + (pth_distance / 2.0))
+        PAH1_X_LatchPostHoleLeftSide = X_Center - (pkg_DIM_H / 2.0) - (pth_distance / 2.0)
         PAH1_Y_LatchPostHoleLeftSide = Y_Center - (pth_distance / 2.0)
-        PAH2_X_LatchPostHoleLeftSide =  X_Center - ((pkg_DIM_J / 2.0) - (pth_distance / 2.0))
+        PAH2_X_LatchPostHoleLeftSide =  X_Center - (pkg_DIM_H / 2.0) + (pth_distance / 2.0)
         PAH2_Y_LatchPostHoleLeftSide = PAH1_Y_LatchPostHoleLeftSide
         PAH3_X_LatchPostHoleLeftSide = PAH1_X_LatchPostHoleLeftSide
         PAH3_Y_LatchPostHoleLeftSide = Y_Center + (pth_distance / 2.0)
@@ -623,9 +702,9 @@ def generateFootprint(config, fpParams, fpId):
                  drill= pth_drill,
                  layers=Pad.LAYERS_THT))
         # Right side Latch post holes
-        PAH1_X_LatchPostHoleRightSide = X_Center + ((pkg_DIM_J / 2.0) - (pth_distance / 2.0))
+        PAH1_X_LatchPostHoleRightSide = X_Center + (pkg_DIM_H / 2.0) - (pth_distance / 2.0)
         PAH1_Y_LatchPostHoleRightSide = Y_Center - (pth_distance / 2.0)
-        PAH2_X_LatchPostHoleRightSide = X_Center + ((pkg_DIM_J / 2.0) + (pth_distance / 2.0))
+        PAH2_X_LatchPostHoleRightSide = X_Center + (pkg_DIM_H / 2.0) + (pth_distance / 2.0)
         PAH2_Y_LatchPostHoleRightSide = PAH1_Y_LatchPostHoleRightSide
         PAH3_X_LatchPostHoleRightSide = PAH1_X_LatchPostHoleRightSide
         PAH3_Y_LatchPostHoleRightSide = Y_Center + (pth_distance / 2.0)
@@ -674,8 +753,8 @@ def generateFootprint(config, fpParams, fpId):
 
     f.setDescription("{0}, {1}x{2}mm, {3} Ball, {4}x{5} Layout, {6}mm Pitch, {7}".format(
                      fpId,
-                     (len_REF_A + pkg_DIM_C + len_REF_B + pkg_DIM_G),
-                     pkg_DIM_C,
+                     ((P1_X_Courtyard * -1) + P2_X_Courtyard),
+                     ((P1_Y_Courtyard * -1) + P4_Y_Courtyard),
                      pad_array_size,
                      num_positions,
                      num_rows,
