@@ -122,7 +122,7 @@ def build_flat_transformer(series, url, A, B, C, D, E, F, G, H, I, J, K, L, M, N
 
 
 def load_csvs():
-    flat_series = ["fl"]
+    flat_series = ["fl", "fld", "fle"]
     regular_series = ["vb", "vc"]
     for series in flat_series:
         with open(f"./series_information/{series}.csv", "r") as f:
