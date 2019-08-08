@@ -9,7 +9,6 @@ SEAF-30-01-L-08-1-RA-GP-TR_P1.27mm:
   option: "GP"
   pick_and_place_pad: "NONE"
   tape_and_reel: "TR"
-  pad_shape: "oval"
 
 SEAF-40-01-L-10-1-RA-GP-TR_P1.27mm:
   family: "SEAF"
@@ -22,7 +21,6 @@ SEAF-40-01-L-10-1-RA-GP-TR_P1.27mm:
   option: "GP"
   pick_and_place_pad: "NONE"
   tape_and_reel: "TR"
-  pad_shape: "oval"
   
 SEAF-50-01-L-08-1-RA-GP-TR_P1.27mm:
   family: "SEAF"
@@ -35,4 +33,3 @@ SEAF-50-01-L-08-1-RA-GP-TR_P1.27mm:
   option: "GP"
   pick_and_place_pad: "NONE"
   tape_and_reel: "TR"
-  pad_shape: "oval"

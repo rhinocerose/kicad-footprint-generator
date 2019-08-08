@@ -244,16 +244,7 @@ def generateFootprint(config, fpParams, fpId):
     t1 = 0.15 * s1[0]
     t2 = 0.15 * s2[0]
 
-    padShape = Pad.SHAPE_CIRCLE
-    if "pad_shape" in fpParams:
-        if fpParams["pad_shape"] == "rect":
-            padShape = Pad.SHAPE_RECT
-        if fpParams["pad_shape"] == "roundrect":
-            padShape = Pad.SHAPE_ROUNDRECT
-        if fpParams["pad_shape"] == "oval":
-            padShape = Pad.SHAPE_OVAL
-
-    #chamfer = min(config['fab_bevel_size_absolute'], min(pkgX, pkgY) * config['fab_bevel_size_relative'])
+    padShape = Pad.SHAPE_OVAL
     
     silkOffset = config['silk_fab_offset']
     crtYdOffset = config['courtyard_offset']['connector']
