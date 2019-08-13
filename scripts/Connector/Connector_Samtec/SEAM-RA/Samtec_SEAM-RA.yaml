@@ -1,4 +1,4 @@
-SEAM-30-01-L-08-1-RA-GP-TR_P1.27mm:
+SEAM-30-01-L-08-1-RA-GP-TR:
   family: "SEAM"
   no_pins_of_row: 30
   lead_style: 01.0
@@ -10,7 +10,7 @@ SEAM-30-01-L-08-1-RA-GP-TR_P1.27mm:
   pick_and_place_pad: "NONE"
   tape_and_reel: "TR"
   
-SEAM-40-01-L-10-1-RA-GP-TR_P1.27mm:
+SEAM-40-01-L-10-1-RA-GP-TR:
   family: "SEAM"
   no_pins_of_row: 40
   lead_style: 01.0
@@ -22,7 +22,7 @@ SEAM-40-01-L-10-1-RA-GP-TR_P1.27mm:
   pick_and_place_pad: "NONE"
   tape_and_reel: "TR"
   
-SEAM-50-01-L-08-1-RA-GP-TR_P1.27mm:
+SEAM-50-01-L-08-1-RA-GP-TR:
   family: "SEAM"
   no_pins_of_row: 50
   lead_style: 01.0

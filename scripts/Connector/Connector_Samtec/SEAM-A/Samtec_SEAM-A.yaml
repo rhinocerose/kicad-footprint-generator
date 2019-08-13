@@ -1,4 +1,4 @@
-SEAM-30-02.0-L-08-1-A-GP-K-TR_P1.27mm:
+SEAM-30-02.0-L-08-1-A-GP-K-TR:
   family: "SEAM"
   no_pins_of_row: 30
   lead_style: "02.0"
@@ -10,7 +10,7 @@ SEAM-30-02.0-L-08-1-A-GP-K-TR_P1.27mm:
   pick_and_place_pad: "K"
   tape_and_reel: "TR"
   
-SEAM-40-02.0-L-10-1-A-GP-K-TR_P1.27mm:
+SEAM-40-02.0-L-10-1-A-GP-K-TR:
   family: "SEAM"
   no_pins_of_row: 40
   lead_style: "02.0"
@@ -22,7 +22,7 @@ SEAM-40-02.0-L-10-1-A-GP-K-TR_P1.27mm:
   pick_and_place_pad: "K"
   tape_and_reel: "TR"
   
-SEAM-50-02.0-L-08-1-A-GP-K-TR_P1.27mm:
+SEAM-50-02.0-L-08-1-A-GP-K-TR:
   family: "SEAM"
   no_pins_of_row: 50
   lead_style: "02.0"
