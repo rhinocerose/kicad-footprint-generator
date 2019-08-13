@@ -25,10 +25,12 @@ def generateFootprint(config, fpParams, fpId):
     pitchString = str(pitchX) + "x" + str(pitchY)
     # The paste mask is bigger than the copper and stop-mask
     # For this type of connector it is a must to do so.
-    pad_size_x = 0.84
+    pad_size_x = 0.32 + 0.2 + 0.32
     pad_size_y = 0.64
+    pad_stencil_size_x = 0.44 + 0.1 + 0.44 
+    pad_stencil_size_y = 0.89    
     mask_margin = 0.0
-    paste_margin = 0.125
+    paste_margin = 0.0
     paste_ratio = 0.0
     npth_drill_AlignmentHole = 1.27
     # Holes use paste in hole technology .. therefore the THT-via size is same as drill
@@ -751,21 +753,43 @@ def generateFootprint(config, fpParams, fpId):
                 pad_array_size -= 1
         for col in row_set:
             if pin_order == "tlbr":
-                if (row_num == 0):            
+                if (row_num == 0):
+                    # Apply the pad itself without a solder paste mask            
                     f.append(Pad(number="{}{}".format(row, col),
                                  type=Pad.TYPE_SMT,
                                  shape=padShape,
                                  at=[Pad_X_Left_First_Row + (col-1) * pitchX, Pad_Y_Top_First_Row + row_num * pitchY],
                                  size=[pad_size_x, pad_size_y],
-                                 layers=Pad.LAYERS_SMT, 
+                                 #layers=Pad.LAYERS_SMT,
+                                 layers=['F.Cu', 'F.Mask'], 
+                                 radius_ratio=config['round_rect_radius_ratio']))
+                    # Apply the solder paste mask 
+                    f.append(Pad(number="{}{}".format(row, col),
+                                 type=Pad.TYPE_SMT,
+                                 shape=padShape,
+                                 at=[Pad_X_Left_First_Row + (col-1) * pitchX, Pad_Y_Top_First_Row + row_num * pitchY],
+                                 size=[pad_stencil_size_x, pad_stencil_size_y],
+                                 #layers=Pad.LAYERS_SMT,
+                                 layers=['F.Paste'],
                                  radius_ratio=config['round_rect_radius_ratio']))
                 else:
+                    ## Apply the pad itself without a solder paste mask 
                     f.append(Pad(number="{}{}".format(row, col),
                                  type=Pad.TYPE_SMT,
                                  shape=padShape,
                                  at=[Pad_X_Left_Second_Row + (col-1) * pitchX, Pad_Y_Top_Second_Row + ((row_num - 1) * pitchY)],
                                  size=[pad_size_x, pad_size_y],
-                                 layers=Pad.LAYERS_SMT, 
+                                 #layers=Pad.LAYERS_SMT,
+                                 layers=['F.Cu', 'F.Mask'],
+                                 radius_ratio=config['round_rect_radius_ratio']))
+                    # Apply the solder paste mask
+                    f.append(Pad(number="{}{}".format(row, col),
+                                 type=Pad.TYPE_SMT,
+                                 shape=padShape,
+                                 at=[Pad_X_Left_Second_Row + (col-1) * pitchX, Pad_Y_Top_Second_Row + ((row_num - 1) * pitchY)],
+                                 size=[pad_stencil_size_x, pad_stencil_size_y],
+                                 #layers=Pad.LAYERS_SMT,
+                                 layers=['F.Paste'],
                                  radius_ratio=config['round_rect_radius_ratio']))
             elif pin_order == "trbl":
                 f.append(Pad(number="{}{}".format(row, col),
