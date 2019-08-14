@@ -75,7 +75,7 @@ def generateFootprint(config, fpParams, fpId):
     tab_DIM_J = [[4, 6, 8, 10],
                  [2.54, 5.08, 7.62, 10.16]]
     tab_DIM_L = [[20, 30, 40, 50],
-                 [33.27, 45.97, 58.67, 71,37]]
+                 [33.27, 45.97, 58.67, 71.37]]
     tab_DIM_M = [[4, 6, 8, 10],
                  [1.27, 2.03, 2.03, 2.03]]
     tab_DIM_P_w_GP = [[20, 30, 40, 50],
@@ -91,7 +91,7 @@ def generateFootprint(config, fpParams, fpId):
     len_REF_F = 1.397 # Distance right alignment hole to pin B1, see datasheet page 1
     len_REF_G = 1.02 # Distance for showing clamp for 06,08 and 10 row types as square
     len_REF_H = 12.32 # Distance upper outline to end of GP
-    len_REF_N = 1.85 # Length not noted in datasheet, measured from 3D-Model . Counterpart to DIM "N" but also a fixed value for all
+    len_REF_N = 1.6 # Length not noted in datasheet, measured from 3D-Model . Counterpart to DIM "N" but also a fixed value for all
     
     pkg_DIM_A = getTableEntry(tab_DIM_A, num_positions)
     if pkg_DIM_A == -1:
@@ -670,7 +670,7 @@ def generateFootprint(config, fpParams, fpId):
     elif ((fpParams["option"] == "GP") and fpParams["no_of_rows"] != 4): # This is the without GP-option or LP-option
         # Generating Points for the "Fab"-layer (fabrication)
         P1_X_Fabrication = X_Center - (pkg_DIM_E / 2.0)
-        P1_Y_Fabrication = Y_Center - (len_REF_A + len_REF_B)
+        P1_Y_Fabrication = Y_Center + len_REF_D - len_REF_B - len_REF_A
         PCLAMP1_X_Fabrication = P1_X_Fabrication
         PCLAMP1_Y_Fabrication = P1_Y_Fabrication - len_REF_G
         PCLAMP2_X_Fabrication = PCLAMP1_X_Fabrication + len_REF_G
@@ -682,9 +682,9 @@ def generateFootprint(config, fpParams, fpId):
         PCLAMP5_X_Fabrication = PCLAMP4_X_Fabrication
         PCLAMP5_Y_Fabrication = PCLAMP2_Y_Fabrication
         PCLAMP6_X_Fabrication = X_Center + (pkg_DIM_E / 2.0)
-        PCLAMP6_Y_Fabrication = P1_Y_Fabrication - len_REF_G
+        PCLAMP6_Y_Fabrication = PCLAMP5_Y_Fabrication        
         P2_X_Fabrication = X_Center + (pkg_DIM_E / 2.0)
-        P2_Y_Fabrication = P1_Y_Fabrication
+        P2_Y_Fabrication = P1_Y_Fabrication        
         P3_X_Fabrication = P2_X_Fabrication
         P3_Y_Fabrication = P2_Y_Fabrication + len_REF_N        
         P4_X_Fabrication = X_Center + (pkg_DIM_P_w_GP / 2.0)
