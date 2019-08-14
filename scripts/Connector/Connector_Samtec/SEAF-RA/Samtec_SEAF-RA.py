@@ -92,11 +92,15 @@ def generateFootprint(config, fpParams, fpId):
     tab_DIM_K = [[4, 6, 8, 10],
                  [2.54, 5.08, 7.62, 10.16]]
     tab_DIM_M = [[20, 30, 40, 50],
-                 [33.27, 45.97, 58.68, 71.37]]
+                 [33.27, 45.97, 58.67, 71.37]]
     tab_DIM_N = [[4, 6, 8, 10],
                  [1.27, 2.08, 2.08, 2.08]]
+    # Original table entries from datasheet. There is an error for 10 row-types
+    #tab_DIM_P = [[4, 6, 8, 10],
+    #             [13.77, 12.75, 16.31, 18.85]]
+    # Corrected table entries, measured in 3D and on a physical part itself
     tab_DIM_P = [[4, 6, 8, 10],
-                 [13.77, 12.75, 16.31, 18.85]]
+                 [13.77, 12.75, 16.31, 16.31]]
     tab_DIM_Q_w_GP = [[20, 30, 40, 50],
                       [44.96, 57.66, 70.36, 83.06]]
     tab_DIM_Q_wo_GP = [[20, 30, 40, 50],
@@ -109,6 +113,7 @@ def generateFootprint(config, fpParams, fpId):
     len_REF_C = 2.16 # Distance from first pin row to second pin row, see dataheet page 1
     len_REF_D = 4.38 # Distance from first pin row to left upper fixature hole 
     len_REF_E = 2.97 # Distance first pad A1 from Alignement Hole DIM "E", see datasheet page 1
+    len_REF_F = 3.63 # Distance last pad Ax to Alignement Hole right side (use  DIM "E" ?), see datasheet page 1
     len_REF_N = 1.51 # Length not noted in datasheet, measured from 3D-Model . Counterpart to DIM "N" but also a fixed value for all
     
     pkg_DIM_A = getTableEntry(tab_DIM_A, num_positions)
@@ -215,27 +220,9 @@ def generateFootprint(config, fpParams, fpId):
     else:
         row_skips = []
 
-    # must be given pitch (equal in X and Y) or a unique pitch in both X and Y
-    #if "pitch" in fpParams:
-    #    if "pitch_x" and "pitch_y" in fpParams:
-    #        raise KeyError('{}: Either pitch or both pitch_x and pitch_y must be given.'.format(fpId))
-    #    else:
-    #        pitchString = str(fpParams["pitch"])
-    #        pitchX = fpParams["pitch"]
-    #        pitchY = fpParams["pitch"]
-    #else:
-    #    if "pitch_x" and "pitch_y" in fpParams:
-    #        pitchString = str(fpParams["pitch_x"]) + "x" + str(fpParams["pitch_y"])
-    #        pitchX = fpParams["pitch_x"]
-    #        pitchY = fpParams["pitch_y"]
-    #    else:
-    #        raise KeyError('{}: Either pitch or both pitch_x and pitch_y must be given.'.format(fpId))
 
     f = Footprint(fpId)
     f.setAttribute("smd")
-    #if "mask_margin" in fpParams: f.setMaskMargin(fpParams["mask_margin"])
-    #if "paste_margin" in fpParams: f.setPasteMargin(fpParams["paste_margin"])
-    #if "paste_ratio" in fpParams: f.setPasteMarginRatio(fpParams["paste_ratio"])
     f.setMaskMargin(mask_margin)
     f.setPasteMargin(paste_margin)
     f.setPasteMarginRatio(paste_ratio)
@@ -422,7 +409,7 @@ def generateFootprint(config, fpParams, fpId):
     elif (fpParams["option"] == "GP"):
         # Generating Points for the "Fab"-layer (fabrication)
         P1_X_Fabrication = X_Center - (pkg_DIM_M / 2.0)
-        P1_Y_Fabrication = Y_Center - (len_REF_A + len_REF_B)
+        P1_Y_Fabrication = Y_Center - len_REF_A - len_REF_B
         P2_X_Fabrication = X_Center + (pkg_DIM_M / 2.0)
         P2_Y_Fabrication = P1_Y_Fabrication
         P3_X_Fabrication = P2_X_Fabrication
@@ -443,7 +430,7 @@ def generateFootprint(config, fpParams, fpId):
         P10_Y_Fabrication = P9_Y_Fabrication
         P11_X_Fabrication = P10_X_Fabrication
         P11_Y_Fabrication = P8_Y_Fabrication
-        P12_X_Fabrication = X_Center - (pkg_DIM_H_w_GP / 2)
+        P12_X_Fabrication = X_Center - (pkg_DIM_H_w_GP / 2.0)
         P12_Y_Fabrication = P11_Y_Fabrication
         P13_X_Fabrication = X_Center - (pkg_DIM_H_w_GP / 2.0)
         P13_Y_Fabrication = P6_Y_Fabrication
