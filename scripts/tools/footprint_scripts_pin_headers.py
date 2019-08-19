@@ -288,9 +288,9 @@ def makePinHeadStraight(rows, cols, rm, coldist, package_width, overlen_top, ove
 #                 +-------+                                    rm
 #
 def makePinHeadAngled(rows, cols, rm, coldist, pack_width, pack_offset, pin_length, pin_width, ddrill, pad,
-                      tags_additional=[], lib_name="${{KISYS3DMOD}}/Pin_Headers", classname="Pin_Header",
-                      classname_description="pin header", offset3d=[0, 0, 0], scale3d=[1, 1, 1],
-                      rotate3d=[0, 0, 0], pin_num_invert=False):
+					  tags_additional=[], lib_name="${{KISYS3DMOD}}/Pin_Headers", classname="Pin_Header",
+					  classname_description="pin header", offset3d=[0, 0, 0], scale3d=[1, 1, 1],
+					  rotate3d=[0, 0, 0], pin_num_reverse=False):
     h_fabb = (rows - 1) * rm + rm / 2 + rm / 2
     w_fabb = pack_width
     l_fabb = coldist * (cols - 1) + pack_offset
@@ -341,6 +341,12 @@ def makePinHeadAngled(rows, cols, rm, coldist, pack_width, pack_offset, pin_leng
     elif (cols == 3):
         description = description + ", triple rows"
         tags = tags + " triple row"
+
+    if pin_num_reverse:
+        footprint_name = footprint_name + "_reversed"
+        description = description + ", reversed numbering"
+        tags = tags + " reversed numbering"
+
     
     if (len(tags_additional) > 0):
         for t in tags_additional:
@@ -573,9 +579,9 @@ def makePinHeadAngled(rows, cols, rm, coldist, pack_width, pack_offset, pin_leng
 #                 +---------------------------------------+
 #
 def makeSocketStripAngled(rows, cols, rm, coldist, pack_width, pack_offset, pin_width, ddrill, pad,
-                      tags_additional=[], lib_name="${{KISYS3DMOD}}/Socket_Strips", classname="Socket_Strip",
-                      classname_description="socket strip", offset3d=[0, 0, 0], scale3d=[1, 1, 1],
-                      rotate3d=[0, 0, 0], pin_num_invert=False):
+						  tags_additional=[], lib_name="${{KISYS3DMOD}}/Socket_Strips", classname="Socket_Strip",
+						  classname_description="socket strip", offset3d=[0, 0, 0], scale3d=[1, 1, 1],
+						  rotate3d=[0, 0, 0], pin_num_reverse=False):
     h_fabb = (rows - 1) * rm + rm / 2 + rm / 2
     w_fabb = -pack_width
     l_fabb = -1*(coldist * (cols - 1) + pack_offset)
@@ -616,7 +622,12 @@ def makeSocketStripAngled(rows, cols, rm, coldist, pack_width, pack_offset, pin_
     elif (cols == 3):
         description = description + ", triple rows"
         tags = tags + " triple row"
-    
+
+    if pin_num_reverse:
+        footprint_name = footprint_name + "_reversed"
+        description = description + ", reversed numbering"
+        tags = tags + " reversed numbering"
+
     if (len(tags_additional) > 0):
         for t in tags_additional:
             footprint_name = footprint_name + "_" + t
@@ -705,7 +716,7 @@ def makeSocketStripAngled(rows, cols, rm, coldist, pack_width, pack_offset, pin_
     pad_shapeother = Pad.SHAPE_OVAL
     pad_layers = Pad.LAYERS_THT 
 
-    if pin_num_invert:
+    if pin_num_reverse:
         p = rows*cols
         step = -1
     else:
