@@ -34,8 +34,7 @@ def generateFootprint(config, fpParams, fpId):
     # resulting in a THT with no copper pad
     pth_drill = 0.99
     pth_distance = 2.97
-        
-    
+    pth_paste_length = 2.29
     
     # Check if given parameters are correct according catalogue ordering guideline
     # checking-clause
@@ -670,6 +669,7 @@ def generateFootprint(config, fpParams, fpId):
         PAH4_X_LatchPostHoleLeftSide = PAH2_X_LatchPostHoleLeftSide
         PAH4_Y_LatchPostHoleLeftSide = PAH3_Y_LatchPostHoleLeftSide
         
+        # Apply the pad itself without a solder paste mask
         f.append(Pad(at=[PAH1_X_LatchPostHoleLeftSide, PAH1_Y_LatchPostHoleLeftSide],
                  number="",
                  type=Pad.TYPE_THT,
@@ -677,7 +677,15 @@ def generateFootprint(config, fpParams, fpId):
                  size=pth_drill,
                  drill= pth_drill,
                  layers=Pad.LAYERS_THT))
+        # Apply the solder paste mask            
+        f.append(Polygon(nodes=[[PAH1_X_LatchPostHoleLeftSide - (pth_paste_length / 2.0), PAH1_Y_LatchPostHoleLeftSide - (pth_paste_length / 2.0)],
+                                [PAH1_X_LatchPostHoleLeftSide + (pth_paste_length / 2.0), PAH1_Y_LatchPostHoleLeftSide - (pth_paste_length / 2.0)],
+                                [PAH1_X_LatchPostHoleLeftSide + (pth_paste_length / 2.0), PAH1_Y_LatchPostHoleLeftSide + (pth_paste_length / 2.0)],
+                                [PAH1_X_LatchPostHoleLeftSide - (pth_paste_length / 2.0), PAH1_Y_LatchPostHoleLeftSide + (pth_paste_length / 2.0)]],
+                         layer='F.Paste',
+                         width=0.0))
         
+        # Apply the pad itself without a solder paste mask
         f.append(Pad(at=[PAH2_X_LatchPostHoleLeftSide, PAH2_Y_LatchPostHoleLeftSide],
                  number="",
                  type=Pad.TYPE_THT,
@@ -685,7 +693,15 @@ def generateFootprint(config, fpParams, fpId):
                  size=pth_drill,
                  drill= pth_drill,
                  layers=Pad.LAYERS_THT))
+        # Apply the solder paste mask            
+        f.append(Polygon(nodes=[[PAH2_X_LatchPostHoleLeftSide - (pth_paste_length / 2.0), PAH2_Y_LatchPostHoleLeftSide - (pth_paste_length / 2.0)],
+                                [PAH2_X_LatchPostHoleLeftSide + (pth_paste_length / 2.0), PAH2_Y_LatchPostHoleLeftSide - (pth_paste_length / 2.0)],
+                                [PAH2_X_LatchPostHoleLeftSide + (pth_paste_length / 2.0), PAH2_Y_LatchPostHoleLeftSide + (pth_paste_length / 2.0)],
+                                [PAH2_X_LatchPostHoleLeftSide - (pth_paste_length / 2.0), PAH2_Y_LatchPostHoleLeftSide + (pth_paste_length / 2.0)]],
+                         layer='F.Paste',
+                         width=0.0))
         
+        # Apply the pad itself without a solder paste mask
         f.append(Pad(at=[PAH3_X_LatchPostHoleLeftSide, PAH3_Y_LatchPostHoleLeftSide],
                  number="",
                  type=Pad.TYPE_THT,
@@ -693,7 +709,15 @@ def generateFootprint(config, fpParams, fpId):
                  size=pth_drill,
                  drill= pth_drill,
                  layers=Pad.LAYERS_THT))
+        # Apply the solder paste mask            
+        f.append(Polygon(nodes=[[PAH3_X_LatchPostHoleLeftSide - (pth_paste_length / 2.0), PAH3_Y_LatchPostHoleLeftSide - (pth_paste_length / 2.0)],
+                                [PAH3_X_LatchPostHoleLeftSide + (pth_paste_length / 2.0), PAH3_Y_LatchPostHoleLeftSide - (pth_paste_length / 2.0)],
+                                [PAH3_X_LatchPostHoleLeftSide + (pth_paste_length / 2.0), PAH3_Y_LatchPostHoleLeftSide + (pth_paste_length / 2.0)],
+                                [PAH3_X_LatchPostHoleLeftSide - (pth_paste_length / 2.0), PAH3_Y_LatchPostHoleLeftSide + (pth_paste_length / 2.0)]],
+                         layer='F.Paste',
+                         width=0.0))
         
+        # Apply the pad itself without a solder paste mask
         f.append(Pad(at=[PAH4_X_LatchPostHoleLeftSide, PAH4_Y_LatchPostHoleLeftSide],
                  number="",
                  type=Pad.TYPE_THT,
@@ -701,6 +725,14 @@ def generateFootprint(config, fpParams, fpId):
                  size=pth_drill,
                  drill= pth_drill,
                  layers=Pad.LAYERS_THT))
+        # Apply the solder paste mask            
+        f.append(Polygon(nodes=[[PAH4_X_LatchPostHoleLeftSide - (pth_paste_length / 2.0), PAH4_Y_LatchPostHoleLeftSide - (pth_paste_length / 2.0)],
+                                [PAH4_X_LatchPostHoleLeftSide + (pth_paste_length / 2.0), PAH4_Y_LatchPostHoleLeftSide - (pth_paste_length / 2.0)],
+                                [PAH4_X_LatchPostHoleLeftSide + (pth_paste_length / 2.0), PAH4_Y_LatchPostHoleLeftSide + (pth_paste_length / 2.0)],
+                                [PAH4_X_LatchPostHoleLeftSide - (pth_paste_length / 2.0), PAH4_Y_LatchPostHoleLeftSide + (pth_paste_length / 2.0)]],
+                         layer='F.Paste',
+                         width=0.0))
+        
         # Right side Latch post holes
         PAH1_X_LatchPostHoleRightSide = X_Center + (pkg_DIM_H / 2.0) - (pth_distance / 2.0)
         PAH1_Y_LatchPostHoleRightSide = Y_Center - (pth_distance / 2.0)
@@ -711,6 +743,7 @@ def generateFootprint(config, fpParams, fpId):
         PAH4_X_LatchPostHoleRightSide = PAH2_X_LatchPostHoleRightSide
         PAH4_Y_LatchPostHoleRightSide = PAH3_Y_LatchPostHoleRightSide
         
+        # Apply the pad itself without a solder paste mask
         f.append(Pad(at=[PAH1_X_LatchPostHoleRightSide, PAH1_Y_LatchPostHoleRightSide],
                  number="",
                  type=Pad.TYPE_THT,
@@ -718,7 +751,15 @@ def generateFootprint(config, fpParams, fpId):
                  size=pth_drill,
                  drill= pth_drill,
                  layers=Pad.LAYERS_THT))
+        # Apply the solder paste mask            
+        f.append(Polygon(nodes=[[PAH1_X_LatchPostHoleRightSide - (pth_paste_length / 2.0), PAH1_Y_LatchPostHoleRightSide - (pth_paste_length / 2.0)],
+                                [PAH1_X_LatchPostHoleRightSide + (pth_paste_length / 2.0), PAH1_Y_LatchPostHoleRightSide - (pth_paste_length / 2.0)],
+                                [PAH1_X_LatchPostHoleRightSide + (pth_paste_length / 2.0), PAH1_Y_LatchPostHoleRightSide + (pth_paste_length / 2.0)],
+                                [PAH1_X_LatchPostHoleRightSide - (pth_paste_length / 2.0), PAH1_Y_LatchPostHoleRightSide + (pth_paste_length / 2.0)]],
+                         layer='F.Paste',
+                         width=0.0))
         
+        # Apply the pad itself without a solder paste mask
         f.append(Pad(at=[PAH2_X_LatchPostHoleRightSide, PAH2_Y_LatchPostHoleRightSide],
                  number="",
                  type=Pad.TYPE_THT,
@@ -726,7 +767,15 @@ def generateFootprint(config, fpParams, fpId):
                  size=pth_drill,
                  drill= pth_drill,
                  layers=Pad.LAYERS_THT))
+        # Apply the solder paste mask            
+        f.append(Polygon(nodes=[[PAH2_X_LatchPostHoleRightSide - (pth_paste_length / 2.0), PAH2_Y_LatchPostHoleRightSide - (pth_paste_length / 2.0)],
+                                [PAH2_X_LatchPostHoleRightSide + (pth_paste_length / 2.0), PAH2_Y_LatchPostHoleRightSide - (pth_paste_length / 2.0)],
+                                [PAH2_X_LatchPostHoleRightSide + (pth_paste_length / 2.0), PAH2_Y_LatchPostHoleRightSide + (pth_paste_length / 2.0)],
+                                [PAH2_X_LatchPostHoleRightSide - (pth_paste_length / 2.0), PAH2_Y_LatchPostHoleRightSide + (pth_paste_length / 2.0)]],
+                         layer='F.Paste',
+                         width=0.0))
         
+        # Apply the pad itself without a solder paste mask
         f.append(Pad(at=[PAH3_X_LatchPostHoleRightSide, PAH3_Y_LatchPostHoleRightSide],
                  number="",
                  type=Pad.TYPE_THT,
@@ -734,7 +783,15 @@ def generateFootprint(config, fpParams, fpId):
                  size=pth_drill,
                  drill= pth_drill,
                  layers=Pad.LAYERS_THT))
+        # Apply the solder paste mask            
+        f.append(Polygon(nodes=[[PAH3_X_LatchPostHoleRightSide - (pth_paste_length / 2.0), PAH3_Y_LatchPostHoleRightSide - (pth_paste_length / 2.0)],
+                                [PAH3_X_LatchPostHoleRightSide + (pth_paste_length / 2.0), PAH3_Y_LatchPostHoleRightSide - (pth_paste_length / 2.0)],
+                                [PAH3_X_LatchPostHoleRightSide + (pth_paste_length / 2.0), PAH3_Y_LatchPostHoleRightSide + (pth_paste_length / 2.0)],
+                                [PAH3_X_LatchPostHoleRightSide - (pth_paste_length / 2.0), PAH3_Y_LatchPostHoleRightSide + (pth_paste_length / 2.0)]],
+                         layer='F.Paste',
+                         width=0.0))
         
+        # Apply the pad itself without a solder paste mask
         f.append(Pad(at=[PAH4_X_LatchPostHoleRightSide, PAH4_Y_LatchPostHoleRightSide],
                  number="",
                  type=Pad.TYPE_THT,
@@ -742,6 +799,13 @@ def generateFootprint(config, fpParams, fpId):
                  size=pth_drill,
                  drill= pth_drill,
                  layers=Pad.LAYERS_THT))
+        # Apply the solder paste mask            
+        f.append(Polygon(nodes=[[PAH4_X_LatchPostHoleRightSide - (pth_paste_length / 2.0), PAH4_Y_LatchPostHoleRightSide - (pth_paste_length / 2.0)],
+                                [PAH4_X_LatchPostHoleRightSide + (pth_paste_length / 2.0), PAH4_Y_LatchPostHoleRightSide - (pth_paste_length / 2.0)],
+                                [PAH4_X_LatchPostHoleRightSide + (pth_paste_length / 2.0), PAH4_Y_LatchPostHoleRightSide + (pth_paste_length / 2.0)],
+                                [PAH4_X_LatchPostHoleRightSide - (pth_paste_length / 2.0), PAH4_Y_LatchPostHoleRightSide + (pth_paste_length / 2.0)]],
+                         layer='F.Paste',
+                         width=0.0))
   
     ##################  Gereration of File-Name, Description and Tags  ########################
     # Prepare name variables for footprint folder, footprint name, etc.
