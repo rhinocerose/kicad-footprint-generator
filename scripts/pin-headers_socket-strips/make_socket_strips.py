@@ -42,6 +42,10 @@ if __name__ == '__main__':
             makeSocketStripAngled(rows, cols, rm, rm, angled_pack_width, angled_pack_offset, angled_pin_width, ddrill, pad,
                               [], "Socket_Strips",  "Socket_Strip", "socket strip",[-(cols - 1) * rm / 2 / 25.4, -(rows - 1) * rm / 2 / 25.4, 0], [1, 1, 1],
                                 [0, 0, 270])
+            makeSocketStripAngled(rows, cols, rm, rm, angled_pack_width, angled_pack_offset, angled_pin_width, ddrill, pad,
+                                  [], "Socket_Strips",  "Socket_Strip", "socket strip",[-(cols - 1) * rm / 2 / 25.4, -(rows - 1) * rm / 2 / 25.4, 0], [1, 1, 1],
+                                  [0, 0, 270], True)
+
             if cols == 2:
                 makePinHeadStraightSMD(rows, cols, rm, rm, rmx_pad_offset, rmx_pin_length, pin_width,
                                        cols * singlecol_packwidth + singlecol_packoffset,
@@ -74,6 +78,12 @@ if __name__ == '__main__':
                               [], "Socket_Strip", "Socket_Strip", "socket strip", [(cols - 1) * rm / 2 / 25.4, -(rows - 1) * rm / 2 / 25.4, 0],
                               [1, 1, 1],
                               [0, 0, 90])
+            makeSocketStripAngled(rows, cols, rm, rm, angled_pack_width, angled_pack_offset,
+                                  angled_pin_width, ddrill, pad,
+                                  [], "Socket_Strip", "Socket_Strip", "socket strip", [(cols - 1) * rm / 2 / 25.4, -(rows - 1) * rm / 2 / 25.4, 0],
+                                  [1, 1, 1],
+                                  [0, 0, 90], True)
+
             if cols == 2:
                 makePinHeadStraightSMD(rows, cols, rm, rm, rmx_pad_offset, rmx_pin_length, pin_width,
                                        cols * singlecol_packwidth + singlecol_packoffset,
@@ -109,4 +119,3 @@ if __name__ == '__main__':
                                        singlecol_packwidth / 2 + singlecol_packoffset, pad_smd,
                                        True, [], "Socket_Strips", "Socket_Strip", "socket strip", isSocket=True)
 
-            
