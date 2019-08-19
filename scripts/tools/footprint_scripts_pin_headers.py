@@ -290,7 +290,7 @@ def makePinHeadStraight(rows, cols, rm, coldist, package_width, overlen_top, ove
 def makePinHeadAngled(rows, cols, rm, coldist, pack_width, pack_offset, pin_length, pin_width, ddrill, pad,
                       tags_additional=[], lib_name="${{KISYS3DMOD}}/Pin_Headers", classname="Pin_Header",
                       classname_description="pin header", offset3d=[0, 0, 0], scale3d=[1, 1, 1],
-                      rotate3d=[0, 0, 0]):
+                      rotate3d=[0, 0, 0], pin_num_invert=False):
     h_fabb = (rows - 1) * rm + rm / 2 + rm / 2
     w_fabb = pack_width
     l_fabb = coldist * (cols - 1) + pack_offset
@@ -522,7 +522,12 @@ def makePinHeadAngled(rows, cols, rm, coldist, pack_width, pack_offset, pin_leng
     pad_shapeother = Pad.SHAPE_OVAL
     pad_layers = Pad.LAYERS_THT
     
-    p = 1
+    if pin_num_invert:
+        p = rows*cols
+        step = -1
+    else:
+        p = 1
+        step = 1
     
     for r in range(1, rows + 1):
         x1 = 0
@@ -535,7 +540,7 @@ def makePinHeadAngled(rows, cols, rm, coldist, pack_width, pack_offset, pin_leng
                     Pad(number=p, type=pad_type, shape=pad_shapeother, at=[x1, y1], size=pad, drill=ddrill,
                         layers=pad_layers))
             
-            p = p + 1
+            p = p + step
             x1 = x1 + coldist
         
         y1 = y1 + rm
@@ -570,7 +575,7 @@ def makePinHeadAngled(rows, cols, rm, coldist, pack_width, pack_offset, pin_leng
 def makeSocketStripAngled(rows, cols, rm, coldist, pack_width, pack_offset, pin_width, ddrill, pad,
                       tags_additional=[], lib_name="${{KISYS3DMOD}}/Socket_Strips", classname="Socket_Strip",
                       classname_description="socket strip", offset3d=[0, 0, 0], scale3d=[1, 1, 1],
-                      rotate3d=[0, 0, 0]):
+                      rotate3d=[0, 0, 0], pin_num_invert=False):
     h_fabb = (rows - 1) * rm + rm / 2 + rm / 2
     w_fabb = -pack_width
     l_fabb = -1*(coldist * (cols - 1) + pack_offset)
@@ -700,7 +705,14 @@ def makeSocketStripAngled(rows, cols, rm, coldist, pack_width, pack_offset, pin_
     pad_shapeother = Pad.SHAPE_OVAL
     pad_layers = Pad.LAYERS_THT 
 
-    p = 1
+    if pin_num_invert:
+        p = rows*cols
+        step = -1
+    else:
+        p = 1
+        step = 1
+
+
     for r in range(1, rows + 1):
         x1 = 0
         for c in range(1, cols + 1):
@@ -712,7 +724,7 @@ def makeSocketStripAngled(rows, cols, rm, coldist, pack_width, pack_offset, pin_
                     Pad(number=p, type=pad_type, shape=pad_shapeother, at=[x1, y1], size=pad, drill=ddrill,
                         layers=pad_layers))
         
-            p = p + 1
+            p = p + step
             x1 = x1 - coldist
     
         y1 = y1 + rm
