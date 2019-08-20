@@ -35,7 +35,15 @@ def generateFootprint(config, fpParams, fpId):
     npth_drill_AlignmentHole = 1.27
     # Holes use paste in hole technology .. therefore the THT-via size is same as drill
     # resulting in a THT with no copper pad
+    # But this is not a practical real world design.
+    # PCB manufacturers need a annular restring anyway, at least according IPC2221 of 50 um.
+    # To avoid problems in manufacturing process,
+    # assume a Minimum Annular Ring of 200 um or a Pad to Hole Ratio of 1,5 . what ever is suitable.
     pth_drill = 1.14
+    if ((pth_drill * 1.5) < (pth_drill + (2 * 0.2))):
+        pth_pad = pth_drill + (2 * 0.2)
+    else:
+        pth_pad = pth_drill * 1.5
     pth_distance = 2.97
         
     
@@ -1006,7 +1014,7 @@ def generateFootprint(config, fpParams, fpId):
                      number="",
                      type=Pad.TYPE_THT,
                      shape=Pad.SHAPE_CIRCLE,
-                     size=pth_drill,
+                     size=pth_pad,
                      drill= pth_drill,
                      layers=Pad.LAYERS_THT))
         
@@ -1014,7 +1022,7 @@ def generateFootprint(config, fpParams, fpId):
                      number="",
                      type=Pad.TYPE_THT,
                      shape=Pad.SHAPE_CIRCLE,
-                     size=pth_drill,
+                     size=pth_pad,
                      drill= pth_drill,
                      layers=Pad.LAYERS_THT))
         
@@ -1022,7 +1030,7 @@ def generateFootprint(config, fpParams, fpId):
                      number="",
                      type=Pad.TYPE_THT,
                      shape=Pad.SHAPE_CIRCLE,
-                     size=pth_drill,
+                     size=pth_pad,
                      drill= pth_drill,
                      layers=Pad.LAYERS_THT))
         
@@ -1030,7 +1038,7 @@ def generateFootprint(config, fpParams, fpId):
                      number="",
                      type=Pad.TYPE_THT,
                      shape=Pad.SHAPE_CIRCLE,
-                     size=pth_drill,
+                     size=pth_pad,
                      drill= pth_drill,
                      layers=Pad.LAYERS_THT))
     elif (fpParams["option"] == "LP"):
@@ -1047,7 +1055,7 @@ def generateFootprint(config, fpParams, fpId):
                      number="",
                      type=Pad.TYPE_THT,
                      shape=Pad.SHAPE_CIRCLE,
-                     size=pth_drill,
+                     size=pth_pad,
                      drill= pth_drill,
                      layers=Pad.LAYERS_THT))
         
@@ -1055,7 +1063,7 @@ def generateFootprint(config, fpParams, fpId):
                      number="",
                      type=Pad.TYPE_THT,
                      shape=Pad.SHAPE_CIRCLE,
-                     size=pth_drill,
+                     size=pth_pad,
                      drill= pth_drill,
                      layers=Pad.LAYERS_THT))
         
@@ -1063,7 +1071,7 @@ def generateFootprint(config, fpParams, fpId):
                      number="",
                      type=Pad.TYPE_THT,
                      shape=Pad.SHAPE_CIRCLE,
-                     size=pth_drill,
+                     size=pth_pad,
                      drill= pth_drill,
                      layers=Pad.LAYERS_THT))
         
@@ -1071,7 +1079,7 @@ def generateFootprint(config, fpParams, fpId):
                      number="",
                      type=Pad.TYPE_THT,
                      shape=Pad.SHAPE_CIRCLE,
-                     size=pth_drill,
+                     size=pth_pad,
                      drill= pth_drill,
                      layers=Pad.LAYERS_THT))
         
@@ -1088,7 +1096,7 @@ def generateFootprint(config, fpParams, fpId):
                      number="",
                      type=Pad.TYPE_THT,
                      shape=Pad.SHAPE_CIRCLE,
-                     size=pth_drill,
+                     size=pth_pad,
                      drill= pth_drill,
                      layers=Pad.LAYERS_THT))
         
@@ -1096,7 +1104,7 @@ def generateFootprint(config, fpParams, fpId):
                      number="",
                      type=Pad.TYPE_THT,
                      shape=Pad.SHAPE_CIRCLE,
-                     size=pth_drill,
+                     size=pth_pad,
                      drill= pth_drill,
                      layers=Pad.LAYERS_THT))
         
@@ -1104,7 +1112,7 @@ def generateFootprint(config, fpParams, fpId):
                      number="",
                      type=Pad.TYPE_THT,
                      shape=Pad.SHAPE_CIRCLE,
-                     size=pth_drill,
+                     size=pth_pad,
                      drill= pth_drill,
                      layers=Pad.LAYERS_THT))
         
@@ -1112,7 +1120,7 @@ def generateFootprint(config, fpParams, fpId):
                      number="",
                      type=Pad.TYPE_THT,
                      shape=Pad.SHAPE_CIRCLE,
-                     size=pth_drill,
+                     size=pth_pad,
                      drill= pth_drill,
                      layers=Pad.LAYERS_THT))
     else:
