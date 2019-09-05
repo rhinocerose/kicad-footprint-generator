@@ -30,6 +30,14 @@ from math import ceil
 # or DIN 41612. These connectors are named 2X and 3X, a convention also used by
 # Harting.
 
+# These connectors do not place the grid origin on top of the first existing
+# pin. The standard is designed such that the a1 pin is always on the same
+# position on the board. It is used as grid origin even if a1 is not populated.
+# This allows it to change between different connectors while maintaining their
+# precise position on the PCB.
+# See the discussion in the originial pull request:
+# https://github.com/KiCad/kicad-footprints/pull/1076
+
 lib_name = 'Connector_DIN'
 
 large_holes = {
@@ -223,6 +231,7 @@ def build_pins(mod, config, pins, rows, row_direction, column_direction):
             )
 
     pins_per_row = pins / len(rows)
+    first = None
     for row in rows.lower():
         if row_direction == Point(0,1): # horizontal
             offset = config['series_rows'].lower().index(row) * config['pin_row_offset']
@@ -244,14 +253,19 @@ def build_pins(mod, config, pins, rows, row_direction, column_direction):
 
         for pin in positions:
             number = config['name_pattern'].format(**locals())
-            if number == 'a1':
-                shape = Pad.SHAPE_ROUNDRECT
-            else:
-                shape = Pad.SHAPE_CIRCLE
             pos = Point(
                     pin_one.x + column_direction.x * (pin - 1) * config['pin_column_offset'],
                     pin_one.y + column_direction.y * (pin - 1) * config['pin_column_offset'])
+            if first is None:
+                # no marked pin yet
+                shape = Pad.SHAPE_ROUNDRECT
+                first = pos
+            else:
+                shape = Pad.SHAPE_CIRCLE
             mod.append(Pad(at=pos, number=number, shape=shape, **pin_args))
+
+    # return the position of the first pin to place markers correctly
+    return first
 
 
 def build_din41612_connector_horizontal(mod, series, direction, pins, rows,
@@ -264,7 +278,7 @@ def build_din41612_connector_horizontal(mod, series, direction, pins, rows,
     mod.append(Pad(at=mounting, **mounting_args))
     mod.append(Pad(at=mirror_x(mounting, center), **mounting_args))
 
-    build_pins(mod, config, pins, rows, 
+    pos1 = build_pins(mod, config, pins, rows,
             row_direction=Point(0,1), column_direction=Point(1,0))
 
     # silk screen reference
@@ -330,20 +344,20 @@ def build_din41612_connector_horizontal(mod, series, direction, pins, rows,
         silk_points)), layer='F.SilkS', width=.12))
 
     # add arrow pointing at a1
-    arrow_points = [
+    arrow_points = map(lambda x: pos1 + x, (
             Point(-.2 - config['pin_plating_diameter'] / 2, 0),
             Point(-.8 - config['pin_plating_diameter'] / 2, -0.3),
             Point(-.8 - config['pin_plating_diameter'] / 2, 0.3),
             Point(-.2 - config['pin_plating_diameter'] / 2, 0),
-            ]
+            ))
     mod.append(PolygoneLine(polygone=arrow_points, layer='F.SilkS', width=.12))
     # add a1 marker on fab layer
-    marker_points = [
+    marker_points = map(lambda x: pos1 + x, (
             Point(0, -config['a1_housing_back'] - hole_part_inset - .2),
             Point(-.5, -config['a1_housing_back'] - hole_part_inset - .9),
             Point(.5, -config['a1_housing_back'] - hole_part_inset - .9),
             Point(0, -config['a1_housing_back'] - hole_part_inset - .2),
-            ]
+            ))
     mod.append(PolygoneLine(polygone=marker_points, layer='F.Fab', width=.1))
 
     # add courtyard
@@ -406,7 +420,7 @@ def build_din41612_connector_vertical(mod, series, direction, pins, rows,
         center_x -= config['pin_column_offset']
     center = Point(center_x, config['pin_column_offset'] * (config['row_pins'] / 2 -
         0.5))
-    build_pins(mod, config, pins, rows,
+    pos1 = build_pins(mod, config, pins, rows,
             row_direction=Point(1,0), column_direction=Point(0,1))
     mounting = Point(config['a1_mounting'],
                center.y - config['mounting_width'] / 2)
@@ -482,20 +496,20 @@ def build_din41612_connector_vertical(mod, series, direction, pins, rows,
 
     # add arrow pointing at a1
     arrow_tip = center.x - config['housing_height'] / 2 - 0.3
-    arrow_points = [
+    arrow_points = map(lambda x: pos1 + x, (
             Point(arrow_tip, 0),
             Point(arrow_tip - 0.68, -0.3),
             Point(arrow_tip - 0.68, 0.3),
             Point(arrow_tip, 0)
-            ]
+            ))
     mod.append(PolygoneLine(polygone=arrow_points, layer='F.SilkS', width=.12))
     # do similar on the fab layer
     arrow_size = .75
-    arrow_points = [
+    arrow_points = map(lambda x: pos1 + x, (
             Point(center.x - config['housing_height'] / 2, -arrow_size),
             Point(center.x - config['housing_height'] / 2 + arrow_size, 0),
             Point(center.x - config['housing_height'] / 2, arrow_size),
-            ]
+            ))
     mod.append(PolygoneLine(polygone=arrow_points, layer='F.Fab', width=.1))
 
     # highlight connector shape on silk
