@@ -508,11 +508,10 @@ def build_din41612_connector_vertical(mod, series, direction, pins, rows,
             ))
     mod.append(PolygoneLine(polygone=arrow_points, layer='F.SilkS', width=.12))
     # do similar on the fab layer
-    arrow_size = .75
     arrow_points = map(lambda x: pos1 + x, (
-            Point(center.x - config['housing_height'] / 2, -arrow_size),
-            Point(center.x - config['housing_height'] / 2 + arrow_size, 0),
-            Point(center.x - config['housing_height'] / 2, arrow_size),
+            Point(center.x - config['housing_height'] / 2, -.5),
+            Point(center.x - config['housing_height'] / 2 + .7, 0),
+            Point(center.x - config['housing_height'] / 2, .5),
             ))
     mod.append(PolygoneLine(polygone=arrow_points, layer='F.Fab', width=.1))
 
