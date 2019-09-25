@@ -591,7 +591,7 @@ def build_din41612_connector(series, direction, pins, rows, extra_args={}):
     gender = string.capwords(config['gender'])
     footprint_name = (
         f"DIN41612_{safe_series}_{len(rows)}x{pins_per_row}"
-        f"{extra_fp_name}_{gender}_{direction}" )
+        f"{extra_fp_name}_{gender}_{direction}_THT" )
     config['footprint_name'] = footprint_name
     mod = Footprint(footprint_name)
     mod.setDescription(f"DIN41612 connector, type {series}, {direction}, "
