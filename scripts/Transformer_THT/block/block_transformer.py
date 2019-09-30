@@ -15,8 +15,8 @@ sys.path.append(os.path.join(sys.path[0], "..", "..", ".."))  # load parent path
 from KicadModTree import *  # NOQA
 from KicadModTree.nodes.base.Pad import Pad  # NOQA
 
-drill_extra = .2 # mm extra hole diameter
-size_extra = 1.5 # mm copper
+drill_extra = 1 # mm extra hole diameter
+size_extra = 2 # mm copper
 mounting_drill_extra = .2 # mm extra hole diameter
 library = "Transformer_THT.pretty"
 
