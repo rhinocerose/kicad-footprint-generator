@@ -107,7 +107,7 @@ def build_regular_transformer(series, url, A, B, C, D, E, F, G, H, Pin):
     trans, pad1height = add_pads(kicad_mod, size=size, drill=drill,
             x_sep=E, pris_sep=D, secs_sep=F, sec_sep=G)
 
-    build_outline(trans, name, A, B, pad1height)
+    build_outline(trans, name, B, A, pad1height)
 
     file_handler = KicadFileHandler(kicad_mod)
     file_handler.writeFile(f"{library}/{name}.kicad_mod")
