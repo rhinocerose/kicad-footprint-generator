@@ -46,7 +46,7 @@ def generate_one_footprint(pincount, variant, configuration):
 
     # calculate working values
     pitch = 0.5
-    pad_y = -2 
+    pad_y = -2
     pad_width = 0.3
     pad_height = 1.4
     pad_x_span = pitch * (pincount - 1)
@@ -57,12 +57,12 @@ def generate_one_footprint(pincount, variant, configuration):
     tab_x = pad1_x + 3.1 - tab_width / 2.0
     tab_y = pad_y + pad_height / 2.0 + tab_height / 2.0 - 0.6
 
-    body_y1 = tab_y - tab_height / 2.0 + 0.2 
+    body_y1 = tab_y - tab_height / 2.0 + 0.2
     half_body_width = pad_x_span / 2.0 + 2.45
     actuator_y1 = body_y1 + 4.2
     actuator_y2 = actuator_y1 + 1.5
-    half_actuator_width = pad_x_span / 2.0 +5.5 / 2.0
-    ear_height = (7.5 - 5.9) / 2.0 # (A - B) /2
+    half_actuator_width = pad_x_span / 2.0 + 3
+    ear_height = 1.4
 
     body_edge = {
         'left': -half_body_width,
