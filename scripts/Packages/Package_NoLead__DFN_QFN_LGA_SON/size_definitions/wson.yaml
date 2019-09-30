@@ -638,7 +638,7 @@ SON-8_1.5x2.0mm_P0.5mm:
   library: Package_SON
   #manufacturer: 'man'
   #part_number: 'mpn'
-  size_source: 'http://www.ti.com/lit/ds/symlink/tps62840.pdf'
+  size_source: 'http://www.ti.com/lit/ds/symlink/tps62840.pdf#page=37'
   ipc_class: 'qfn_pull_back' #'qfn' | 'qfn_pull_back'
   #ipc_density: 'least' #overwrite global value for this device.
   #body_size_x_min: 2.85
