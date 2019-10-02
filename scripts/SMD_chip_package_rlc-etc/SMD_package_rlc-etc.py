@@ -49,7 +49,7 @@ class TwoTerminalSMDchip():
         # Gmin = Smax − 2JH − √(CS^2 + F^2 + P^2)
         # Xmax = Wmin + 2JS + √(CW^2 + F^2 + P^2)
 
-        # Some manufacturers do not list the terminal spacing (S) in their datasheet but list the terminal lenght (T)
+        # Some manufacturers do not list the terminal spacing (S) in their datasheet but list the terminal length (T)
         # Then one can calculate
         # Stol(RMS) = √(Ltol^2 + 2*^2)
         # Smin = Lmin - 2*Tmax
@@ -95,7 +95,7 @@ class TwoTerminalSMDchip():
         elif 'terminal_length_max' in device_size_data and 'terminal_length_min' in device_size_data or 'terminal_length' in device_size_data:
             dimensions['terminal_length'] = TolerancedSize.fromYaml(device_size_data, base_name='terminal_length')
         else:
-            raise KeyError("Either terminator spacing or terminal lenght must be included in the size definition.")
+            raise KeyError("Either terminator spacing or terminal length must be included in the size definition.")
 
         if 'terminal_width_min' in device_size_data and 'terminal_width_max' in device_size_data or 'terminal_width' in device_size_data:
             dimensions['terminal_width'] = TolerancedSize.fromYaml(device_size_data, base_name='terminal_width')
@@ -120,6 +120,7 @@ class TwoTerminalSMDchip():
                         print(exc)
 
             for size_name in package_size_defintions:
+                print(group_name + ': ' + size_name)
                 device_size_data = package_size_defintions[size_name]
 
                 device_dimensions = TwoTerminalSMDchip.deviceDimensions(device_size_data)
@@ -326,7 +327,7 @@ if __name__ == "__main__":
                         help='list of files holding information about what devices should be created.')
     parser.add_argument('--global_config', type=str, nargs='?', help='the config file defining how the footprint will look like. (KLC)', default='../tools/global_config_files/config_KLCv3.0.yaml')
     parser.add_argument('--series_config', type=str, nargs='?', help='the config file defining series parameters.', default='config_KLCv3.0.yaml')
-    parser.add_argument('--ipc_definition', type=str, nargs='?', help='the ipc definition file', default='ipc7351B_smd_two_terminal_chip.yaml')
+    parser.add_argument('--ipc_definition', type=str, nargs='?', help='the ipc definition file', default='ipc7351B_smd_two_terminal.yaml')
     parser.add_argument('--force_rectangle_pads', action='store_true', help='Force the generation of rectangle pads instead of rounded rectangle (KiCad 4.x compatibility.)')
     args = parser.parse_args()
 

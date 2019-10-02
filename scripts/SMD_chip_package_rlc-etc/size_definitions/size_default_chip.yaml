@@ -1,3 +1,5 @@
+#ToDo: update dimensions without capacitor, fuse, inductor, and resistor sizes
+#   where those part types have a unique size definition file
 SMD_0603:
     code_imperial: "0603"
     code_metric: "1608"
@@ -60,19 +62,20 @@ SMD_1210:
     terminator_spacing_max: 2.32
     size_info: '(Body size source: http://www.tortai-tech.com/upload/download/2011102023233369053.pdf)'
 
-SMD_1806:
-    code_imperial: "1806"
-    code_metric: "4516"
-    body_length:
-      nominal: 4.5
-      tolerance: 0.2
-    body_width:
-      nominal: 1.6
-      tolerance: 0.2
-    terminal_length:
-      nominal: 0.7
-      tolerance: 0.3
-    size_info: '(Body size source: https://www.modelithics.com/models/Vendor/MuRata/BLM41P.pdf)'
+#Could not find any diode, fuse, or LED in this body size
+# SMD_1806:
+    # code_imperial: "1806"
+    # code_metric: "4516"
+    # body_length:
+      # nominal: 4.5
+      # tolerance: 0.2
+    # body_width:
+      # nominal: 1.6
+      # tolerance: 0.2
+    # terminal_length:
+      # nominal: 0.7
+      # tolerance: 0.3
+    # size_info: '(Body size source: https://www.modelithics.com/models/Vendor/MuRata/BLM41P.pdf)'
 
 SMD_1812:
     code_imperial: "1812"
