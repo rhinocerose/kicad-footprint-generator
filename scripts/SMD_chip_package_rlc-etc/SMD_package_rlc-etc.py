@@ -29,7 +29,7 @@ def merge_dicts(*dict_args):
         result.update(dictionary)
     return result
 
-class TwoTerminalSMDchip():
+class TwoTerminalSMD():
     def __init__(self, command_file, configuration):
         self.configuration = configuration
         with open(command_file, 'r') as command_stream:
@@ -131,10 +131,11 @@ class TwoTerminalSMDchip():
         fab_line_width = self.configuration.get('fab_line_width', 0.1)
         silk_line_width = self.configuration.get('silk_line_width', 0.12)
 
-        device_dimensions = TwoTerminalSMDchip.deviceDimensions(device_size_data)
+        device_dimensions = TwoTerminalSMD.deviceDimensions(device_size_data)
 
         ipc_reference = footprint_group_data['ipc_reference']
-        ipc_density = footprint_group_data['ipc_density']
+        ipc_density = self.configuration.get('ipc_density')[0]
+        density_suffix = self.configuration.get('ipc_density')[1]
         ipc_data_set = self.ipc_defintions[ipc_reference][ipc_density]
         ipc_round_base = self.ipc_defintions[ipc_reference]['round_base']
 
@@ -148,6 +149,13 @@ class TwoTerminalSMDchip():
 
         model3d_path_prefix = self.configuration.get('3d_model_prefix','${KISYS3DMOD}')
         suffix_3d = suffix if footprint_group_data.get('include_suffix_in_3dpath', 'True') == 'True' else ""
+        
+        if density_suffix != '' and 'handsolder' not in footprint_group_data['keywords']:
+            density_description = ', IPC-7351 {density:s} land protrusion'.format(density=ipc_density)
+            suffix = suffix + density_suffix
+            suffix_3d = suffix_3d + density_suffix
+        else:
+            density_description = ''
 
         code_metric = device_size_data.get('code_metric')
         code_letter = device_size_data.get('code_letter')
@@ -177,6 +185,7 @@ class TwoTerminalSMDchip():
         # init kicad footprint
         kicad_mod.setDescription(footprint_group_data['description'].format(code_imperial=code_imperial,
             code_metric=code_metric, code_letter=code_letter,
+            density=density_description,
             size_info=device_size_data.get('size_info')))
         kicad_mod.setTags(footprint_group_data['keywords'])
         kicad_mod.setAttribute('smd')
@@ -336,8 +345,21 @@ if __name__ == "__main__":
     parser.add_argument('--global_config', type=str, nargs='?', help='the config file defining how the footprint will look like. (KLC)', default='../tools/global_config_files/config_KLCv3.0.yaml')
     parser.add_argument('--series_config', type=str, nargs='?', help='the config file defining series parameters.', default='config_KLCv3.0.yaml')
     parser.add_argument('--ipc_definition', type=str, nargs='?', help='the ipc definition file', default='ipc7351B_smd_two_terminal.yaml')
+    parser.add_argument('--ipc_density', type=str, nargs='?', help='IPC density level (L,N,M)')
     parser.add_argument('--force_rectangle_pads', action='store_true', help='Force the generation of rectangle pads instead of rounded rectangle (KiCad 4.x compatibility.)')
     args = parser.parse_args()
+
+    # if the user requests an IPC density, put that and footprint suffix in a list
+    # otherwise, use nominal density with no suffix
+    if args.ipc_density is None or args.ipc_density not in ['l', 'L', 'n', 'N', 'm', 'M']:
+        ipc_density = ['nominal', '']
+    else:
+        if args.ipc_density.upper() == 'L':
+            ipc_density = ['least', '_L']
+        elif args.ipc_density.upper() == 'N':
+            ipc_density = ['nominal', '_N']
+        elif args.ipc_density.upper() == 'M':
+            ipc_density = ['most', '_M']
 
     with open(args.global_config, 'r') as config_stream:
         try:
@@ -352,10 +374,11 @@ if __name__ == "__main__":
             print(exc)
     args = parser.parse_args()
     configuration['ipc_definition'] = args.ipc_definition
+    configuration['ipc_density'] = ipc_density
     if args.force_rectangle_pads:
         configuration['round_rect_max_radius'] = None
         configuration['round_rect_radius_ratio'] = 0
 
     for filepath in args.files:
-        two_terminal_smd =TwoTerminalSMDchip(filepath, configuration)
+        two_terminal_smd = TwoTerminalSMD(filepath, configuration)
         two_terminal_smd.generateFootprints()
