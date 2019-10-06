@@ -642,11 +642,11 @@ SON-8_1.5x2.0mm_P0.5mm:
   ipc_class: 'qfn_pull_back' #'qfn' | 'qfn_pull_back'
   #ipc_density: 'least' #overwrite global value for this device.
   body_size_x:
-    minimal: 1.4
-    maximal: 1.6
+    minimum: 1.4
+    maximum: 1.6
   body_size_y:
-    minimal: 1.9
-    maximal: 2.1
+    minimum: 1.9
+    maximum: 2.1
   lead_width:
     minimum: 0.20
     maximum: 0.30
