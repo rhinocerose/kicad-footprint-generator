@@ -350,16 +350,18 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     # if the user requests an IPC density, put that and footprint suffix in a list
-    # otherwise, use nominal density with no suffix
-    if args.ipc_density is None or args.ipc_density not in ['l', 'L', 'n', 'N', 'm', 'M']:
+    # nominal density with no suffix if no argument is provided
+    if args.ipc_density is None:
         ipc_density = ['nominal', '']
+    elif args.ipc_density.upper() == 'L':
+        ipc_density = ['least', '_L']
+    elif args.ipc_density.upper() == 'N':
+        ipc_density = ['nominal', '_N']
+    elif args.ipc_density.upper() == 'M':
+        ipc_density = ['most', '_M']
     else:
-        if args.ipc_density.upper() == 'L':
-            ipc_density = ['least', '_L']
-        elif args.ipc_density.upper() == 'N':
-            ipc_density = ['nominal', '_N']
-        elif args.ipc_density.upper() == 'M':
-            ipc_density = ['most', '_M']
+        raise ValueError("If IPC density is specified, it must be 'L', 'N', or 'M.'")
+        sys.exit()
 
     with open(args.global_config, 'r') as config_stream:
         try:
