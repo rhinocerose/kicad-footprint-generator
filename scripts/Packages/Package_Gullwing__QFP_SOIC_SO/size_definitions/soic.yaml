@@ -660,14 +660,13 @@ Infineon_PG-DSO-8-59:
     maximum: 2.65
   overall_size_x: 
     nominal: 10.3
-    tolerance: [-0.3, 0.3]
+    tolerance: 0.3
   lead_len:
     nominal: 0.7
-    tolerance: [-0.2, 0.2]
+    tolerance: 0.2
   lead_width: 
     nominal: 0.4
-    tolerance: [-0.08, 0.08]
+    tolerance: 0.08
   pitch: 1.27
   num_pins_x: 0
   num_pins_y: 4
-
