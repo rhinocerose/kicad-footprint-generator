@@ -253,8 +253,14 @@ def makeDIPSwitch(pins, rm, pinrow_distance, package_width, overlen_top, overlen
     t_crt = min(t_slk - crt_offset, (pins / 2 - 1) * rm / 2 - h_crt / 2)
     
     if (mode == 'Piano'):
-        l_crt = l_crt - switch_width
-        w_crt = w_crt + switch_width
+        if package_width>(pinrow_distance + pad[0]):
+            l_crt = l_crt - switch_width
+            w_crt = w_crt + switch_width
+        else:
+            overhang = package_width / 2 + switch_width - (pinrow_distance + pad[0]) / 2
+            if overhang>0:
+                l_crt = l_crt - overhang
+                w_crt = w_crt + overhang
     
     smdtext=''
     smddescription=''
