@@ -391,9 +391,9 @@ def makeDIPSwitch(pins, rm, pinrow_distance, package_width, overlen_top, overlen
         x = pinrow_distance / 2
         y = sw * rm
         if (mode == 'Piano'):
-            kicad_modg.append(
-                RectLine(start=[l_fab, y - switch_height / 2], end=[l_fab - switch_width, y + switch_height / 2],
-                         layer='F.Fab', width=lw_fab))
+            kicad_modg.append(Line(start=[l_fab, y - switch_height / 2], end=[l_fab - switch_width, y - switch_height / 2], layer='F.Fab', width=lw_fab))
+            kicad_modg.append(Line(start=[l_fab - switch_width, y - switch_height / 2], end=[l_fab - switch_width, y + switch_height / 2], layer='F.Fab', width=lw_fab))
+            kicad_modg.append(Line(start=[l_fab - switch_width, y + switch_height / 2], end=[l_fab, y + switch_height / 2], layer='F.Fab', width=lw_fab))
         else:
             kicad_modg.append(RectLine(start=[x - switch_width / 2, y - switch_height / 2],
                                        end=[x + switch_width / 2, y + switch_height / 2], layer='F.Fab', width=lw_fab))
