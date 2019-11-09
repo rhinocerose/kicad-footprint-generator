@@ -4,6 +4,7 @@ FileHeader:
 
 SOT-363_SC-70-6:
   size_source: 'https://www.jedec.org/sites/default/files/docs/MO-203C.pdf variant AB'
+  custom_name_format: 'SOT-363_SC-70-6'
   body_size_x: 1.25 +/-0.15
   body_size_y: 2 +/-0.15
   overall_size_x: 2.1 +/-0.30
