@@ -516,7 +516,8 @@ device_definition:
         # body_fin_protrusion: 1.6
         # body_fin_width: 0.8
         rel_body_edge_x: 2.25
-        center_shift_y: 0
+        # amount to shift y position of center for pick-and-place (positive -> shift whole footprint up)
+        center_shift_y: -0.75
         additional_drawing:
           # left keepout area
           -
