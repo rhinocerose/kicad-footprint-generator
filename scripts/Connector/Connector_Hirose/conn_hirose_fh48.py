@@ -40,6 +40,12 @@ sh_paste_size = [0.28,0.9]
 mp_size = [1.6, 2.2]
 pad_outer_span = 5.2
 
+# some measured dimensions not given in the datasheet
+corner_notch_width = 1 # width of notch on each side of body
+corner_notch_height = 1.5 # height of corner notch from bottom edge of body (includes the sh_pin_notch_height below)
+sh_pin_notch_width = 1 # width of plastic around each shield pin
+sh_pin_notch_height = 0.5 # depth of notch around each shield pin in towards the body
+
 def generate_one_footprint(idx, pins, configuration):
     mpn = part_code.format(n=pins)
     pad_silk_off = configuration['silk_line_width']/2 + configuration['silk_pad_clearance']
@@ -97,9 +103,44 @@ def generate_one_footprint(idx, pins, configuration):
         'top': y1
         }
 
-    kicad_mod.append(RectLine(
-        start={'x': x1,'y': y1}, end={'x': x2,'y': y2},
+    # left fab line
+    kicad_mod.append(PolygoneLine(
+        polygone=[
+            {'x': body_edge['left'],'y': body_edge['top']},
+            {'x': body_edge['left'],'y': body_edge['bottom'] - corner_notch_height},
+            {'x': body_edge['left'] + corner_notch_width,'y': body_edge['bottom'] - corner_notch_height},
+            {'x': body_edge['left'] + corner_notch_width,'y': body_edge['bottom'] - sh_pin_notch_height},
+            {'x': sh_pad_left - sh_pin_notch_width/2,'y': body_edge['bottom'] - sh_pin_notch_height}
+        ],
         layer='F.Fab', width=configuration['fab_line_width']))
+
+    # right fab line
+    kicad_mod.append(PolygoneLine(
+        polygone=[
+            {'x': -sh_pad_left + sh_pin_notch_width/2,'y': body_edge['bottom'] - sh_pin_notch_height},
+            {'x': body_edge['right'] - corner_notch_width,'y': body_edge['bottom'] - sh_pin_notch_height},
+            {'x': body_edge['right'] - corner_notch_width,'y': body_edge['bottom'] - corner_notch_height},
+            {'x': body_edge['right'],'y': body_edge['bottom'] - corner_notch_height},
+            {'x': body_edge['right'],'y': body_edge['top']},
+            {'x': body_edge['left'],'y': body_edge['top']}
+        ],
+        layer='F.Fab', width=configuration['fab_line_width']))
+
+    # horizontal fab lines around and between shield pads
+    for pin in range(sh_pins_per_row[idx]):
+        kicad_mod.append(PolygoneLine(
+            polygone=[
+                {'x': sh_pad_left + pin * sh_pitch - sh_pin_notch_width/2, 'y': y2 - sh_pin_notch_height},
+                {'x': sh_pad_left + pin * sh_pitch - sh_pin_notch_width/2, 'y': y2},
+                {'x': sh_pad_left + pin * sh_pitch + sh_pin_notch_width/2, 'y': y2},
+                {'x': sh_pad_left + pin * sh_pitch + sh_pin_notch_width/2, 'y': y2 - sh_pin_notch_height}
+            ],
+            layer='F.Fab', width=configuration['fab_line_width']))
+        if pin <= sh_pins_per_row[idx] - 2:
+            kicad_mod.append(Line(
+                start=[sh_pad_left + pin * sh_pitch + sh_pin_notch_width/2, y2 - sh_pin_notch_height],
+                end=[sh_pad_left + (pin + 1) * sh_pitch - sh_pin_notch_width/2, y2 - sh_pin_notch_height],
+                layer='F.Fab', width=configuration['fab_line_width']))
 
     # pin 1 fab mark
     sl=1
@@ -127,8 +168,12 @@ def generate_one_footprint(idx, pins, configuration):
             {'x': silk_pad_x, 'y': pad_y - pad_size[1]/2},
             {'x': silk_pad_x, 'y': y1},
             {'x': x1, 'y': y1},
-            {'x': x1, 'y': y2},
-            {'x': silk_sh_pad_x, 'y': y2}
+            {'x': x1, 'y': y2 - corner_notch_height},
+            {'x': x1 + corner_notch_width, 'y': y2 - corner_notch_height},
+            {'x': x1 + corner_notch_width, 'y': y2 - sh_pin_notch_height},
+            {'x': sh_pad_left - sh_pin_notch_width/2 - off, 'y': y2 - sh_pin_notch_height},
+            {'x': sh_pad_left - sh_pin_notch_width/2 - off, 'y': y2},
+            {'x': sh_pad_left - sh_pad_size[0]/2 - pad_silk_off, 'y': y2}
         ],
         layer='F.SilkS', width=configuration['silk_line_width']))
     
@@ -137,16 +182,26 @@ def generate_one_footprint(idx, pins, configuration):
         polygone=[
             {'x': -silk_pad_x, 'y': y1},
             {'x': x2, 'y': y1},
-            {'x': x2, 'y': y2},
-            {'x': -silk_sh_pad_x, 'y': y2}
+            {'x': x2, 'y': y2 - corner_notch_height},
+            {'x': x2 - corner_notch_width, 'y': y2 - corner_notch_height},
+            {'x': x2 - corner_notch_width, 'y': y2 - sh_pin_notch_height},
+            {'x': -sh_pad_left + sh_pin_notch_width/2 + off, 'y': y2 - sh_pin_notch_height},
+            {'x': -sh_pad_left + sh_pin_notch_width/2 + off, 'y': y2},
+            {'x': -sh_pad_left + sh_pad_size[0]/2 + pad_silk_off, 'y': y2}
         ],
         layer='F.SilkS', width=configuration['silk_line_width']))
 
     # horizontal silk lines between shield pads
     for pin in range(sh_pins_per_row[idx] - 1):
-        kicad_mod.append(Line(
-            start=[sh_pad_left + pin * sh_pitch + + sh_pad_size[0]/2 + pad_silk_off, y2],
-            end=[sh_pad_left + (pin + 1) * sh_pitch - sh_pad_size[0]/2 - pad_silk_off, y2],
+        kicad_mod.append(PolygoneLine(
+            polygone=[
+                {'x': sh_pad_left + pin * sh_pitch + sh_pad_size[0]/2 + pad_silk_off, 'y': y2},
+                {'x': sh_pad_left + pin * sh_pitch + sh_pin_notch_width/2 + off, 'y': y2},
+                {'x': sh_pad_left + pin * sh_pitch + sh_pin_notch_width/2 + off, 'y': y2 - sh_pin_notch_height},
+                {'x': sh_pad_left + (pin + 1) * sh_pitch - sh_pin_notch_width/2 - off, 'y': y2 - sh_pin_notch_height},
+                {'x': sh_pad_left + (pin + 1) * sh_pitch - sh_pin_notch_width/2 - off, 'y': y2},
+                {'x': sh_pad_left + (pin + 1) * sh_pitch - sh_pad_size[0]/2 - pad_silk_off, 'y': y2}
+            ],
             layer='F.SilkS', width=configuration['silk_line_width']))
 
     ########################### CrtYd #################################
@@ -166,7 +221,7 @@ def generate_one_footprint(idx, pins, configuration):
 
     ######################### Text Fields ###############################
     addTextFields(kicad_mod=kicad_mod, configuration=configuration, body_edges=body_edge,
-        courtyard={'top':cy1, 'bottom':cy2}, fp_name=footprint_name, text_y_inside_position='bottom')
+        courtyard={'top':cy1, 'bottom':cy2}, fp_name=footprint_name, text_y_inside_position='center')
 
     ##################### Output and 3D model ############################
     model3d_path_prefix = configuration.get('3d_model_prefix','${KISYS3DMOD}/')
