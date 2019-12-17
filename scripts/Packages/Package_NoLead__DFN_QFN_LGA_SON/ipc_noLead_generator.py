@@ -82,7 +82,7 @@ class NoLead():
 
             Gmin_y, Zmax_y, Xmax_y_ignored = ipc_pad_center_plus_size(ipc_data, ipc_round_base, manf_tol,
                     center_position=device_dimensions.get('lead_center_pos_y', TolerancedSize(nominal=0)),
-                    lead_length=device_dimensions.get('lead_len_H'),
+                    lead_length=device_dimensions.get('lead_len_V'),
                     lead_width=device_dimensions['lead_width'])
         else:
             Gmin_x, Zmax_x, Xmax = ipc_body_edge_inside_pull_back(
