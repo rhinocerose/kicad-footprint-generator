@@ -54,18 +54,22 @@ TQFP-48-1EP_7x7mm_P0.5mm_EP5.0x5.0mm:
     # paste_avoid_via: True
 
 TQFP-48-1EP_7x7mm_P0.5mm_EP3.62x3.62mm:
-  size_source: 'http://www.ti.com/lit/ml/mpqf051a/mpqf051a.pdf'
+  size_source: 'http://www.ti.com/lit/ds/symlink/tusb4020bi.pdf#page=42'
   body_size_x:
-    nominal: 7
+    minimum: 6.8
+    maximum: 7.2
     tolerance: 0
   body_size_y:
-    nominal: 7
+    minimum: 6.8
+    maximum: 7.2
     tolerance: 0
   overall_size_x:
-    nominal: 9
+    minimum: 8.8
+    maximum: 9.2
     tolerance: 0
   overall_size_y:
-    nominal: 9
+    minimum: 8.8
+    maximum: 9.2
     tolerance: 0
   lead_width:
     minimum: 0.17
@@ -78,18 +82,11 @@ TQFP-48-1EP_7x7mm_P0.5mm_EP3.62x3.62mm:
   num_pins_y: 12
 
   EP_size_x:
-    minimum: 3.52
     nominal: 3.62
-    maximum: 5.72
   EP_size_y:
-    minimum: 3.52
     nominal: 3.62
-    maximum: 5.72
   # EP_paste_coverage: 0.65
   EP_num_paste_pads: [2, 2]
-  #heel_reduction: 0.1 #for relatively large EP pads (increase clearance)
-  # EP_size_limit_x: 3.6  #for relatively large EP pads (increase clearance)
-  # EP_size_limit_y: 3.6  #for relatively large EP pads (increase clearance)
 
   thermal_vias:
     count: [3, 3]
