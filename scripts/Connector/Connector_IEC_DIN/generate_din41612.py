@@ -350,6 +350,7 @@ def build_din41612_connector_horizontal(mod, series, direction, pins, rows,
             center.x - config['housing_width']/2 + hole_part_width + sd,
             -config['a1_housing_back'] - hole_part_inset + sd
             )
+
     keepout_radius = config["pin_plating_diameter"]   + .4
     positions = build_positions(config, pins_per_row=pins / len(rows),
             row=rows[0], row_direction=Point(0,1),
@@ -537,51 +538,40 @@ def build_din41612_connector_vertical(mod, series, direction, pins, rows,
             ))
     mod.append(PolygoneLine(polygone=arrow_points, layer='F.Fab', width=.1))
 
+    keepout_radius = config["pin_plating_diameter"]   + .4
+    positions = build_positions(config, pins_per_row=pins / len(rows),
+            row=rows[0], row_direction=Point(1,0),
+            column_direction=Point(0,1))
+    keepouts = addKeepoutRect(positions[0].x, positions[0].y, keepout_radius,
+        keepout_radius)
+    for pos in positions[1:]:
+        keepouts += addKeepoutRound(pos.x, pos.y, keepout_radius, keepout_radius)
+    for row in rows[1:]:
+        positions = build_positions(config, pins_per_row=pins / len(rows),
+                row=row, row_direction=Point(1,0),
+                column_direction=Point(0,1))
+        for pos in positions:
+            keepouts += addKeepoutRound(pos.x, pos.y, keepout_radius, keepout_radius)
     # highlight connector shape on silk
     highlight_expand = 0
     he = highlight_expand
-    if series == "F":
-        # F series uses pins where the pads collide with the outline, so we
-        # need to cut the drawn line
-        highlight_depth_left = 2
-        highlight_depth_right = 2
-        conn_highlight = [
-                Point(conn_left - he, conn_top + highlight_depth_left),
-                Point(conn_left - he, conn_top - he),
-                Point(conn_right - config['nodge_height'] + he, conn_top - he),
-                Point(conn_right - config['nodge_height'] + he,
-                      conn_top + config['nodge_width'] - he),
-                Point(conn_right + he,
-                      conn_top + config['nodge_width'] - he),
-                Point(conn_right + he,
-                      conn_top + highlight_depth_right),
-                ]
-        mod.append(PolygoneLine(polygone=conn_highlight, layer='F.SilkS',
-                width=.12))
-        mod.append(PolygoneLine(
-            polygone=list(map(lambda x: mirror_y(x, center), conn_highlight)),
-            layer='F.SilkS', width=.12))
-    else:
-        # all others get the full outline
-        # TODO verify this is correct when adding more types
-        conn_highlight = [
-                Point(conn_left - he, conn_top - he),
-                Point(conn_right - config['nodge_height'] + he, conn_top - he),
-                Point(conn_right - config['nodge_height'] + he,
-                      conn_top + config['nodge_width'] - he),
-                Point(conn_right + he,
-                      conn_top + config['nodge_width'] - he),
-                Point(conn_right + he,
-                      conn_bottom - config['nodge_width'] + he),
-                Point(conn_right - config['nodge_height'] + he,
-                      conn_bottom - config['nodge_width'] + he),
-                Point(conn_right - config['nodge_height'] + he, conn_bottom + he),
-                Point(conn_left - he, conn_bottom + he),
-                Point(conn_left - he, conn_top - he),
-                ]
-        mod.append(PolygoneLine(polygone=conn_highlight, layer='F.SilkS',
-                width=.12))
-
+    conn_highlight = [
+            Point(conn_left - he, conn_top - he),
+            Point(conn_right - config['nodge_height'] + he, conn_top - he),
+            Point(conn_right - config['nodge_height'] + he,
+                  conn_top + config['nodge_width'] - he),
+            Point(conn_right + he,
+                  conn_top + config['nodge_width'] - he),
+            Point(conn_right + he,
+                  conn_bottom - config['nodge_width'] + he),
+            Point(conn_right - config['nodge_height'] + he,
+                  conn_bottom - config['nodge_width'] + he),
+            Point(conn_right - config['nodge_height'] + he, conn_bottom + he),
+            Point(conn_left - he, conn_bottom + he),
+            Point(conn_left - he, conn_top - he),
+            ]
+    addPolyLineWithKeepout(mod, poly=conn_highlight, layer='F.SilkS',
+            width=.12, keepouts=keepouts)
 
 
 def build_din41612_connector(series, direction, pins, rows, extra_args={}):
@@ -670,5 +660,6 @@ for direction in ('Horizontal', 'Vertical'):
                 args = v[2]
             else:
                 args = {}
+            print(f"building {series} {v} {direction}")
             build_din41612_connector(series=series, direction=direction,
                     pins=pins, rows=rows, extra_args=args)
