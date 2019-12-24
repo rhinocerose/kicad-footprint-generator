@@ -44,7 +44,7 @@ lib_name = 'Connector_DIN'
 
 large_holes = {
         'pin_hole_diameter': 1.6,
-        'pin_plating_diameter': 2.3,
+        'pin_plating_diameter': 2.6,
         }
 
 
