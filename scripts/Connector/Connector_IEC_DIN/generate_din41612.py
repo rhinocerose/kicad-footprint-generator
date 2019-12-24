@@ -5,6 +5,8 @@ import string
 import sys
 sys.path.append(os.path.join(sys.path[0], "..", "..", ".."))  # load parent path of KicadModTree
 from KicadModTree import *
+sys.path.append(os.path.join(sys.path[0], "..", "..", "tools"))  # load parent path of KicadModTree
+from drawing_tools import *
 from math import ceil
 
 # According to IEC 60603-2 §3 and DIN 41612-1 §2 connector names should be like
@@ -220,6 +222,30 @@ def round_courtyard(point):
     return Point(ceil(point.x / grid) * grid,
             ceil(point.y / grid) * grid)
 
+def build_positions(config, pins_per_row, row, row_direction, column_direction):
+    if row_direction == Point(0,1): # horizontal
+        offset = config['series_rows'].lower().index(row) * config['pin_row_offset']
+    else: # vertical always uses all rows, z is index -1
+        rows = "zabcde"
+        offset = (rows.index(row) - 1) * config['pin_row_offset']
+    pin_one = Point(row_direction.x * offset, row_direction.y * offset)
+    if pins_per_row == config['row_pins']:
+        positions = range(1, config['row_pins'] + 1)
+    elif pins_per_row == config['row_pins'] // 2:
+        positions = range(2, config['row_pins'] + 1, 2)
+    elif pins_per_row == config['row_pins'] // 4:
+        positions = range(2, config['row_pins'] + 1, 4)
+    elif pins_per_row == 11:
+        positions = range(2, config['row_pins'] + 1, 3)
+    else:
+        raise Exception(f"weird pins per row: {pins_per_row} (row_pins: "
+                        f"{config['row_pins']}, {pins}x{rows}")
+    return [
+            Point(
+            pin_one.x + column_direction.x * (pin - 1) * config['pin_column_offset'],
+            pin_one.y + column_direction.y * (pin - 1) * config['pin_column_offset'])
+            for pin in positions]
+
 def build_pins(mod, config, pins, rows, row_direction, column_direction):
     pin_args = dict(
                 type=Pad.TYPE_THT,
@@ -230,32 +256,14 @@ def build_pins(mod, config, pins, rows, row_direction, column_direction):
                 maximum_radius=0.25,
             )
 
-    pins_per_row = pins / len(rows)
     first = None
+    pins_per_row = pins / len(rows)
     for row in rows.lower():
-        if row_direction == Point(0,1): # horizontal
-            offset = config['series_rows'].lower().index(row) * config['pin_row_offset']
-        else: # vertical always uses all rows, z is index -1
-            rows = "zabcde"
-            offset = (rows.index(row) - 1) * config['pin_row_offset']
-        pin_one = Point(row_direction.x * offset, row_direction.y * offset)
-        if pins_per_row == config['row_pins']:
-            positions = range(1, config['row_pins'] + 1)
-        elif pins_per_row == config['row_pins'] // 2:
-            positions = range(2, config['row_pins'] + 1, 2)
-        elif pins_per_row == config['row_pins'] // 4:
-            positions = range(2, config['row_pins'] + 1, 4)
-        elif pins_per_row == 11:
-            positions = range(2, config['row_pins'] + 1, 3)
-        else:
-            raise Exception(f"weird pins per row: {pins_per_row} (row_pins: "
-                            f"{config['row_pins']}, {pins}x{rows}")
+        positions = build_positions(config, pins_per_row, row, row_direction,
+                column_direction)
 
-        for pin in positions:
+        for pin, pos in enumerate(positions):
             number = config['name_pattern'].format(**locals())
-            pos = Point(
-                    pin_one.x + column_direction.x * (pin - 1) * config['pin_column_offset'],
-                    pin_one.y + column_direction.y * (pin - 1) * config['pin_column_offset'])
             if first is None:
                 # no marked pin yet
                 shape = Pad.SHAPE_ROUNDRECT
@@ -336,12 +344,25 @@ def build_din41612_connector_horizontal(mod, series, direction, pins, rows,
                 -config['a1_housing_back'] + sd),
             Point(center.x - config['housing_width']/2 + hole_part_width + sd,
                 -config['a1_housing_back'] - hole_part_inset + sd),
-            Point(-.2 - config['pin_plating_diameter']/2,
-                -config['a1_housing_back'] - hole_part_inset + sd),
             ]
+    line_point = Point(
+            center.x - config['housing_width']/2 + hole_part_width + sd,
+            -config['a1_housing_back'] - hole_part_inset + sd
+            )
+    keepout_radius = config["pin_plating_diameter"]   + .4
+    positions = build_positions(config, pins_per_row=pins / len(rows),
+            row=rows[0], row_direction=Point(0,1),
+            column_direction=Point(1,0))
+    keepouts = addKeepoutRect(positions[0].x, positions[0].y, keepout_radius,
+        keepout_radius)
+    for pos in positions[1:]:
+        keepouts += addKeepoutRound(pos.x, pos.y, keepout_radius, keepout_radius)
+
     mod.append(PolygoneLine(polygone=silk_points, layer='F.SilkS', width=.12))
     mod.append(PolygoneLine(polygone=list(map(lambda x: mirror_x(x, center),
         silk_points)), layer='F.SilkS', width=.12))
+    addHLineWithKeepout(mod, line_point.x, mirror_x(line_point, center).x,
+            line_point.y, layer='F.SilkS', width=.12, keepouts=keepouts)
 
     # add arrow pointing at a1
     arrow_points = map(lambda x: pos1 + x, (
