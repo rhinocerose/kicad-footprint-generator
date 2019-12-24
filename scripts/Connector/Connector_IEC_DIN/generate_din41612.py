@@ -139,11 +139,12 @@ dimensions = {
                 **large_holes
                 ),
 #            'E160': { 'series_rows': 'abcde', },
+#            TODO: F also has horizontal female versions with larger holes
             'F': dict(
                 series_rows='zbd',
                 housing_height=14.8,
                 connector_height=12.4,
-                **large_holes),
+                ),
 #            'F_flat': { 'series_rows': 'zbd', },
 # TODO H11 vertical and horizontal use different rows (e, vs. ac)
 #            'H11': { 'series_rows': 'e',
