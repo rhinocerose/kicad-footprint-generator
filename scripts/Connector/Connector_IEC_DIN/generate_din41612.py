@@ -522,19 +522,22 @@ def build_din41612_connector_vertical(mod, series, direction, pins, rows,
         layer='F.CrtYd', width=.05))
 
     # add arrow pointing at a1
-    arrow_tip = center.x - config['housing_height'] / 2 - 0.3
-    arrow_points = map(lambda x: pos1 + x, (
-            Point(arrow_tip, 0),
-            Point(arrow_tip - 0.68, -0.3),
-            Point(arrow_tip - 0.68, 0.3),
-            Point(arrow_tip, 0)
+    edge_position = Point(
+        center.x - config['housing_height'] / 2,
+        pos1.y
+    )
+    arrow_points = map(lambda x: edge_position + x, (
+            Point(-0.3, 0),
+            Point(-0.3 - 0.68, -0.3),
+            Point(-0.3 - 0.68, 0.3),
+            Point(-0.3, 0)
             ))
     mod.append(PolygoneLine(polygone=arrow_points, layer='F.SilkS', width=.12))
     # do similar on the fab layer
-    arrow_points = map(lambda x: pos1 + x, (
-            Point(center.x - config['housing_height'] / 2, -.5),
-            Point(center.x - config['housing_height'] / 2 + .7, 0),
-            Point(center.x - config['housing_height'] / 2, .5),
+    arrow_points = map(lambda x: edge_position + x, (
+            Point(0, -.5),
+            Point(.7, 0),
+            Point(0, .5),
             ))
     mod.append(PolygoneLine(polygone=arrow_points, layer='F.Fab', width=.1))
 
