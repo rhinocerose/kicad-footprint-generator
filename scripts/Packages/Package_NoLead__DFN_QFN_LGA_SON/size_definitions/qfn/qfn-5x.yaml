@@ -228,25 +228,25 @@ QFN-56-1EP_8x8mm_P0.5mm_EP5.6x5.6mm:
   #include_suffix_in_3dpath: 'False'
 QFN-56-1EP_8x8mm_P0.5mm_EP6.1x6.1mm:
   device_type: 'QFN'
-  size_source: 'http://intantech.com/files/Intan_RHD2000_series_datasheet.pdf'
+  size_source: 'http://intantech.com/files/Intan_RHD2000_series_datasheet.pdf (JEDEC MO-220 variation VLLD-2)'
   ipc_class: 'qfn' # 'qfn_pull_back'
-  #ipc_density: 'least' #overwrite global value for this device.
   # custom_name_format:
   body_size_x:
-    minimum: 8.0
-    maximum: 8.0
+    nominal: 8
   body_size_y:
-    minimum: 8.0
-    maximum: 8.0
+    nominal: 8
   body_height:
-    minimum: 0.85
-    maximum: 0.85
+    minimum: 0.8
+    nominal: 0.9
+    maximum: 1
   lead_width:
-    minimum: 0.23
-    maximum: 0.23
+    minimum: 0.18
+    nominal: 0.25
+    maximum: 0.3
   lead_len:
-    minimum: 0.4
-    maximum: 0.4
+    minimum: 0.3
+    nominal: 0.4
+    maximum: 0.5
   EP_size_x:
     nominal: 6.1
     tolerance: 0.1
