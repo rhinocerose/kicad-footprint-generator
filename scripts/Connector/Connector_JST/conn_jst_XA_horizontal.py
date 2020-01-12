@@ -20,7 +20,6 @@ orientation = 'H'
 number_of_rows = 1
 datasheet = 'http://www.jst-mfg.com/product/pdf/eng/eXA1.pdf'
 
-#TODO : variant with/without hook
 
 silk_pin1_marker_type = 1
 fab_pin1_marker_type = 3
@@ -88,7 +87,7 @@ def generate_one_footprint(pincount, variant, configuration):
     kicad_mod.setTags(tags)
 
 
-    # create Silkscreen
+    ########################### Silkscreen ################################
     tmp_x1=x_min+body_back_protrusion_width+configuration['silk_fab_offset']
     tmp_x2=x_max-body_back_protrusion_width-configuration['silk_fab_offset']
     pad_silk_offset = configuration['silk_pad_clearance'] + configuration['silk_line_width']/2
@@ -121,9 +120,6 @@ def generate_one_footprint(pincount, variant, configuration):
                                   ,{'x':x_max-1, 'y':silk_y_max - 2.3}
                                   ,{'x':x_max-1, 'y':silk_y_max}]
         kicad_mod.append(PolygoneLine(polygone=poly_big_cutout, layer='F.SilkS', width=configuration['silk_line_width']))
-
-        kicad_mod.append(Line(start=[silk_x_min, silk_y_main_min], end=[tmp_x1, silk_y_main_min], layer='F.SilkS', width=configuration['silk_line_width']))
-        kicad_mod.append(Line(start=[silk_x_max, silk_y_main_min], end=[tmp_x2, silk_y_main_min], layer='F.SilkS', width=configuration['silk_line_width']))
 
 
         #locking "dimple", centered
@@ -167,10 +163,6 @@ def generate_one_footprint(pincount, variant, configuration):
     kicad_mod.append(PolygoneLine(polygone=poly_fab_outline, layer='F.Fab', width=configuration['fab_line_width']))
 
     ############################# Pads ##################################
-    # kicad_mod.append(Pad(number=1, type=Pad.TYPE_THT, shape=Pad.SHAPE_RECT,
-    #                     at=[0, 0], size=pad_size,
-    #                     drill=drill_size, layers=Pad.LAYERS_THT))
-
     optional_pad_params = {}
     if configuration['kicad4_compatible']:
         optional_pad_params['tht_pad1_shape'] = Pad.SHAPE_RECT
