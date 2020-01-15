@@ -7,9 +7,8 @@ import math
 # ensure that the kicad-footprint-generator directory is available
 #sys.path.append(os.environ.get('KIFOOTPRINTGENERATOR'))  # enable package import from parent directory
 #sys.path.append("D:\hardware\KiCAD\kicad-footprint-generator")  # enable package import from parent directory
-sys.path.append(os.path.join(sys.path[0],"..","..","kicad_mod")) # load kicad_mod path
-sys.path.append(os.path.join(sys.path[0],"..","..")) # load kicad_mod path
-sys.path.append(os.path.join(sys.path[0],"..","tools")) # load kicad_mod path
+sys.path.append(os.path.join(sys.path[0],"..","..","..")) # load kicad_mod path
+sys.path.append(os.path.join(sys.path[0],"..","..","tools")) # load kicad_mod path
 
 from KicadModTree import *  # NOQA
 from footprint_scripts_terminal_blocks import *
@@ -22,11 +21,11 @@ if __name__ == '__main__':
 
     script_generated_note="script-generated using https://github.com/pointhi/kicad-footprint-generator/scripts/TerminalBlock_WAGO";
     classname="TerminalBlock_WAGO"
-    
-    
 
-   
-    
+
+
+
+
     pins=[1,2,3,4,5,6,7,8,9,10,12,16,24]
     rm=7.5
     package_height=15
@@ -61,9 +60,9 @@ if __name__ == '__main__':
         webpage="";
         classname_description="Terminal Block WAGO {0}".format(name);
         footprint_name="TerminalBlock_WAGO_{0}_1x{2:02}_P{1:3.2f}mm_45Degree".format(name, rm, p)
-        makeTerminalBlock45Degree(footprint_name=footprint_name, 
-                                  pins=p, rm=rm, 
-                                  package_height=package_height, leftbottom_offset=leftbottom_offset, 
+        makeTerminalBlock45Degree(footprint_name=footprint_name,
+                                  pins=p, rm=rm,
+                                  package_height=package_height, leftbottom_offset=leftbottom_offset,
                                   ddrill=ddrill, pad=pad, vsegment_lines_offset=vsegment_lines_offset,
                                   opening=opening, opening_xoffset=opening_xoffset, opening_yoffset=opening_yoffset, opening_elliptic=opening_elliptic,
                                   bevel_height=bevel_height, secondHoleDiameter=secondHoleDiameter, secondHoleOffset=secondHoleOffset, thirdHoleDiameter=thirdHoleDiameter, thirdHoleOffset=thirdHoleOffset, fourthHoleDiameter=fourthHoleDiameter, fourthHoleOffset=fourthHoleOffset, fifthHoleDiameter=fifthHoleDiameter,fifthHoleOffset=fifthHoleOffset,
@@ -72,10 +71,10 @@ if __name__ == '__main__':
                                   nibbleSize=nibbleSize, nibblePos=nibblePos, fabref_offset=fabref_offset,
                                   tags_additional=[], lib_name="${KISYS3DMOD}/"+classname, classname=classname, classname_description=classname_description, webpage=webpage, script_generated_note=script_generated_note)
 
-     
-     
 
-    
+
+
+
     pins=[1,2,3,4,5,6,7,8,9,10,12,16,24]
     rm=5
     package_height=15
@@ -110,9 +109,9 @@ if __name__ == '__main__':
         webpage="";
         classname_description="Terminal Block WAGO {0}".format(name);
         footprint_name="TerminalBlock_WAGO_{0}_1x{2:02}_P{1:3.2f}mm_45Degree".format(name, rm, p)
-        makeTerminalBlock45Degree(footprint_name=footprint_name, 
-                                  pins=p, rm=rm, 
-                                  package_height=package_height, leftbottom_offset=leftbottom_offset, 
+        makeTerminalBlock45Degree(footprint_name=footprint_name,
+                                  pins=p, rm=rm,
+                                  package_height=package_height, leftbottom_offset=leftbottom_offset,
                                   ddrill=ddrill, pad=pad,  vsegment_lines_offset=vsegment_lines_offset,
                                   opening=opening, opening_xoffset=opening_xoffset, opening_yoffset=opening_yoffset, opening_elliptic=opening_elliptic,
                                   bevel_height=bevel_height, secondHoleDiameter=secondHoleDiameter, secondHoleOffset=secondHoleOffset, thirdHoleDiameter=thirdHoleDiameter, thirdHoleOffset=thirdHoleOffset, fourthHoleDiameter=fourthHoleDiameter, fourthHoleOffset=fourthHoleOffset, fifthHoleDiameter=fifthHoleDiameter,fifthHoleOffset=fifthHoleOffset,
@@ -150,24 +149,24 @@ if __name__ == '__main__':
         webpage="";
         classname_description="Terminal Block WAGO {0}".format(name);
         footprint_name="TerminalBlock_WAGO_{0}_1x{2:02}_P{1:3.2f}mm_45Degree".format(name, rm, p)
-        makeTerminalBlock45Degree(footprint_name=footprint_name, 
-                                  pins=p, rm=rm, 
-                                  package_height=package_height, leftbottom_offset=leftbottom_offset, 
-                                  ddrill=ddrill, pad=pad, 
-                                  opening=opening, opening_xoffset=opening_xoffset, opening_yoffset=opening_yoffset, 
-                                  bevel_height=bevel_height, secondHoleDiameter=secondHoleDiameter, secondHoleOffset=secondHoleOffset, thirdHoleDiameter=thirdHoleDiameter, thirdHoleOffset=thirdHoleOffset, fourthHoleDiameter=fourthHoleDiameter, fourthHoleOffset=fourthHoleOffset, 
+        makeTerminalBlock45Degree(footprint_name=footprint_name,
+                                  pins=p, rm=rm,
+                                  package_height=package_height, leftbottom_offset=leftbottom_offset,
+                                  ddrill=ddrill, pad=pad,
+                                  opening=opening, opening_xoffset=opening_xoffset, opening_yoffset=opening_yoffset,
+                                  bevel_height=bevel_height, secondHoleDiameter=secondHoleDiameter, secondHoleOffset=secondHoleOffset, thirdHoleDiameter=thirdHoleDiameter, thirdHoleOffset=thirdHoleOffset, fourthHoleDiameter=fourthHoleDiameter, fourthHoleOffset=fourthHoleOffset,
                                   nibbleSize=nibbleSize, nibblePos=nibblePos, fabref_offset=fabref_offset,
                                   tags_additional=[], lib_name="${KISYS3DMOD}/"+classname, classname=classname, classname_description=classname_description, webpage=webpage, script_generated_note=script_generated_note)
         name="236-{0}".format(400+p);
         webpage="";
         classname_description="Terminal Block WAGO {0}".format(name);
         footprint_name="TerminalBlock_WAGO_{0}_1x{2:02}_P{1:3.2f}mm_45Degree".format(name, rm, p)
-        makeTerminalBlock45Degree(footprint_name=footprint_name, 
-                                  pins=p, rm=rm, 
-                                  package_height=package_height, leftbottom_offset=leftbottom_offset, 
-                                  ddrill=ddrill, pad=pad, 
-                                  opening=opening, opening_xoffset=opening_xoffset, opening_yoffset=opening_yoffset, 
-                                  bevel_height=bevel_height, secondHoleDiameter=secondHoleDiameter, secondHoleOffset=secondHoleOffset, thirdHoleDiameter=thirdHoleDiameter, thirdHoleOffset=thirdHoleOffset, fourthHoleDiameter=fourthHoleDiameter, fourthHoleOffset=fourthHoleOffset, 
+        makeTerminalBlock45Degree(footprint_name=footprint_name,
+                                  pins=p, rm=rm,
+                                  package_height=package_height, leftbottom_offset=leftbottom_offset,
+                                  ddrill=ddrill, pad=pad,
+                                  opening=opening, opening_xoffset=opening_xoffset, opening_yoffset=opening_yoffset,
+                                  bevel_height=bevel_height, secondHoleDiameter=secondHoleDiameter, secondHoleOffset=secondHoleOffset, thirdHoleDiameter=thirdHoleDiameter, thirdHoleOffset=thirdHoleOffset, fourthHoleDiameter=fourthHoleDiameter, fourthHoleOffset=fourthHoleOffset,
                                   secondDrillDiameter=secondDrillDiameter,secondDrillOffset=secondDrillOffset,secondDrillPad=secondDrillPad,
                                   nibbleSize=nibbleSize, nibblePos=nibblePos, fabref_offset=fabref_offset,
                                   tags_additional=[], lib_name="${KISYS3DMOD}/"+classname, classname=classname, classname_description=classname_description, webpage=webpage, script_generated_note=script_generated_note)
@@ -200,24 +199,24 @@ if __name__ == '__main__':
         webpage="";
         classname_description="Terminal Block WAGO {0}".format(name);
         footprint_name="TerminalBlock_WAGO_{0}_1x{2:02}_P{1:3.2f}mm_45Degree".format(name, rm, p)
-        makeTerminalBlock45Degree(footprint_name=footprint_name, 
-                                  pins=p, rm=rm, 
-                                  package_height=package_height, leftbottom_offset=leftbottom_offset, 
-                                  ddrill=ddrill, pad=pad, 
-                                  opening=opening, opening_xoffset=opening_xoffset, opening_yoffset=opening_yoffset, 
-                                  bevel_height=bevel_height, secondHoleDiameter=secondHoleDiameter, secondHoleOffset=secondHoleOffset, thirdHoleDiameter=thirdHoleDiameter, thirdHoleOffset=thirdHoleOffset, fourthHoleDiameter=fourthHoleDiameter, fourthHoleOffset=fourthHoleOffset, 
+        makeTerminalBlock45Degree(footprint_name=footprint_name,
+                                  pins=p, rm=rm,
+                                  package_height=package_height, leftbottom_offset=leftbottom_offset,
+                                  ddrill=ddrill, pad=pad,
+                                  opening=opening, opening_xoffset=opening_xoffset, opening_yoffset=opening_yoffset,
+                                  bevel_height=bevel_height, secondHoleDiameter=secondHoleDiameter, secondHoleOffset=secondHoleOffset, thirdHoleDiameter=thirdHoleDiameter, thirdHoleOffset=thirdHoleOffset, fourthHoleDiameter=fourthHoleDiameter, fourthHoleOffset=fourthHoleOffset,
                                   nibbleSize=nibbleSize, nibblePos=nibblePos, fabref_offset=fabref_offset,
                                   tags_additional=[], lib_name="${KISYS3DMOD}/"+classname, classname=classname, classname_description=classname_description, webpage=webpage, script_generated_note=script_generated_note)
         name="236-{0}".format(500+p);
         webpage="";
         classname_description="Terminal Block WAGO {0}".format(name);
         footprint_name="TerminalBlock_WAGO_{0}_1x{2:02}_P{1:3.2f}mm_45Degree".format(name, rm, p)
-        makeTerminalBlock45Degree(footprint_name=footprint_name, 
-                                  pins=p, rm=rm, 
-                                  package_height=package_height, leftbottom_offset=leftbottom_offset, 
-                                  ddrill=ddrill, pad=pad, 
-                                  opening=opening, opening_xoffset=opening_xoffset, opening_yoffset=opening_yoffset, 
-                                  bevel_height=bevel_height, secondHoleDiameter=secondHoleDiameter, secondHoleOffset=secondHoleOffset, thirdHoleDiameter=thirdHoleDiameter, thirdHoleOffset=thirdHoleOffset, fourthHoleDiameter=fourthHoleDiameter, fourthHoleOffset=fourthHoleOffset, 
+        makeTerminalBlock45Degree(footprint_name=footprint_name,
+                                  pins=p, rm=rm,
+                                  package_height=package_height, leftbottom_offset=leftbottom_offset,
+                                  ddrill=ddrill, pad=pad,
+                                  opening=opening, opening_xoffset=opening_xoffset, opening_yoffset=opening_yoffset,
+                                  bevel_height=bevel_height, secondHoleDiameter=secondHoleDiameter, secondHoleOffset=secondHoleOffset, thirdHoleDiameter=thirdHoleDiameter, thirdHoleOffset=thirdHoleOffset, fourthHoleDiameter=fourthHoleDiameter, fourthHoleOffset=fourthHoleOffset,
                                   secondDrillDiameter=secondDrillDiameter,secondDrillOffset=secondDrillOffset,secondDrillPad=secondDrillPad,
                                   nibbleSize=nibbleSize, nibblePos=nibblePos, fabref_offset=fabref_offset,
                                   tags_additional=[], lib_name="${KISYS3DMOD}/"+classname, classname=classname, classname_description=classname_description, webpage=webpage, script_generated_note=script_generated_note)
@@ -250,24 +249,24 @@ if __name__ == '__main__':
         webpage="";
         classname_description="Terminal Block WAGO {0}".format(name);
         footprint_name="TerminalBlock_WAGO_{0}_1x{2:02}_P{1:3.2f}mm_45Degree".format(name, rm, p)
-        makeTerminalBlock45Degree(footprint_name=footprint_name, 
-                                  pins=p, rm=rm, 
-                                  package_height=package_height, leftbottom_offset=leftbottom_offset, 
-                                  ddrill=ddrill, pad=pad, 
-                                  opening=opening, opening_xoffset=opening_xoffset, opening_yoffset=opening_yoffset, 
-                                  bevel_height=bevel_height, secondHoleDiameter=secondHoleDiameter, secondHoleOffset=secondHoleOffset, thirdHoleDiameter=thirdHoleDiameter, thirdHoleOffset=thirdHoleOffset, fourthHoleDiameter=fourthHoleDiameter, fourthHoleOffset=fourthHoleOffset, 
+        makeTerminalBlock45Degree(footprint_name=footprint_name,
+                                  pins=p, rm=rm,
+                                  package_height=package_height, leftbottom_offset=leftbottom_offset,
+                                  ddrill=ddrill, pad=pad,
+                                  opening=opening, opening_xoffset=opening_xoffset, opening_yoffset=opening_yoffset,
+                                  bevel_height=bevel_height, secondHoleDiameter=secondHoleDiameter, secondHoleOffset=secondHoleOffset, thirdHoleDiameter=thirdHoleDiameter, thirdHoleOffset=thirdHoleOffset, fourthHoleDiameter=fourthHoleDiameter, fourthHoleOffset=fourthHoleOffset,
                                   nibbleSize=nibbleSize, nibblePos=nibblePos, fabref_offset=fabref_offset,
                                   tags_additional=[], lib_name="${KISYS3DMOD}/"+classname, classname=classname, classname_description=classname_description, webpage=webpage, script_generated_note=script_generated_note)
         name="236-{0}".format(600+p);
         webpage="";
         classname_description="Terminal Block WAGO {0}".format(name);
         footprint_name="TerminalBlock_WAGO_{0}_1x{2:02}_P{1:3.2f}mm_45Degree".format(name, rm, p)
-        makeTerminalBlock45Degree(footprint_name=footprint_name, 
-                                  pins=p, rm=rm, 
-                                  package_height=package_height, leftbottom_offset=leftbottom_offset, 
-                                  ddrill=ddrill, pad=pad, 
-                                  opening=opening, opening_xoffset=opening_xoffset, opening_yoffset=opening_yoffset, 
-                                  bevel_height=bevel_height, secondHoleDiameter=secondHoleDiameter, secondHoleOffset=secondHoleOffset, thirdHoleDiameter=thirdHoleDiameter, thirdHoleOffset=thirdHoleOffset, fourthHoleDiameter=fourthHoleDiameter, fourthHoleOffset=fourthHoleOffset, 
+        makeTerminalBlock45Degree(footprint_name=footprint_name,
+                                  pins=p, rm=rm,
+                                  package_height=package_height, leftbottom_offset=leftbottom_offset,
+                                  ddrill=ddrill, pad=pad,
+                                  opening=opening, opening_xoffset=opening_xoffset, opening_yoffset=opening_yoffset,
+                                  bevel_height=bevel_height, secondHoleDiameter=secondHoleDiameter, secondHoleOffset=secondHoleOffset, thirdHoleDiameter=thirdHoleDiameter, thirdHoleOffset=thirdHoleOffset, fourthHoleDiameter=fourthHoleDiameter, fourthHoleOffset=fourthHoleOffset,
                                   secondDrillDiameter=secondDrillDiameter,secondDrillOffset=secondDrillOffset,secondDrillPad=secondDrillPad,
                                   nibbleSize=nibbleSize, nibblePos=nibblePos, fabref_offset=fabref_offset,
                                   tags_additional=[], lib_name="${KISYS3DMOD}/"+classname, classname=classname, classname_description=classname_description, webpage=webpage, script_generated_note=script_generated_note)

@@ -4,14 +4,14 @@ import sys
 import os
 import math
 
-sys.path.append(os.path.join(sys.path[0], "..", ".."))  # load parent path of KicadModTree
+sys.path.append(os.path.join(sys.path[0], "..", "..", ".."))  # load parent path of KicadModTree
 import argparse
 import yaml
 from KicadModTree import *
 
-sys.path.append(os.path.join(sys.path[0], "..", "tools"))  # load parent path of tools
+sys.path.append(os.path.join(sys.path[0], "..", "..", "tools"))  # load parent path of tools
 
-sys.path.append(os.path.join(sys.path[0], "..", "general"))  # load parent path of tools
+sys.path.append(os.path.join(sys.path[0], "..", "..", "general"))  # load parent path of tools
 from StandardBox import *
 
 def qfn(args):
@@ -24,7 +24,7 @@ def qfn(args):
     tags = args["tags"]
     manufacture = args["manufacture"]
     serie = args["serie"]
-    
+
     W = args["W"]
     H = args["H"]
     WD = args["WD"]
@@ -41,24 +41,24 @@ def qfn(args):
     rotation = args["rotation"]
     dest_dir_3D_prefix = args["dest_dir_3D_prefix"]
 
-    
+
     for pinnumber in pinnumbers:
         footprint_name = ''
         footprint_name = footprint_name + manufacture + '_' + serie
         footprint_name = footprint_name + '_1x' + '{:02d}'.format(pinnumber)
         footprint_name = footprint_name + '_P' + '{:.2f}'.format(PS) + "mm"
         footprint_name = footprint_name + '_45-Degree'
-    
+
         f = Footprint(footprint_name)
 
-        
+
         file3Dname = "${KISYS3DMOD}/" + dest_dir_3D_prefix + "/" + footprint_name + ".wrl"
         words = footprint_name.split("_")
         if words[-1].lower().startswith('handsolder'):
             words[-1] = ''
             ff = '_'.join(words)
             file3Dname = "${KISYS3DMOD}/" + dest_dir_3D_prefix + "/" + ff + ".wrl"
-            
+
         lw = ((2.0 * PE) + ((pinnumber - 1) * PS))
         at = [0.0 - PE, W - WD]
         size = [lw, W]
