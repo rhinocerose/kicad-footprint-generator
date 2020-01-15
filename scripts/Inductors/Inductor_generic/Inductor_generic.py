@@ -5,10 +5,10 @@ import os
 import re
 
 # load parent path of KicadModTree
-sys.path.append(os.path.join(sys.path[0], "..", ".."))
+sys.path.append(os.path.join(sys.path[0], "..", "..", ".."))
 
 # load scripts
-sys.path.append(os.path.join(sys.path[0], ".."))
+sys.path.append(os.path.join(sys.path[0], "..", ".."))
 
 from KicadModTree import *
 from general.StandardBox import *
@@ -42,7 +42,7 @@ def qfn(args):
     #
     file_handler = KicadFileHandler(f)
     file_handler.writeFile(footprint_name + ".kicad_mod")
-    
+
 
 
 if __name__ == '__main__':

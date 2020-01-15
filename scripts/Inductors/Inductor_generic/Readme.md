@@ -1,0 +1,1 @@
+Generic generator for inductor footprints. Use to duplicate the suggested footprint given in the datasheet. Used to generate footprints for inductors with rectangular base and possibly some corners chamfered, rounded or cut out. (Example TDK SLF6028)
