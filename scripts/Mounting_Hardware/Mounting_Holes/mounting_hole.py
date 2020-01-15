@@ -6,7 +6,7 @@ import argparse
 import yaml
 import math
 
-sys.path.append(os.path.join(sys.path[0], "..", ".."))  # load parent path of KicadModTree
+sys.path.append(os.path.join(sys.path[0], "..", "..", ".."))  # load parent path of KicadModTree
 
 from KicadModTree import *  # NOQA
 from KicadModTree.nodes.base.Pad import Pad  # NOQA
