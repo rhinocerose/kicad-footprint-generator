@@ -241,7 +241,7 @@ class ArcPadPrimitive(Node):
         return result
 
     def getVirtualChilds(self):
-        #ToDo: properly calculate the maximum anchor pad size (the limiting lines need to be taken into account)
+        # ToDo: properly calculate the maximum anchor pad size (the limiting lines need to be taken into account)
         at = self.reference_arc.getMidPoint()
         primitives = self._getArcPrimitives()
         for p in primitives:
