@@ -8,6 +8,7 @@ fp_name_format_string: '{prefix:s}_{code_imperial:s}_{code_metric:s}Metric{suffi
 fp_name_non_metric_format_string: '{prefix:s}_{code_imperial:s}{suffix:s}'
 
 fp_name_tantal_format_string: '{prefix:s}_EIA-{code_metric:s}_{code_letter:s}{suffix:s}'
+fp_name_manuf_pn_format_string: '{manufacturer:s}_{manuf_pn:s}{suffix:s}'
 
 3d_model_prefix: '${KISYS3DMOD}/'
 
