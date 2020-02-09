@@ -652,6 +652,67 @@ TQFN-32-1EP_5x5mm_P0.50mm_EP3.40x3.40mm:
   #suffix: '_Pad{pad_x:.2f}x{pad_y:.2f}mm_HandSolder'
   #include_suffix_in_3dpath: 'False'
 
+TQFN-32-1EP_3x6mm_P0.4mm_EP1.25x3.5mm:
+  device_type: 'TQFN'
+  #manufacturer: 'man'
+  #part_number: 'mpn'
+  size_source: 'https://www.diodes.com/assets/Package-Files/ZL32.pdf'
+  ipc_class: 'qfn' # 'qfn_pull_back'
+  #ipc_density: 'least' #overwrite global value for this device.
+  # custom_name_format:
+  body_size_x:
+    nominal: 3
+  body_size_y:
+    nominal: 6
+  overall_height:
+    minimum: 0.70
+    nominal: 0.75
+    maximum: 0.80
+
+  lead_width:
+    minimum: 0.15
+    nominal: 0.20
+    maximum: 0.25
+  lead_len:
+    minimum: 0.20
+    nominal: 0.30
+    maximum: 0.40
+
+  EP_size_x:
+    minimum: 1.90
+    nominal: 2.00
+    maximum: 2.10
+  EP_size_y:
+    minimum: 4.90
+    nominal: 5.00
+    maximum: 5.10
+  EP_size_x_overwrite: 1.25
+  EP_size_y_overwrite: 3.50
+  # EP_paste_coverage: 0.65
+  EP_num_paste_pads: [2, 2]
+
+  thermal_vias:
+    count: [2, 5]
+    drill: 0.33
+    # min_annular_ring: 0.15
+    paste_via_clearance: 0.1
+    # EP_num_paste_pads: [2, 2]
+    #paste_between_vias: 1
+    #paste_rings_outside: 1
+    EP_paste_coverage: 0.75
+    #grid: [1, 1]
+    # bottom_pad_size:
+    paste_avoid_via: False
+
+  pitch: 0.40
+  num_pins_x: 5
+  num_pins_y: 11
+  #chamfer_edge_pins: 0.12
+  #pin_count_grid:
+  #pad_length_addition: 0.5
+  #suffix: '_Pad{pad_x:.2f}x{pad_y:.2f}mm_HandSolder'
+  #include_suffix_in_3dpath: 'False'
+
 TQFN-40-1EP_5x5mm_P0.40mm_EP3.50x3.50mm:
   device_type: 'TQFN'
   #manufacturer: 'man'
@@ -706,6 +767,67 @@ TQFN-40-1EP_5x5mm_P0.40mm_EP3.50x3.50mm:
   num_pins_x: 10
   num_pins_y: 10
   chamfer_edge_pins: 0.12
+  #pin_count_grid:
+  #pad_length_addition: 0.5
+  #suffix: '_Pad{pad_x:.2f}x{pad_y:.2f}mm_HandSolder'
+  #include_suffix_in_3dpath: 'False'
+
+TQFN-42-1EP_3.5x9mm_P0.5mm_EP1.8x7mm:
+  device_type: 'TQFN'
+  #manufacturer: 'man'
+  #part_number: 'mpn'
+  size_source: 'https://www.diodes.com/assets/Package-Files/PD-2035g-ZH42.pdf'
+  ipc_class: 'qfn' # 'qfn_pull_back'
+  #ipc_density: 'least' #overwrite global value for this device.
+  # custom_name_format:
+  body_size_x:
+    nominal: 3.5
+  body_size_y:
+    nominal: 9
+  overall_height:
+    minimum: 0.70
+    nominal: 0.75
+    maximum: 0.84
+
+  lead_width:
+    minimum: 0.20
+    nominal: 0.25
+    maximum: 0.30
+  lead_len:
+    minimum: 0.30
+    nominal: 0.40
+    maximum: 0.50
+
+  EP_size_x:
+    minimum: 1.95
+    nominal: 2.05
+    maximum: 2.15
+  EP_size_y:
+    minimum: 7.45
+    nominal: 7.55
+    maximum: 7.65
+  EP_size_x_overwrite: 1.80
+  EP_size_y_overwrite: 7.00
+  # EP_paste_coverage: 0.65
+  EP_num_paste_pads: [2, 2]
+
+  thermal_vias:
+    count: [2, 9]
+    drill: 0.3
+    # min_annular_ring: 0.15
+    paste_via_clearance: 0.1
+    # EP_num_paste_pads: [2, 2]
+    #paste_between_vias: 1
+    #paste_rings_outside: 1
+    EP_paste_coverage: 0.75
+    #grid: [1, 1]
+    # bottom_pad_size:
+    paste_avoid_via: False
+
+  pitch: 0.50
+  num_pins_x: 4
+  num_pins_y: 17
+  #chamfer_edge_pins: 0.12
   #pin_count_grid:
   #pad_length_addition: 0.5
   #suffix: '_Pad{pad_x:.2f}x{pad_y:.2f}mm_HandSolder'
