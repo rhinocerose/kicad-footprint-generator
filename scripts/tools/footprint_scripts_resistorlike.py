@@ -280,7 +280,7 @@ def makeResistorAxialHorizontal(seriesname, rm, rmdisp, w, d, ddrill, R_POW, typ
 
     # add model
     if (has3d!=0):
-        kicad_mod.append(Model(filename=lib_name + ".3dshapes/"+footprint_name+".wrl", at=x_3d, scale=s_3d, rotate=[0, 0, 0]))
+        kicad_mod.append(Model(filename="${KISYS3DMOD}/" + lib_name + ".3dshapes/"+footprint_name+".wrl", at=x_3d, scale=s_3d, rotate=[0, 0, 0]))
 
     # print render tree
     # print(kicad_mod.getRenderTree())
@@ -288,8 +288,10 @@ def makeResistorAxialHorizontal(seriesname, rm, rmdisp, w, d, ddrill, R_POW, typ
 
     # write file
     file_handler = KicadFileHandler(kicad_mod)
-    file_handler.writeFile(footprint_name+'.kicad_mod')
-
+    directory = os.path.dirname(lib_name + ".pretty/")
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+    file_handler.writeFile(lib_name + ".pretty/" + footprint_name + '.kicad_mod')
 
 # simple axial round (type="cyl")/ box (type="box") resistor, vertically mounted
 # deco="none"/"elco"/"cp"/"tantal"/"diode"/"diode_KUP"
@@ -1025,7 +1027,7 @@ def makeResistorRadial(seriesname, rm, w, h, ddrill, R_POW, innerw=0,innerh=0,rm
 
     # add model
     if (has3d != 0):
-        kicad_modg.append(Model(filename=lib_name + ".3dshapes/" + footprint_name + ".wrl", at=x_3d, scale=s_3d, rotate=[0, 0, 0]))
+        kicad_modg.append(Model(filename="${KISYS3DMOD}/" + lib_name + ".3dshapes/" + footprint_name + ".wrl", at=x_3d, scale=s_3d, rotate=[0, 0, 0]))
 
     # print render tree
     # print(kicad_mod.getRenderTree())
@@ -1033,4 +1035,7 @@ def makeResistorRadial(seriesname, rm, w, h, ddrill, R_POW, innerw=0,innerh=0,rm
 
     # write file
     file_handler = KicadFileHandler(kicad_mod)
-    file_handler.writeFile(footprint_name + '.kicad_mod')
+    directory = os.path.dirname(lib_name + ".pretty/")
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+    file_handler.writeFile(lib_name + ".pretty/" + footprint_name + '.kicad_mod')
