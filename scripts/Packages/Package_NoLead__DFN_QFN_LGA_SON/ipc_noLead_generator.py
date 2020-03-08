@@ -12,13 +12,16 @@ sys.path.append(os.path.join(sys.path[0], "..", "..", ".."))  # load parent path
 
 from KicadModTree import *  # NOQA
 from KicadModTree.nodes.base.Pad import Pad  # NOQA
+from KicadModTree.util.ipc_pad_size_calculators import *
+from KicadModTree.util.TolerancedSize import TolerancedSize
+
 sys.path.append(os.path.join(sys.path[0], "..", "..", "tools"))  # load parent path of tools
 from footprint_text_fields import addTextFields
-from ipc_pad_size_calculators import *
-from quad_dual_pad_border import add_dual_or_quad_pad_border
 
 sys.path.append(os.path.join(sys.path[0], "..", "utils"))
+from quad_dual_pad_border import add_dual_or_quad_pad_border
 from ep_handling_utils import getEpRoundRadiusParams
+
 
 ipc_density = 'nominal'
 ipc_doc_file = '../ipc_definitions.yaml'

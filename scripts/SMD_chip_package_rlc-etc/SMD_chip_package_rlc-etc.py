@@ -10,9 +10,10 @@ sys.path.append(os.path.join(sys.path[0], "..", ".."))  # load parent path of Ki
 
 from KicadModTree import *  # NOQA
 from KicadModTree.nodes.base.Pad import Pad  # NOQA
+from KicadModTree.util.ipc_pad_size_calculators import *
+
 sys.path.append(os.path.join(sys.path[0], "..", "tools"))  # load parent path of tools
 from footprint_text_fields import addTextFields
-from ipc_pad_size_calculators import *
 from drawing_tools import nearestSilkPointOnOrthogonalLineSmallClerance
 
 size_definition_path = "size_definitions/"

@@ -1,3 +1,19 @@
+# KicadModTree is free software: you can redistribute it and/or
+# modify it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# KicadModTree is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with kicad-footprint-generator. If not, see < http://www.gnu.org/licenses/ >.
+#
+# (C) 2016-2018 by Thomas Pointhuber, <thomas.pointhuber@gmx.at>
+
+
 """
 Pad number generator functions.
 
@@ -22,6 +38,13 @@ To use a generator add the following to the device config:
 
 
 def increment(pincount, init=1, **kwargs):
+    r""" Simple incrementing pad number generator for pad array
+
+    Args:
+        pincount: Total number of pins
+        init: Starting number (default: 1)
+        kwarts: Placeholder for other ignored arguments for compatibility
+    """
     i = init
     while i <= pincount:
         yield i
@@ -133,7 +156,7 @@ def get_generator(device_params):
     Fallback to plain increment.
 
     Args:
-        device_params: Device parameters dictionary 
+        device_params: Device parameters dictionary
 
     Returns:
         Pad number iterator
