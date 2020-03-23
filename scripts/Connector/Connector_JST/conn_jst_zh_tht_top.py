@@ -26,20 +26,32 @@ pitch = 1.50 # mm
 pin_range = range(2,13)
 
 fab_pin1_marker_type = 1
-pin1_marker_offset = 0.3
-pin1_marker_linelen = 1.25
+pin1_marker_offset = 0.2
+pin1_marker_linelen = 0.8
+inner_silkscreen_inset = 0.4 # how much inner silkscreen is inset from outer housing silkscreen
+silkscreen_pin_delimiter_protrusion_length = 0.4
 
 drill_size = 0.73 #Datasheet: 0.7 +0.03/-0.03 
 pad_to_pad_clearance = 0.8
 pad_copper_y_solder_length = 0.5 #How much copper should be in y direction?
 min_annular_ring = 0.15
 
-
+# Y
+# ^
+# |  ___________
+# | |_._._._._._|
+# |__________> X
+#    -0+
 
 # Connector Parameters (housing dimensions compared to pin 1)
-x_min = -1.5 #-1.95
-y_min = (2.2 - 3.5)#-1.7
-y_max = 2.2 #y_min + 4.5
+housing_width = 3.5 # mm
+#housing_length = 1.5*2 + pincount*pitch  # not used, but good documentation.
+
+# pin 1 is at (x=0, y=0)
+
+x_min = -1.5 #housing length past pin 1 on each side (always negative)
+y_max = 2.2 
+y_min = (y_max - housing_width) 
 
 def generate_one_footprint(pincount, configuration):
     silk_x_min = x_min - configuration['silk_fab_offset']
@@ -48,11 +60,11 @@ def generate_one_footprint(pincount, configuration):
 
 
     x_mid = (pincount-1)*pitch/2.0
-    x_max = (pincount-1)*pitch + 1.95
+    x_max = (pincount-1)*pitch + (-x_min)
     silk_x_max = x_max + configuration['silk_fab_offset']
 
     # Through-hole type shrouded header, Top entry type
-    mpn = "B{n}B-PH-K".format(n=pincount) #JST part number format string
+    mpn = "B{n}B-ZR".format(n=pincount) #JST part number format string
     orientation_str = configuration['orientation_options'][orientation]
     footprint_name = configuration['fp_name_format_string'].format(man=manufacturer,
         series=series,
@@ -69,8 +81,7 @@ def generate_one_footprint(pincount, configuration):
     kicad_mod.append(RectLine(start=[silk_x_min,silk_y_min], end=[silk_x_max,silk_y_max],
         layer='F.SilkS', width=configuration['silk_line_width']))
 
-    silk_inner_left=-1.45
-    silk_inner_right=x_max-0.5
+  
 
     poly_silk_p1_protrusion=[
         {'x':-0.3, 'y':silk_y_min},
@@ -82,36 +93,58 @@ def generate_one_footprint(pincount, configuration):
     kicad_mod.append(Line(start=[-0.3, silk_y_min-0.1], end=[-0.6, silk_y_min-0.1], layer='F.SilkS', width=configuration['silk_line_width']))
 
     if configuration['allow_silk_below_part'] == 'tht' or configuration['allow_silk_below_part'] == 'both':
-        poly_silk_inner_outline = [
-            {'x':0.5, 'y':silk_y_min},
-            {'x':0.5, 'y':-1.2},
-            {'x':silk_inner_left, 'y':-1.2},
-            {'x':silk_inner_left, 'y':2.3},
-            {'x':silk_inner_right, 'y':2.3},
-            {'x':silk_inner_right, 'y':-1.2},
-            {'x':x_max-2.45, 'y':-1.2},
-            {'x':x_max-2.45, 'y':silk_y_min}
-        ]
-        kicad_mod.append(PolygoneLine(polygone=poly_silk_inner_outline, layer='F.SilkS', width=configuration['silk_line_width']))
+        # inner_silkscreen_inset = 0.5
+        silk_inner_x_min= silk_x_min + inner_silkscreen_inset     # x pos of left inner silkscreeen box
+        silk_inner_x_max= silk_x_max - inner_silkscreen_inset    # x pos of right inner silkscreeen box
 
-        kicad_mod.append(Line(start=[silk_x_min, -0.5], end=[silk_inner_left, -0.5], layer='F.SilkS', width=configuration['silk_line_width']))
-        kicad_mod.append(Line(start=[silk_x_min, 0.8], end=[silk_inner_left, 0.8], layer='F.SilkS', width=configuration['silk_line_width']))
+        silk_inner_y_min= silk_y_min + inner_silkscreen_inset     
+        silk_inner_y_max= silk_y_max - inner_silkscreen_inset 
 
-        kicad_mod.append(Line(start=[silk_x_max, -0.5], end=[silk_inner_right, -0.5], layer='F.SilkS', width=configuration['silk_line_width']))
-        kicad_mod.append(Line(start=[silk_x_max, 0.8], end=[silk_inner_right, 0.8], layer='F.SilkS', width=configuration['silk_line_width']))
 
+        # inner outline
+        # zh has full shroud, unlike ph, where there is a cutout.
+        # poly_silk_inner_outline = [
+        #     # {'x':0.5, 'y':silk_y_min},       #
+        #     {'x':0.5, 'y':silk_y_min},             #
+        #     {'x':silk_inner_x_min, 'y':-1.2}, # 
+        #     {'x':silk_inner_x_min, 'y':2.3},
+        #     {'x':silk_inner_x_max, 'y':2.3},
+        #     {'x':silk_inner_x_max, 'y':-1.2},
+        #     {'x':x_max-2.45, 'y':-1.2},
+        #     {'x':x_max-2.45, 'y':silk_y_min}
+        # ]
+        # kicad_mod.append(PolygoneLine(polygone=poly_silk_inner_outline, layer='F.SilkS', width=configuration['silk_line_width']))
+
+        #use box for zh inner outline instead.
+        kicad_mod.append(RectLine(start=[silk_inner_x_min,silk_inner_y_min], end=[silk_inner_x_max,silk_inner_y_max],
+        layer='F.SilkS', width=configuration['silk_line_width']))
+
+        # side gaps
+        side_gap_width  = 1.0  # width on x from startx in + direction
+        side_gap_startx = -0.5  # offset from pins. in this case -0.5 + 1.0 = 0.5: so goes from -0.5 to 0.5        
+        side_gap_endx   = side_gap_startx + side_gap_width
+        kicad_mod.append(Line(start=[silk_x_min, side_gap_startx], end=[silk_inner_x_min, side_gap_startx], layer='F.SilkS', width=configuration['silk_line_width']))
+        kicad_mod.append(Line(start=[silk_x_min, side_gap_endx], end=[silk_inner_x_min, side_gap_endx], layer='F.SilkS', width=configuration['silk_line_width']))
+
+        kicad_mod.append(Line(start=[silk_x_max, side_gap_startx], end=[silk_inner_x_max, side_gap_startx], layer='F.SilkS', width=configuration['silk_line_width']))
+        kicad_mod.append(Line(start=[silk_x_max, side_gap_endx], end=[silk_inner_x_max, side_gap_endx], layer='F.SilkS', width=configuration['silk_line_width']))
+
+        # silkscreen pin delimiter protrusions
+        inner_prot_ymax = silk_inner_y_max ## y position of inner silkscren box
+        inner_prot_ymin = inner_prot_ymax - silkscreen_pin_delimiter_protrusion_length
+        inner_prot_xwidth = 0.2
         for i in range(0, pincount-1):
-            middle_x = 1+i*2
-            start_x = middle_x-0.1
-            end_x = middle_x+0.1
+            middle_x = pitch/2 + i*pitch  #x pos between pins
+            start_x = middle_x - (inner_prot_xwidth/2) 
+            end_x = middle_x + (inner_prot_xwidth/2)
             poly_silk_inner_protrusion=[
-                {'x':start_x, 'y':2.3},
-                {'x':start_x, 'y':1.8},
-                {'x':end_x, 'y':1.8},
-                {'x':end_x, 'y':2.3}
+                {'x':start_x, 'y':inner_prot_ymax},
+                {'x':start_x, 'y':inner_prot_ymin},
+                {'x':end_x, 'y':inner_prot_ymin},
+                {'x':end_x, 'y':inner_prot_ymax}
             ]
             kicad_mod.append(PolygoneLine(polygone=poly_silk_inner_protrusion, layer='F.SilkS', width=configuration['silk_line_width']))
-            kicad_mod.append(Line(start=[middle_x, 2.3], end=[middle_x, 1.8], layer='F.SilkS', width=configuration['silk_line_width']))
+            kicad_mod.append(Line(start=[middle_x, inner_prot_ymax], end=[middle_x, inner_prot_ymin], layer='F.SilkS', width=configuration['silk_line_width']))
 
     ########################### Pin 1 marker ################################
     poly_pin1_marker = [
