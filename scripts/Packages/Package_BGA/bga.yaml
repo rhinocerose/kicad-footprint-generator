@@ -334,3 +334,13 @@ ST_uTFBGA-36_3.6x3.6mm_Layout6x6_P0.5mm:
    mask_margin: 0.05
    layout_x: 6
    layout_y: 6
+BGA-196_15x15mm_Layout14x14_P1.0mm_Ball0.5mm_Pad0.4mm_NSMD:
+  description: "BGA-196"
+  size_source: "http://ww1.microchip.com/downloads/en/DeviceDoc/VMDS-10502.pdf#page=99"
+  body_size_x: 15.0
+  body_size_y: 15.0
+  pitch: 1.0
+  pad_diameter: 0.4
+  mask_margin: 0.05
+  layout_x: 14
+  layout_y: 14
