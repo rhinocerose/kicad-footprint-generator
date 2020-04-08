@@ -109,9 +109,9 @@ def generate_one_footprint(pincount, variant, configuration):
         if hook:
             poly_big_cutout=[{'x':x_min+1, 'y':silk_y_max}
                                   ,{'x':x_min+1, 'y':silk_y_max - 2.3}
-                                  ,{'x':(A/2)-1.8, 'y':silk_y_max - 2.3}]
+                                  ,{'x':(A/2)-1.6, 'y':silk_y_max - 2.3}]
             kicad_mod.append(PolygoneLine(polygone=poly_big_cutout, layer='F.SilkS', width=configuration['silk_line_width']))
-            poly_big_cutout=[{'x':(A/2)+1.8, 'y':silk_y_max-2.3}
+            poly_big_cutout=[{'x':(A/2)+1.6, 'y':silk_y_max-2.3}
                                   ,{'x':x_max-1, 'y':silk_y_max - 2.3}
                                   ,{'x':x_max-1, 'y':silk_y_max}]
         else:
@@ -123,12 +123,65 @@ def generate_one_footprint(pincount, variant, configuration):
 
 
         #locking "dimple", centered
-        dimple_w = 1.6
+        if pincount == 2:
+            dimple_w = 0.8
+        else:
+            dimple_w = 1.6
         dimple_h = 1.8
         dimple_y = y_max - 4.9  #middle of the dimple
         kicad_mod.append(RectLine(start=[(A-dimple_w)/2, dimple_y + dimple_h/2], end=[(A+dimple_w)/2, dimple_y - dimple_h/2],
             layer='F.SilkS', width=configuration['silk_line_width']))
 
+        # top
+        if pincount == 2:
+            recess = 3.2
+        elif pincount == 3:
+            recess = 4.8
+        else:
+            recess = 5.4
+        mid = 2.1
+        cutout = 1.1
+        wall = (mid - cutout)/2
+        polygons = [[
+            {'x': x_mid + recess/2, 'y': silk_y_max - 2.3},
+            {'x': x_mid + recess/2, 'y': 2},
+            {'x': x_mid + recess/2 + wall, 'y': 2},
+            {'x': x_mid + recess/2 + wall, 'y': silk_y_max - 3.9},
+            {'x': x_mid + recess/2 + wall + cutout, 'y': silk_y_max - 3.9},
+            {'x': x_mid + recess/2 + wall + cutout, 'y': 2},
+            {'x': silk_x_max, 'y': 2},
+            ], [
+            {'x': x_mid - recess/2, 'y': silk_y_max - 2.3},
+            {'x': x_mid - recess/2, 'y': 2},
+            {'x': x_mid - recess/2 - wall, 'y': 2},
+            {'x': x_mid - recess/2 - wall, 'y': silk_y_max - 3.9},
+            {'x': x_mid - recess/2 - wall - cutout, 'y': silk_y_max - 3.9},
+            {'x': x_mid - recess/2 - wall - cutout, 'y': 2},
+            {'x': silk_x_min, 'y': 2},
+            ]]
+        if pincount >= 6:
+            side = 2.3
+            polygons[0][-1:] = [
+                {'x': x_mid + recess/2 + mid, 'y': 2},
+                {'x': x_mid + recess/2 + mid, 'y': silk_y_max - 2.3},
+                ]
+            polygons[1][-1:] = [
+                {'x': x_mid - recess/2 - mid, 'y': 2},
+                {'x': x_mid - recess/2 - mid, 'y': silk_y_max - 2.3},
+                ]
+            polygons.append([
+                {'x': x_max - side, 'y': silk_y_max - 2.3},
+                {'x': x_max - side, 'y': 2},
+                {'x': silk_x_max, 'y': 2},
+                ])
+            polygons.append([
+                {'x': x_min + side, 'y': silk_y_max - 2.3},
+                {'x': x_min + side, 'y': 2},
+                {'x': silk_x_min, 'y': 2},
+                ])
+        for poly in polygons:
+            kicad_mod.append(PolygoneLine(polygone = poly,
+                layer='F.SilkS', width=configuration['silk_line_width']))
 
     ########################### CrtYd ################################
     part_x_min = x_min
