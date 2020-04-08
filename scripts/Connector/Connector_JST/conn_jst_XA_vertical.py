@@ -92,7 +92,6 @@ def generate_one_footprint(pincount, variant, configuration):
     kicad_mod.setTags(tags)
 
     ########################### Silkscreen ###########################
-    #Note, the locking recess dimensions vary with pincount, so this is approximate and mostly incorrect.
     if pincount == 2:
         bump = 0.8
         recess = 3.2
@@ -118,6 +117,23 @@ def generate_one_footprint(pincount, variant, configuration):
         {'x':x_mid - recess/2, 'y':silk_y_min},
         {'x':silk_x_min, 'y':silk_y_min},
     ]
+
+    if pincount >= 6:
+        side = 2.3
+        mid = 2.1
+        silk_ext_outline[4:4] = [
+                {'x':silk_x_max - side, 'y':silk_y_min},
+                {'x':silk_x_max - side, 'y':silk_y_min+1},
+                {'x':x_mid + recess/2 + mid, 'y':silk_y_min+1},
+                {'x':x_mid + recess/2 + mid, 'y':silk_y_min},
+                ]
+        silk_ext_outline[-1:-1] = [
+                {'x':x_mid - recess/2 - mid, 'y':silk_y_min},
+                {'x':x_mid - recess/2 - mid, 'y':silk_y_min+1},
+                {'x':silk_x_min + side, 'y':silk_y_min+1},
+                {'x':silk_x_min + side, 'y':silk_y_min},
+                ]
+
     kicad_mod.append(PolygoneLine(polygone=silk_ext_outline, layer='F.SilkS', width=configuration['silk_line_width']))
 
     silk_inner_left=(A-B)/2 + 0.9   #0.9 = shroud thickness
