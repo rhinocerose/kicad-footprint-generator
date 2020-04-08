@@ -47,7 +47,7 @@ pincounts = [*range(2,15+1),18,20]
 variant_parameters = {
     '1-A': {
         'boss':True,
-        'pin_range':pincounts,
+        'pin_range':[count for count in pincounts if count != 18],
         'descr_str':', with boss'
         },
     '1': {
