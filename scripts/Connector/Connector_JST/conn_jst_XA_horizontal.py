@@ -135,15 +135,31 @@ def generate_one_footprint(pincount, variant, configuration):
     part_x_max = x_max
     part_y_min = y_min
     part_y_max = y_max
+    offset = configuration['courtyard_offset']['connector']
+    grid = configuration['courtyard_grid']
 
-    cx1 = roundToBase(part_x_min-configuration['courtyard_offset']['connector'], configuration['courtyard_grid'])
-    cy1 = roundToBase(part_y_min-configuration['courtyard_offset']['connector'], configuration['courtyard_grid'])
+    cx1 = roundToBase(part_x_min - offset, grid)
+    cy1 = roundToBase(part_y_min - offset, grid)
 
-    cx2 = roundToBase(part_x_max+configuration['courtyard_offset']['connector'], configuration['courtyard_grid'])
-    cy2 = roundToBase(part_y_max+configuration['courtyard_offset']['connector'], configuration['courtyard_grid'])
+    cx2 = roundToBase(part_x_max + offset, grid)
+    cy2 = roundToBase(part_y_max + offset, grid)
 
-    kicad_mod.append(RectLine(
-        start=[cx1, cy1], end=[cx2, cy2],
+    cx3 = roundToBase(part_x_max - body_back_protrusion_width - offset, grid)
+    cy3 = roundToBase(-pad_size[1]/2 - offset, grid)
+
+    cx4 = roundToBase(part_x_min + body_back_protrusion_width + offset, grid)
+
+    kicad_mod.append(PolygoneLine(polygone=[
+            {'x':cx1, 'y':cy1},
+            {'x':cx1, 'y':cy2},
+            {'x':cx2, 'y':cy2},
+            {'x':cx2, 'y':cy1},
+            {'x':cx3, 'y':cy1},
+            {'x':cx3, 'y':cy3},
+            {'x':cx4, 'y':cy3},
+            {'x':cx4, 'y':cy1},
+            {'x':cx1, 'y':cy1},
+            ],
         layer='F.CrtYd', width=configuration['courtyard_line_width']))
 
     ########################### Fab Outline ################################
