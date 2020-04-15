@@ -22,3 +22,24 @@ TSOP-II-44_10.16x18.41mm_P0.80mm:
   pitch: 0.80
   num_pins_x: 0
   num_pins_y: 22
+
+TSOP-II-86_10.16x22.22mm_P0.5mm:
+  size_source: 'http://www.issi.com/WW/pdf/42-45S32800J.pdf'
+  body_size_x:
+    minimum: 10.03
+    maximum: 10.29
+  body_size_y:
+    minimum: 22.02
+    maximum: 22.42
+  overall_size_x:
+    minimum: 11.56
+    maximum: 11.96
+  lead_width:
+    minimum: 0.17
+    maximum: 0.27
+  lead_len:
+    minimum: 0.40
+    maximum: 0.60
+  pitch: 0.50
+  num_pins_x: 0
+  num_pins_y: 43
