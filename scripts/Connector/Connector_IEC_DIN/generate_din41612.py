@@ -241,11 +241,11 @@ def build_positions(config, pins_per_row, row, row_direction, column_direction):
     else:
         raise Exception(f"weird pins per row: {pins_per_row} (row_pins: "
                         f"{config['row_pins']}, {pins}x{rows}")
-    return [
-            Point(
+    return {pin: Point(
             pin_one.x + column_direction.x * (pin - 1) * config['pin_column_offset'],
-            pin_one.y + column_direction.y * (pin - 1) * config['pin_column_offset'])
-            for pin in positions]
+            pin_one.y + column_direction.y * (pin - 1) * config['pin_column_offset']
+        )
+        for pin in positions}
 
 def build_pins(mod, config, pins, rows, row_direction, column_direction):
     pin_args = dict(
@@ -263,7 +263,7 @@ def build_pins(mod, config, pins, rows, row_direction, column_direction):
         positions = build_positions(config, pins_per_row, row, row_direction,
                 column_direction)
 
-        for pin, pos in enumerate(positions):
+        for pin, pos in positions.items():
             number = config['name_pattern'].format(**locals())
             if first is None:
                 # no marked pin yet
@@ -352,9 +352,9 @@ def build_din41612_connector_horizontal(mod, series, direction, pins, rows,
             )
 
     keepout_radius = config["pin_plating_diameter"]   + .4
-    positions = build_positions(config, pins_per_row=pins / len(rows),
+    positions = list(build_positions(config, pins_per_row=pins / len(rows),
             row=rows[0], row_direction=Point(0,1),
-            column_direction=Point(1,0))
+            column_direction=Point(1,0)).values())
     keepouts = addKeepoutRect(positions[0].x, positions[0].y, keepout_radius,
         keepout_radius)
     for pos in positions[1:]:
@@ -542,9 +542,9 @@ def build_din41612_connector_vertical(mod, series, direction, pins, rows,
     mod.append(PolygoneLine(polygone=arrow_points, layer='F.Fab', width=.1))
 
     keepout_radius = config["pin_plating_diameter"]   + .4
-    positions = build_positions(config, pins_per_row=pins / len(rows),
+    positions = list(build_positions(config, pins_per_row=pins / len(rows),
             row=rows[0], row_direction=Point(1,0),
-            column_direction=Point(0,1))
+            column_direction=Point(0,1)).values())
     keepouts = addKeepoutRect(positions[0].x, positions[0].y, keepout_radius,
         keepout_radius)
     for pos in positions[1:]:
@@ -553,7 +553,7 @@ def build_din41612_connector_vertical(mod, series, direction, pins, rows,
         positions = build_positions(config, pins_per_row=pins / len(rows),
                 row=row, row_direction=Point(1,0),
                 column_direction=Point(0,1))
-        for pos in positions:
+        for pos in positions.values():
             keepouts += addKeepoutRound(pos.x, pos.y, keepout_radius, keepout_radius)
     # highlight connector shape on silk
     highlight_expand = 0
