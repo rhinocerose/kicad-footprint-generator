@@ -335,7 +335,7 @@ def build_din41612_connector_horizontal(mod, series, direction, pins, rows,
         ], layer='F.Fab', width=.1))
 
     # add silk screen
-    sd = .2
+    sd = .2 + .06
     silk_points = [
             Point(center.x - config['housing_width']/2 - sd,
                 -config['a1_edge']),
