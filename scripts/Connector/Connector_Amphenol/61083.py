@@ -43,11 +43,11 @@ datasheet = "https://cdn.amphenol-icc.com/media/wysiwyg/files/drawing/61083.pdf"
 variant_params = {
     'no_peg':{
         'peg': 'no',
-        'part_code': "61083-{n:02}xx2"
+        'part_code': "61083-{n}xx2x"
         },
     'peg':{
         'peg': 'yes',
-        'part_code': "61083-{n:02}xx0"
+        'part_code': "61083-{n}xx0x"
         }
 }
 
@@ -65,7 +65,12 @@ mount_drill_right = 1.2
 def generate_one_footprint(pins_per_row, variant, configuration):
     is_peg = variant_params[variant]['peg'] == 'yes'
 
-    mpn = variant_params[variant]['part_code'].format(n=pins_per_row*2)
+    if pins_per_row < 50:
+        pincount_code = "0" + str(pins_per_row*2/10)[0]
+    else:
+        pincount_code = str(pins_per_row*2/10)[:2]
+
+    mpn = variant_params[variant]['part_code'].format(n=pincount_code)
 
     # handle arguments
     mp_name = ""
