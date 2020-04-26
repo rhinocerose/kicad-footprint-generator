@@ -19,6 +19,7 @@ import re
 
 from KicadModTree.util.TolerancedSize import TolerancedSize
 
+
 def ipc_body_edge_inside(
         ipc_data, ipc_round_base, manf_tol, body_size, lead_width,
         lead_len=None, lead_inside=None, heel_reduction=0):
@@ -53,14 +54,16 @@ def ipc_body_edge_inside(
     pull_back = TolerancedSize(nominal=0)
 
     return ipc_body_edge_inside_pull_back(
-                ipc_data, ipc_round_base, manf_tol, body_size, lead_width,
-                lead_len=lead_len, lead_inside=lead_inside, pull_back=pull_back,
-                heel_reduction=heel_reduction
-                )
+        ipc_data, ipc_round_base, manf_tol, body_size, lead_width,
+        lead_len=lead_len, lead_inside=lead_inside, pull_back=pull_back,
+        heel_reduction=heel_reduction
+    )
+
 
 def ipc_body_edge_inside_pull_back(
         ipc_data, ipc_round_base, manf_tol, body_size, lead_width,
-        lead_len=None, lead_inside=None, body_to_inside_lead_edge=None, pull_back=None, lead_outside=None, heel_reduction=0):
+        lead_len=None, lead_inside=None, body_to_inside_lead_edge=None,
+        pull_back=None, lead_outside=None, heel_reduction=0):
     r""" Calculate IPC pad parameters for components with "leads" pulled back from the body edge by given length.
     No lead packages and two terminal devices with terminals set in from what is called the body dimension.
     Set pullback to 0 for components without pullback.
@@ -124,16 +127,20 @@ def ipc_body_edge_inside_pull_back(
     else:
         raise KeyError("either lead inside distance, lead to body edge or lead lenght must be given")
 
-    Gmin = S.maximum_RMS - 2*ipc_data['heel'] + 2*heel_reduction - math.sqrt(S.ipc_tol_RMS**2 + F**2 + P**2)
+    Gmin = S.maximum_RMS - 2*ipc_data['heel'] + 2 * \
+        heel_reduction - math.sqrt(S.ipc_tol_RMS**2 + F**2 + P**2)
 
-    Zmax = lead_outside.minimum_RMS + 2*ipc_data['toe'] + math.sqrt(lead_outside.ipc_tol_RMS**2 + F**2 + P**2)
-    Xmax = lead_width.minimum_RMS + 2*ipc_data['side'] + math.sqrt(lead_width.ipc_tol_RMS**2 + F**2 + P**2)
+    Zmax = lead_outside.minimum_RMS + 2*ipc_data['toe'] + \
+        math.sqrt(lead_outside.ipc_tol_RMS**2 + F**2 + P**2)
+    Xmax = lead_width.minimum_RMS + 2*ipc_data['side'] + \
+        math.sqrt(lead_width.ipc_tol_RMS**2 + F**2 + P**2)
 
     Zmax = TolerancedSize.roundToBase(Zmax, ipc_round_base['toe'])
     Gmin = TolerancedSize.roundToBase(Gmin, ipc_round_base['heel'])
     Xmax = TolerancedSize.roundToBase(Xmax, ipc_round_base['side'])
 
     return Gmin, Zmax, Xmax
+
 
 def ipc_gull_wing(
         ipc_data, ipc_round_base, manf_tol, lead_width, lead_outside,
@@ -188,16 +195,20 @@ def ipc_gull_wing(
     else:
         raise KeyError("either lead inside distance or lead lenght must be given")
 
-    Gmin = S.maximum_RMS - 2*ipc_data['heel'] + 2*heel_reduction - math.sqrt(S.ipc_tol_RMS**2 + F**2 + P**2)
+    Gmin = S.maximum_RMS - 2*ipc_data['heel'] + 2 * \
+        heel_reduction - math.sqrt(S.ipc_tol_RMS**2 + F**2 + P**2)
 
-    Zmax = lead_outside.minimum_RMS + 2*ipc_data['toe'] + math.sqrt(lead_outside.ipc_tol_RMS**2 + F**2 + P**2)
-    Xmax = lead_width.minimum_RMS + 2*ipc_data['side'] + math.sqrt(lead_width.ipc_tol_RMS**2 + F**2 + P**2)
+    Zmax = lead_outside.minimum_RMS + 2*ipc_data['toe'] + \
+        math.sqrt(lead_outside.ipc_tol_RMS**2 + F**2 + P**2)
+    Xmax = lead_width.minimum_RMS + 2*ipc_data['side'] + \
+        math.sqrt(lead_width.ipc_tol_RMS**2 + F**2 + P**2)
 
     Zmax = TolerancedSize.roundToBase(Zmax, ipc_round_base['toe'])
     Gmin = TolerancedSize.roundToBase(Gmin, ipc_round_base['heel'])
     Xmax = TolerancedSize.roundToBase(Xmax, ipc_round_base['side'])
 
     return Gmin, Zmax, Xmax
+
 
 def ipc_pad_center_plus_size(
         ipc_data, ipc_round_base, manf_tol,
@@ -232,9 +243,11 @@ def ipc_pad_center_plus_size(
     lead_outside = center_position*2 + lead_length
 
     Gmin = S.maximum_RMS - 2*ipc_data['heel'] - math.sqrt(S.ipc_tol_RMS**2 + F**2 + P**2)
-    Zmax = lead_outside.minimum_RMS + 2*ipc_data['toe'] + math.sqrt(lead_outside.ipc_tol_RMS**2 + F**2 + P**2)
+    Zmax = lead_outside.minimum_RMS + 2*ipc_data['toe'] + \
+        math.sqrt(lead_outside.ipc_tol_RMS**2 + F**2 + P**2)
 
-    Xmax = lead_width.minimum_RMS + 2*ipc_data['side'] + math.sqrt(lead_width.ipc_tol_RMS**2 + F**2 + P**2)
+    Xmax = lead_width.minimum_RMS + 2*ipc_data['side'] + \
+        math.sqrt(lead_width.ipc_tol_RMS**2 + F**2 + P**2)
 
     Zmax = TolerancedSize.roundToBase(Zmax, ipc_round_base['toe'])
     Gmin = TolerancedSize.roundToBase(Gmin, ipc_round_base['heel'])

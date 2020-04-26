@@ -17,6 +17,7 @@ from __future__ import division
 import math
 import re
 
+
 class TolerancedSize():
     r""" Class for handling toleranced size parameters as defined by IPC
 
@@ -42,6 +43,7 @@ class TolerancedSize():
         Named options are "inch" and "mil". Everything else means mm.
         (default: None which means mm)
     """
+
     def __init__(self, minimum=None, nominal=None, maximum=None, tolerance=None, unit=None):
         if nominal is not None:
             self.nominal = nominal
@@ -72,7 +74,8 @@ class TolerancedSize():
             self.maximum = self.nominal
 
         if self.maximum < self.minimum:
-            raise ValueError("Maximum is smaller than minimum. Tolerance ranges given wrong or parameters confused.")
+            raise ValueError(
+                "Maximum is smaller than minimum. Tolerance ranges given wrong or parameters confused.")
 
         self.minimum = TolerancedSize.toMetric(self.minimum, unit)
         self.nominal = TolerancedSize.toMetric(self.nominal, unit)
@@ -145,26 +148,26 @@ class TolerancedSize():
         elif '+' in s and '-' in s:
             if s.count('+') > 1 or s.count('-') > 1:
                 raise ValueError(
-                        "Illegal dimension specifier: {}\n"
-                        "\tToo many tolerance specifiers. Expected nom+tolp-toln"
-                        .format(input)
-                    )
+                    "Illegal dimension specifier: {}\n"
+                    "\tToo many tolerance specifiers. Expected nom+tolp-toln"
+                    .format(input)
+                )
             idxp = s.find('+')
             idxn = s.find('-')
 
             nominal = float(s[0:min(idxp, idxn)])
-            tolerance=[
-                float(s[idxn : idxp if idxn<idxp else None]),
-                float(s[idxp : idxn if idxn>idxp else None])]
+            tolerance = [
+                float(s[idxn: idxp if idxn < idxp else None]),
+                float(s[idxp: idxn if idxn > idxp else None])]
         elif '...' in s or '..' in s:
             s = s.replace('...', '..')
             tokens = s.split('..')
             if len(tokens) > 3:
                 raise ValueError(
-                        "Illegal dimension specifier: {}\n"
-                        "\tToo many tokens seperated by '...' (Valid options are min...max or min...nom...max)"
-                        .format(input)
-                    )
+                    "Illegal dimension specifier: {}\n"
+                    "\tToo many tokens seperated by '...' (Valid options are min...max or min...nom...max)"
+                    .format(input)
+                )
             minimum = float(tokens[0])
             maximum = float(tokens[-1])
             if len(tokens) == 3:
@@ -174,18 +177,18 @@ class TolerancedSize():
                 nominal = float(s)
             except Exception as e:
                 raise ValueError(
-                        "Dimension specifier not recogniced: {}\n"
-                        "\t Valid options are nom, nom+/-tol, nom+tolp-toln, min...max or min...nom...max".
-                        format(input)
-                    ) from e
+                    "Dimension specifier not recogniced: {}\n"
+                    "\t Valid options are nom, nom+/-tol, nom+tolp-toln, min...max or min...nom...max".
+                    format(input)
+                ) from e
 
         return TolerancedSize(
-                minimum=minimum,
-                nominal=nominal,
-                maximum=maximum,
-                tolerance=tolerance,
-                unit=unit
-            )
+            minimum=minimum,
+            nominal=nominal,
+            maximum=maximum,
+            tolerance=tolerance,
+            unit=unit
+        )
 
     @staticmethod
     def fromYaml(yaml, base_name=None, unit=None):
@@ -224,7 +227,7 @@ class TolerancedSize():
                     nominal=yaml.get(base_name),
                     maximum=yaml.get(base_name+"_max"),
                     tolerance=yaml.get(base_name+"_tol")
-                    )
+                )
             return TolerancedSize.fromYaml(yaml.get(base_name), unit=unit)
 
         elif type(yaml) is dict:
@@ -234,7 +237,7 @@ class TolerancedSize():
                 maximum=yaml.get("maximum"),
                 tolerance=yaml.get("tolerance"),
                 unit=unit
-                )
+            )
         else:
             return TolerancedSize.fromString(yaml, unit)
 
@@ -257,7 +260,7 @@ class TolerancedSize():
                     "Did you give the wrong tolerances?\n"
                     "tol(RMS): {} tol: {}"
                     .format(self.ipc_tol_RMS, self.ipc_tol)
-                    )
+                )
             # the discrepancy most likely comes from floating point errors. Ignore it.
             self.ipc_tol_RMS = self.ipc_tol
 
@@ -267,30 +270,30 @@ class TolerancedSize():
     def __add__(self, other):
         if type(other) in [int, float]:
             result = TolerancedSize(
-                minimum = self.minimum + other,
-                maximum = self.maximum + other
-                )
+                minimum=self.minimum + other,
+                maximum=self.maximum + other
+            )
             return result
 
         result = TolerancedSize(
-            minimum = self.minimum + other.minimum,
-            maximum = self.maximum + other.maximum
-            )
+            minimum=self.minimum + other.minimum,
+            maximum=self.maximum + other.maximum
+        )
         result.updateRMS([self.ipc_tol_RMS, other.ipc_tol_RMS])
         return result
 
     def __sub__(self, other):
         if type(other) in [int, float]:
             result = TolerancedSize(
-                minimum = self.minimum - other,
-                maximum = self.maximum - other
-                )
+                minimum=self.minimum - other,
+                maximum=self.maximum - other
+            )
             return result
 
         result = TolerancedSize(
-            minimum = self.minimum - other.maximum,
-            maximum = self.maximum - other.minimum
-            )
+            minimum=self.minimum - other.maximum,
+            maximum=self.maximum - other.minimum
+        )
         result.updateRMS([self.ipc_tol_RMS, other.ipc_tol_RMS])
         return result
 
@@ -298,11 +301,11 @@ class TolerancedSize():
         if type(other) not in [int, float]:
             raise NotImplementedError(
                 "Multiplication is only implemented against float or int"
-                )
-        result = TolerancedSize(
-            minimum = self.minimum*other,
-            maximum = self.maximum*other
             )
+        result = TolerancedSize(
+            minimum=self.minimum*other,
+            maximum=self.maximum*other
+        )
         result.updateRMS([self.ipc_tol_RMS*math.sqrt(other)])
         return result
 
@@ -313,11 +316,11 @@ class TolerancedSize():
         if type(other) not in [int, float]:
             raise NotImplementedError(
                 "Division is only implemented against float or int"
-                )
-        result = TolerancedSize(
-            minimum = self.minimum/other,
-            maximum = self.maximum/other
             )
+        result = TolerancedSize(
+            minimum=self.minimum/other,
+            maximum=self.maximum/other
+        )
         result.updateRMS([self.ipc_tol_RMS/math.sqrt(other)])
         return result
 
@@ -325,11 +328,11 @@ class TolerancedSize():
         if type(other) not in [int, float]:
             raise NotImplementedError(
                 "Integer division is only implemented against float or int"
-                )
-        result = TolerancedSize(
-            minimum = self.minimum//other,
-            maximum = self.maximum//other
             )
+        result = TolerancedSize(
+            minimum=self.minimum//other,
+            maximum=self.maximum//other
+        )
         result.updateRMS([self.ipc_tol_RMS//math.sqrt(other)])
         return result
 
