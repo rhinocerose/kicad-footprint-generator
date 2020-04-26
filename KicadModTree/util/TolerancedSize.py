@@ -14,6 +14,8 @@
 # (C) 2016-2018 by Thomas Pointhuber, <thomas.pointhuber@gmx.at>
 
 from __future__ import division
+from future.utils import raise_from
+
 import math
 import re
 
@@ -176,11 +178,12 @@ class TolerancedSize():
             try:
                 nominal = float(s)
             except Exception as e:
-                raise ValueError(
-                    "Dimension specifier not recogniced: {}\n"
-                    "\t Valid options are nom, nom+/-tol, nom+tolp-toln, min...max or min...nom...max".
-                    format(input)
-                ) from e
+                raise_from(
+                    ValueError(
+                        "Dimension specifier not recogniced: {}\n"
+                        "\t Valid options are nom, nom+/-tol, nom+tolp-toln, min...max or min...nom...max".
+                        format(input)
+                    ), e)
 
         return TolerancedSize(
             minimum=minimum,
