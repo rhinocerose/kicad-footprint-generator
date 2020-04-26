@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import sys
-sys.path.append("../../kicad_mod") # load kicad_mod path
+sys.path.append("../../../kicad_mod") # load kicad_mod path
 
 import argparse
 from kicad_mod import KicadMod, createNumberedPadsTHT
@@ -58,7 +58,7 @@ else:
                               ,{'x':((start_pos_x+end_pos_x)/2)-4.45/2-7.3, 'y':1.9}
                               ,{'x':((start_pos_x+end_pos_x)/2)-4.45/2, 'y':1.9}
                               ,{'x':((start_pos_x+end_pos_x)/2)-4.45/2, 'y':3.2}], 'F.SilkS', 0.15)
-    
+
     kicad_mod.addPolygoneLine([{'x':((start_pos_x+end_pos_x)/2)+4.45/2+7.3, 'y':3.2}
                               ,{'x':((start_pos_x+end_pos_x)/2)+4.45/2+7.3, 'y':1.9}
                               ,{'x':((start_pos_x+end_pos_x)/2)+4.45/2, 'y':1.9}
