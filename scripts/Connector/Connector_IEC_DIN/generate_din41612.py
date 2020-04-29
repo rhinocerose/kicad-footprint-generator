@@ -368,14 +368,10 @@ def build_din41612_connector_horizontal(mod, series, direction, pins, rows,
 
     # add arrow pointing at a1
     arrow_points = map(lambda x: pos1 + x, (
-            Point(0, .2 + config['last_row_pos'] +
-                config['pin_plating_diameter']/2),
-            Point(-0.3, .8 + config['last_row_pos'] +
-                config['pin_plating_diameter']/2),
-            Point(0.3, .8 + config['last_row_pos'] +
-                config['pin_plating_diameter']/2),
-            Point(0, .2 + config['last_row_pos'] +
-                config['pin_plating_diameter']/2),
+            Point(-.2 - config['pin_plating_diameter'] / 2, 0),
+            Point(-.8 - config['pin_plating_diameter'] / 2, -0.3),
+            Point(-.8 - config['pin_plating_diameter'] / 2, 0.3),
+            Point(-.2 - config['pin_plating_diameter'] / 2, 0),
             ))
     mod.append(PolygoneLine(polygone=arrow_points, layer='F.SilkS', width=.12))
     # add a1 marker on fab layer
