@@ -351,7 +351,7 @@ def build_din41612_connector_horizontal(mod, series, direction, pins, rows,
             -config['a1_housing_back'] - hole_part_inset + sd
             )
 
-    keepout_radius = config["pin_plating_diameter"]   + .4
+    keepout_radius = config["pin_plating_diameter"] + (.2 + .12) * 2
     positions = list(build_positions(config, pins_per_row=pins / len(rows),
             row=rows[0], row_direction=Point(0,1),
             column_direction=Point(1,0)).values())
