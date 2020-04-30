@@ -180,6 +180,8 @@ class Pad(Node):
           solder paste margin of the pad (default: 0)
         * *solder_mask_margin* (``float``) --
           solder mask margin of the pad (default: 0)
+        * *zone_connect* (``int``) --
+          zone connection type of the pad (default: 0)
 
         * *x_mirror* (``[int, float](mirror offset)``) --
           mirror x direction around offset "point"
@@ -211,6 +213,13 @@ class Pad(Node):
     LAYERS_THT = ['*.Cu', '*.Mask']
     LAYERS_NPTH = ['*.Cu', '*.Mask']
 
+    CONNECT_PARENT = None
+    CONNECT_NONE = 0
+    CONNECT_THERMAL = 1
+    CONNECT_SOLID = 2
+    _CONNECTS = [CONNECT_PARENT, CONNECT_NONE, CONNECT_THERMAL, CONNECT_SOLID]
+
+
     ANCHOR_CIRCLE = 'circle'
     ANCHOR_RECT = 'rect'
     _ANCHOR_SHAPE = [ANCHOR_CIRCLE, ANCHOR_RECT]
@@ -233,6 +242,7 @@ class Pad(Node):
         self._initSolderPasteMargin(**kwargs)
         self._initSolderPasteMarginRatio(**kwargs)
         self._initSolderMaskMargin(**kwargs)
+        self._initZoneConnect(**kwargs)
         self._initLayers(**kwargs)
         self._initMirror(**kwargs)
 
@@ -319,6 +329,13 @@ class Pad(Node):
 
     def _initSolderMaskMargin(self, **kwargs):
         self.solder_mask_margin = kwargs.get('solder_mask_margin', 0)
+        
+    def _initZoneConnect(self, **kwargs):
+        if not kwargs.get('zone_connect'):
+            raise KeyError('zone_connect not declared (like "zone_connect=Pad.CONNECT_SOLID")')
+        self.zone_connect = kwargs.get('zone_connect', Pad.CONNECT_PARENT)
+        if self.zone_connect not in Pad._CONNECTS:
+            raise ValueError('{zone_connect} is an invalid zone connection for pads'.format(type=self.zone_connect))
 
     def _initLayers(self, **kwargs):
         if not kwargs.get('layers'):

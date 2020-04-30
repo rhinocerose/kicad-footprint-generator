@@ -92,6 +92,10 @@ class KicadFileHandler(FileHandler):
             sexpr.append(['solder_mask_margin', self.kicad_mod.maskMargin])
             sexpr.append(SexprSerializer.NEW_LINE)
 
+        if not self.kicad_mod.zoneConnect is None:
+            sexpr.append(['zone_connect', self.kicad_mod.zoneConnect])
+            sexpr.append(SexprSerializer.NEW_LINE)
+
         if self.kicad_mod.pasteMargin:
             sexpr.append(['solder_paste_margin', self.kicad_mod.pasteMargin])
             sexpr.append(SexprSerializer.NEW_LINE)
@@ -347,6 +351,10 @@ class KicadFileHandler(FileHandler):
                 sexpr.append(['solder_paste_margin_ratio', node.solder_paste_margin_ratio])
             if node.solder_paste_margin != 0:
                 sexpr.append(['solder_paste_margin', node.solder_paste_margin])
+
+        if not node.zone_connect is None:
+            sexpr.append(SexprSerializer.NEW_LINE)
+            sexpr.append(['zone_connect', node.zone_connect])
 
         return sexpr
 

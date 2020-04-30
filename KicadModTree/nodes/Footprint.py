@@ -50,6 +50,7 @@ class Footprint(Node):
         self.maskMargin = None
         self.pasteMargin = None
         self.pasteMarginRatio = None
+        self.zoneConnect = None
 
     def setName(self, name):
         self.name = name
@@ -74,3 +75,6 @@ class Footprint(Node):
         assert abs(value) <= 1, "Solder paste margin must be between -1 and 1. {} is too large.".format(value)
 
         self.pasteMarginRatio = value
+
+    def setZoneConnect(self, value):
+        self.zoneConnect = value
