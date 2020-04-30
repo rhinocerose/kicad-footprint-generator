@@ -174,6 +174,8 @@ class Pad(Node):
           If this is given then all other round radius specifiers are ignored
           Ignored for every shape except round rect
 
+        * *clearance* (``float``) --
+          clearance margin of the pad (default: 0)
         * *solder_paste_margin_ratio* (``float``) --
           solder paste margin ratio of the pad (default: 0)
         * *solder_paste_margin* (``float``) --
@@ -242,6 +244,7 @@ class Pad(Node):
         self._initSize(**kwargs)
         self._initOffset(**kwargs)
         self._initDrill(**kwargs)  # requires pad type and offset
+        self._initClearance(**kwargs)
         self._initSolderPasteMargin(**kwargs)
         self._initSolderPasteMarginRatio(**kwargs)
         self._initSolderMaskMargin(**kwargs)
@@ -323,7 +326,10 @@ class Pad(Node):
             self.drill = None
             if kwargs.get('drill'):
                 pass  # TODO: throw warning because drill is not supported
-
+        
+    def _initClearance(self, **kwargs):
+        self.clearance = kwargs.get('clearance', 0)
+        
     def _initSolderPasteMarginRatio(self, **kwargs):
         self.solder_paste_margin_ratio = kwargs.get('solder_paste_margin_ratio', 0)
 
@@ -332,7 +338,7 @@ class Pad(Node):
 
     def _initSolderMaskMargin(self, **kwargs):
         self.solder_mask_margin = kwargs.get('solder_mask_margin', 0)
-        
+   
     def _initZoneConnect(self, **kwargs):
         if not kwargs.get('zone_connect'):
             raise KeyError('zone_connect not declared (like "zone_connect=Pad.CONNECT_SOLID")')

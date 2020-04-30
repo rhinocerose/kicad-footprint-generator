@@ -47,6 +47,7 @@ class Footprint(Node):
         self.description = None
         self.tags = None
         self.attribute = None
+        self.clearance = None
         self.maskMargin = None
         self.pasteMargin = None
         self.pasteMarginRatio = None
@@ -64,6 +65,9 @@ class Footprint(Node):
     def setAttribute(self, value):
         self.attribute = value
 
+    def setClearance(self, value):
+        self.clearance = value
+        
     def setMaskMargin(self, value):
         self.maskMargin = value
 
