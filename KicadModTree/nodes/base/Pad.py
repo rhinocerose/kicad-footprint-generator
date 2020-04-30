@@ -346,8 +346,6 @@ class Pad(Node):
         self.solder_mask_margin = kwargs.get('solder_mask_margin', 0)
    
     def _initZoneConnect(self, **kwargs):
-        if not kwargs.get('zone_connect'):
-            raise KeyError('zone_connect not declared (like "zone_connect=Pad.CONNECT_SOLID")')
         self.zone_connect = kwargs.get('zone_connect', Pad.CONNECT_PARENT)
         if self.zone_connect not in Pad._CONNECTS:
             raise ValueError('{zone_connect} is an invalid zone connection for pads'.format(type=self.zone_connect))
