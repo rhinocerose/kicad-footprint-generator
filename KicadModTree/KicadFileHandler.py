@@ -108,6 +108,14 @@ class KicadFileHandler(FileHandler):
             sexpr.append(['zone_connect', self.kicad_mod.zoneConnect])
             sexpr.append(SexprSerializer.NEW_LINE)
             
+        if self.kicad_mod.thermalWidth:
+            sexpr.append(['thermal_width', self.kicad_mod.thermalWidth])
+            sexpr.append(SexprSerializer.NEW_LINE)
+            
+        if self.kicad_mod.thermalGap:
+            sexpr.append(['thermal_gap', self.kicad_mod.thermalGap])
+            sexpr.append(SexprSerializer.NEW_LINE)
+            
         sexpr.extend(self._serializeTree())
 
         return str(SexprSerializer(sexpr))
@@ -356,9 +364,14 @@ class KicadFileHandler(FileHandler):
             if node.solder_paste_margin != 0:
                 sexpr.append(['solder_paste_margin', node.solder_paste_margin])
 
-        if not node.zone_connect is None:
+        if not node.zone_connect is None or node.thermal_width != 0 or node.thermal_gap!=0:
             sexpr.append(SexprSerializer.NEW_LINE)
-            sexpr.append(['zone_connect', node.zone_connect])
+            if not node.zone_connect is None:
+                sexpr.append(['zone_connect', node.zone_connect])
+            if node.thermal_width != 0:
+                sexpr.append(['thermal_width', node.thermal_width])
+            if node.thermal_gap != 0:
+                sexpr.append(['thermal_gap', node.thermal_gap])
 
         return sexpr
 

@@ -186,8 +186,12 @@ class Pad(Node):
         * *zone_connect* (``int``) --
           zone connection type of the pad (default: None)
           None maps to CONNECT_PARENT, which means connection type is governed
-          by footprint parent.
-
+          by parent footprint.
+        * *thermal_width* (``float``) --
+          thermal relief spoke width of the pad (default: 0)
+        * *thermal_gap* (``float``) --
+          thermal relief gap of the pad (default: 0)
+          
         * *x_mirror* (``[int, float](mirror offset)``) --
           mirror x direction around offset "point"
         * *y_mirror* (``[int, float](mirror offset)``) --
@@ -249,6 +253,8 @@ class Pad(Node):
         self._initSolderPasteMarginRatio(**kwargs)
         self._initSolderMaskMargin(**kwargs)
         self._initZoneConnect(**kwargs)
+        self._initThermalWidth(**kwargs)
+        self._initThermalGap(**kwargs)
         self._initLayers(**kwargs)
         self._initMirror(**kwargs)
 
@@ -345,6 +351,12 @@ class Pad(Node):
         self.zone_connect = kwargs.get('zone_connect', Pad.CONNECT_PARENT)
         if self.zone_connect not in Pad._CONNECTS:
             raise ValueError('{zone_connect} is an invalid zone connection for pads'.format(type=self.zone_connect))
+
+    def _initThermalWidth(self, **kwargs):
+        self.thermal_width = kwargs.get('thermal_width', 0)
+
+    def _initThermalGap(self, **kwargs):
+        self.thermal_gap = kwargs.get('thermal_gap', 0)
 
     def _initLayers(self, **kwargs):
         if not kwargs.get('layers'):

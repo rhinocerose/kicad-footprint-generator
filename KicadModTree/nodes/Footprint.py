@@ -52,6 +52,8 @@ class Footprint(Node):
         self.pasteMargin = None
         self.pasteMarginRatio = None
         self.zoneConnect = None
+        self.thermalWidth = None
+        self.thermalGap = None
 
     def setName(self, name):
         self.name = name
@@ -82,3 +84,9 @@ class Footprint(Node):
 
     def setZoneConnect(self, value):
         self.zoneConnect = value
+        
+    def setThermalWidth(self, value):
+        self.thermalWidth = value
+
+    def setThermalGap(self, value):
+        self.thermalGap = value
