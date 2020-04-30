@@ -181,7 +181,7 @@ class Pad(Node):
         * *solder_mask_margin* (``float``) --
           solder mask margin of the pad (default: 0)
         * *zone_connect* (``int``) --
-          zone connection type of the pad (default: 0)
+          zone connection type of the pad (default: None)
 
         * *x_mirror* (``[int, float](mirror offset)``) --
           mirror x direction around offset "point"
