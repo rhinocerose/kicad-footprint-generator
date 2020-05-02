@@ -260,8 +260,16 @@ class KicadFileHandler(FileHandler):
                     ['size', node.size.x, node.size.y],
                     ['thickness', node.thickness]]]
 
+        jloc = (node.justify != 'center')
         if node.mirror:
-            effects.append(['justify', 'mirror'])
+            if jloc:
+                effects.append(['justify', node.justify, 'mirror'])
+            else:
+                effects.append(['justify', 'mirror'])
+        elif jloc:
+            effects.append(['justify', node.justify])
+        
+        sexpr.append(['layer', node.layer])
 
         sexpr.append(effects)
         sexpr.append(SexprSerializer.NEW_LINE)
