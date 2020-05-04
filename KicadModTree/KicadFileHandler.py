@@ -279,7 +279,7 @@ class KicadFileHandler(FileHandler):
     def _serialize_Model(self, node):
         sexpr = ['model', node.filename,
                  SexprSerializer.NEW_LINE,
-                 ['at', ['xyz', node.at.x, node.at.y, node.at.z]],
+                 ['at', ['xyz', node.at.x, node.at.y, node.at.z]] if node.offset == [0,0,0] else ['offset', ['xyz', node.offset.x, node.offset.y, node.offset.z]],
                  SexprSerializer.NEW_LINE,
                  ['scale', ['xyz', node.scale.x, node.scale.y, node.scale.z]],
                  SexprSerializer.NEW_LINE,
@@ -363,8 +363,10 @@ class KicadFileHandler(FileHandler):
             sexpr_primitives = self._serialize_CustomPadPrimitives(node)
             sexpr.append(['primitives', SexprSerializer.NEW_LINE] + sexpr_primitives)
 
-        if node.solder_paste_margin_ratio != 0 or node.solder_mask_margin != 0 or node.solder_paste_margin != 0:
+        if node.solder_paste_margin_ratio != 0 or node.solder_mask_margin != 0 or node.solder_paste_margin != 0 or node.clearance != 0:
             sexpr.append(SexprSerializer.NEW_LINE)
+            if node.clearance != 0:
+                sexpr.append(['clearance', node.clearance])
             if node.solder_mask_margin != 0:
                 sexpr.append(['solder_mask_margin', node.solder_mask_margin])
             if node.solder_paste_margin_ratio != 0:
