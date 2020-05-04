@@ -639,7 +639,7 @@ connectors = {
         'E': [ (32, 'ae'), (32, 'ac', dict(extra_desc='rows')), (48, 'ace') ],
 #        'E160': [ (160, 'abcde') ],
 #        'F_flat': [ (32, 'zb') (32, 'zd'), (48, 'zbd') ],
-        'F': [ (32, 'zd'), (32, 'zb', dict(extra_desc='rows')), (48, 'zbd') ],
+        'F': [ (32, 'zd', dict(extra_desc='rows')), (32, 'zb'), (48, 'zbd') ],
 #        'H11': [ (11, 'e') ],
         'Q': [ (64, 'ab') ],
         'Q/2': [ (32, 'ab') ],
