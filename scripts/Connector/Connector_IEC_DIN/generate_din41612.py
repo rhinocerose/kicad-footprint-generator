@@ -52,7 +52,7 @@ large_holes = {
 dimensions = {
         'pin_hole_diameter': 1,
         'pin_plating_diameter': 1.55,
-        'mounting_hole_diameter': 2.8,
+        'mounting_hole_diameter': 2.85,
         'pin_row_offset': 2.54,
         'pin_column_offset': 2.54,
         'silk_reference_offset': 1.0,
@@ -87,7 +87,7 @@ dimensions = {
             'housing_depth': 8.6,
             'connector_depth': 6.2,
             'nodge_width': 1,
-            'mounting_hole_diameter': 2.8,
+            'mounting_hole_diameter': 2.85,
             'pin_hole_diameter': 1,
             'nodge_height': 3,
             'nodge_width': 1,
