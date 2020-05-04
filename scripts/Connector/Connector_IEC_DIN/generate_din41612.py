@@ -144,6 +144,7 @@ dimensions = {
                 series_rows='zbd',
                 housing_height=14.8,
                 connector_height=12.4,
+                Vertical=large_holes,
                 ),
 #            'F_flat': { 'series_rows': 'zbd', },
 # TODO H11 vertical and horizontal use different rows (e, vs. ac)
@@ -588,7 +589,10 @@ def build_din41612_connector(series, direction, pins, rows, extra_args={}):
     config = dimensions.copy()
     config.update(config[direction])
     config.update(config[direction][width])
-    config.update(config['series'][series.split('/')[0]])
+    series_config = config['series'][series.split('/')[0]]
+    config.update(series_config)
+    if direction in series_config:
+        config.update(series_config[direction])
     config.update(extra_args)
 
     used_rows = config['series_rows'].find(rows[-1])
