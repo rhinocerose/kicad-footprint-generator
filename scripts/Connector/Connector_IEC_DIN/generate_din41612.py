@@ -139,7 +139,6 @@ dimensions = {
                 **large_holes
                 ),
 #            'E160': { 'series_rows': 'abcde', },
-#            TODO: F also has horizontal female versions with larger holes
             'F': dict(
                 series_rows='zbd',
                 housing_height=14.8,
@@ -649,10 +648,9 @@ connectors = {
         'R/3': [ (30, 'abc'), (20, 'ac') ],
 }
 
-# TODO: Q R RD TE M H15 H7/F24
-# TODO: Vertical
+# TODO: Q R RD TE M H11 H15 H7/F24
+# TODO: check all manufacturer special variants
 # make fab shape depend on mounting position not on front of connector
-# TODO: check housing dimensions for all variants
 
 for direction in ('Horizontal', 'Vertical'):
     for series, variants in connectors.items():
