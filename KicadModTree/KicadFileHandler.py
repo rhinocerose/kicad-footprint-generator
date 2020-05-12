@@ -347,6 +347,8 @@ class KicadFileHandler(FileHandler):
                 sexpr.append(['drill', node.drill.x])
             else:
                 sexpr.append(['drill', 'oval', node.drill.x, node.drill.y])
+            if node.offset != [0,0]:
+                sexpr[-1] += ['(offset',node.offset.x, node.offset.y, ')']
 
         sexpr.append(['layers'] + node.layers)
         if node.shape == Pad.SHAPE_ROUNDRECT:
