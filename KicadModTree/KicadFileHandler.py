@@ -268,8 +268,6 @@ class KicadFileHandler(FileHandler):
                 effects.append(['justify', 'mirror'])
         elif jloc:
             effects.append(['justify', node.justify])
-        
-        sexpr.append(['layer', node.layer])
 
         sexpr.append(effects)
         sexpr.append(SexprSerializer.NEW_LINE)
