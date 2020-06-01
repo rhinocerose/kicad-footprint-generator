@@ -31,6 +31,17 @@ LFBGA-144_10x10mm_Layout12x12_P0.8mm:
   paste_margin: 0.000001
   layout_x: 12
   layout_y: 12
+Texas_DSBGA-20_1.56x1.96mm_Layout4x5_P0.4mm:
+  description: "Texas Instruments, DSBGA, area grid"
+  size_source: "https://www.ti.com/lit/ds/symlink/txs0206.pdf"
+  body_size_x: 1.56
+  body_size_y: 1.96
+  overall_height: 0.5
+  pitch: 0.4
+  pad_diameter: 0.23
+  mask_margin: 0.05
+  layout_x: 4
+  layout_y: 5
 Texas_DSBGA-28_1.9x3.0mm_Layout4x7_P0.4mm:
   description: "Texas Instruments, DSBGA, area grid"
   size_source: "http://www.ti.com/lit/ds/symlink/bq51050b.pdf, http://www.ti.com/lit/an/snva009ag/snva009ag.pdf"
