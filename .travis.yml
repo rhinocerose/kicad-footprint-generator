@@ -13,6 +13,6 @@ python:
 install:
   - ./manage.sh update_dev_packages
 script:
-  - ./manage.sh pep8_check
+  - ./manage.sh pycodestyle_check
   - ./manage.sh unit_tests
   - ./manage.sh py_test_coverage
