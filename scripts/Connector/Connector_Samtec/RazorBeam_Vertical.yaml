@@ -171,7 +171,7 @@ Samtec_LSEM-120-xx.x-x-DV-A-N_Vertical:
   holes:
     - {drill: 1.5, space: 17.7, y: -0.85}
 
-Samtec_LSEM-130-xx-x-DV-A-N_Vertical:
+Samtec_LSEM-130-xx.x-x-DV-A-N_Vertical:
   meta: *LSEM_meta
   pads: *LSEM_pads
   layout: {width: 28.4, height: 4.98}
@@ -179,7 +179,7 @@ Samtec_LSEM-130-xx-x-DV-A-N_Vertical:
   holes:
     - {drill: 1.5, space: 25.7, y: -0.85}
 
-Samtec_LSEM-140-xx-x-DV-A-N_Vertical:
+Samtec_LSEM-140-xx.x-x-DV-A-N_Vertical:
   meta: *LSEM_meta
   pads: *LSEM_pads
   layout: {width: 36.4, height: 4.98}
@@ -187,7 +187,7 @@ Samtec_LSEM-140-xx-x-DV-A-N_Vertical:
   holes:
     - {drill: 1.5, space: 33.7, y: -0.85}
 
-Samtec_LSEM-150-xx-x-DV-A-N_Vertical:
+Samtec_LSEM-150-xx.x-x-DV-A-N_Vertical:
   meta: *LSEM_meta
   pads: *LSEM_pads
   layout: {width: 44.4, height: 4.98}
