@@ -152,7 +152,7 @@ def generate_one_footprint(param, config, default_lib):
     silk_offset = config['silk_fab_offset']
     silk_y = fab_y + silk_offset
     silk_pad = {'x': config['silk_pad_clearance'] + pad_w/2,
-                'y': config['silk_pad_clearance'] + silk_y}
+                'y': config['silk_pad_clearance'] + pad_y/2}
     silk_line = config['silk_line_width']
     silk_lEdge = lEdge - silk_offset
     silk_rEdge = rEdge + silk_offset
@@ -193,7 +193,7 @@ def generate_one_footprint(param, config, default_lib):
 
     # Pin 1 indicator
     fp.append(markerArrow(x = pin1.x,
-                          y = -silk_pad['y'],
+                          y = pin1.y - silk_pad['y'],
                           width = fab_mark / 2,
                           angle = 180,
                           line_width = silk_line,
