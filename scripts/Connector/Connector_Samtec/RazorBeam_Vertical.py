@@ -100,9 +100,11 @@ def generate_one_footprint(param, config, default_lib):
     fab_line = config['fab_line_width']
     fab_mark = config['fab_pin1_marker_length']
     fab_w = param['layout']['width']
+    fab_h = param['layout']['height']
     if 'add-width' in param:
         fab_w += param['add-width']
-    fab_h = param['layout']['height']
+    if 'add-height' in param:
+        fab_h += param['add-height']
     fab_y = fab_h / 2
     lEdge = -fab_w / 2
     rEdge = lEdge + fab_w
@@ -148,10 +150,10 @@ def generate_one_footprint(param, config, default_lib):
     ############################################################################
     # Silkscreen: F.SilkS
     silk_offset = config['silk_fab_offset']
-    silk_pad = {'x': config['silk_pad_clearance'] + pad_w/2,
-                'y': config['silk_pad_clearance'] + pad_h/2}
-    silk_line = config['silk_line_width']
     silk_y = fab_y + silk_offset
+    silk_pad = {'x': config['silk_pad_clearance'] + pad_w/2,
+                'y': config['silk_pad_clearance'] + silk_y}
+    silk_line = config['silk_line_width']
     silk_lEdge = lEdge - silk_offset
     silk_rEdge = rEdge + silk_offset
     silk_chamfer = chamfer + silk_offset/2
@@ -162,7 +164,7 @@ def generate_one_footprint(param, config, default_lib):
                       {'x': silk_lEdge + silk_chamfer, 'y': -silk_y},
                       {'x': silk_lEdge, 'y': -silk_y + silk_chamfer},
                       {'x': silk_lEdge, 'y':  0}],
-                     [{'x': silk_lEdge + silk_chamfer/2, 'y': silk_y - silk_chamfer/2},
+                     [{'x': silk_lEdge, 'y': silk_y - silk_chamfer},
                       {'x': silk_lEdge + silk_chamfer, 'y': silk_y},
                       {'x': silk_pin1, 'y': silk_y}]]
     else:
@@ -191,7 +193,7 @@ def generate_one_footprint(param, config, default_lib):
 
     # Pin 1 indicator
     fp.append(markerArrow(x = pin1.x,
-                          y = pin1.y - silk_pad['y'],
+                          y = -silk_pad['y'],
                           width = fab_mark / 2,
                           angle = 180,
                           line_width = silk_line,
