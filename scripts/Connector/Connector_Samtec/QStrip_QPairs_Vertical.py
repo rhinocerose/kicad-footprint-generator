@@ -148,10 +148,10 @@ def generate_one_footprint(param, config, default_lib):
             n += 1
     
     # Ground pad parameters
-    gnd_h = param['pads']['ground']['height']
+    gnd_h = param['pads']['plane']['height']
     # Combine spacing and width data into a zipped list: [(space,width), ...]
-    gnd_sw = [sw for sw in zip(param['pads']['ground']['space'],
-                               param['pads']['ground']['width'])]
+    gnd_sw = [sw for sw in zip(param['pads']['plane']['space'],
+                               param['pads']['plane']['width'])]
     gnd_sw.sort() # Sort from lowest (inner) to highest (outer) spacing
     
     # Place ground plane pads
