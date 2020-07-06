@@ -159,7 +159,7 @@ def generate_one_footprint(param, config, default_lib):
         mid = bank1_mid + b*bank_x # Bank midpoint
         # Iterate through space/width list to generate ground pads...
         for (space, width) in [(-s,w) for s,w in reversed(gnd_sw)] + gnd_sw:
-            pad = Pad(number = str(n),
+            pad = Pad(number = "P" + str(b+1),
                       at = (mid + space/2, 0),
                       size = (width, gnd_h),
                       type = Pad.TYPE_SMT,
