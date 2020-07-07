@@ -40,13 +40,13 @@ Footprint_Name:
     space: !!float mm # distance between adjacent banks
     width: !!float mm # width of bank outline drawn on F.Fab
     height: !!float mm # height of bank outline drawn on F.Fab
-  pins:
+  pads:
     signal: # signal pin parameters
       pitch: !!float mm
       width: !!float mm # Pad width
       height: !!float mm # Pad height
       y: !!float mm # vertical offset
-    ground: # ground pin parameters
+    planes: # plane parameters
       width:
         - !!float mm # outer pins 
         - !!float mm # inner pins
@@ -148,10 +148,10 @@ def generate_one_footprint(param, config, default_lib):
             n += 1
     
     # Ground pad parameters
-    gnd_h = param['pads']['plane']['height']
+    gnd_h = param['pads']['planes']['height']
     # Combine spacing and width data into a zipped list: [(space,width), ...]
-    gnd_sw = [sw for sw in zip(param['pads']['plane']['space'],
-                               param['pads']['plane']['width'])]
+    gnd_sw = [sw for sw in zip(param['pads']['planes']['space'],
+                               param['pads']['planes']['width'])]
     gnd_sw.sort() # Sort from lowest (inner) to highest (outer) spacing
     
     # Place ground plane pads
@@ -378,9 +378,9 @@ def generate_one_footprint(param, config, default_lib):
 
     # 3D model path
     library = param.get('library', default_lib)
-    model_path = os.path.join('${KISYS3DMOD}',
-                              library+'.3dshapes',
-                              param['name'] + '.wrl')
+    model_path = os.path.join("${KISYS3DMOD}",
+                              library+".3dshapes",
+                              param['name'] + ".wrl")
     fp.append(Model(filename = model_path))
 
     ############################################################################

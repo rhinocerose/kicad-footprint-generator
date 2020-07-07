@@ -26,7 +26,7 @@ Samtec_QTH-030-xx-x-D_P0.5mm_Vertical: &QTH-030-xx-x-D
   banks: {n: 1, diff: 0, slots: 60, space: 20.0, width: 16.5, height: 4.0}
   pads: &QTH_pads
     signal: {pitch: 0.5, y: 3.086, width: 0.305, height: 1.45}
-    plane: {height: 0.64, width: [2.54, 4.7], space: [16.89, 6.35]}
+    planes: {height: 0.64, width: [2.54, 4.7], space: [16.89, 6.35]}
 
 Samtec_QTH-030-xx-x-D-A_P0.5mm_Vertical:
   <<: *QTH-030-xx-x-D
@@ -197,7 +197,7 @@ Samtec_QSH-030-xx-x-D_P0.5mm_Vertical: &QSH-030-xx-x-D
   banks: {n: 1, diff: 0, slots: 60, space: 20.0, width: 16.0, height: 3.8}
   pads: &QSH_pads
     signal: {pitch: 0.5, y: 2.67, width: 0.279, height: 2.27}
-    plane: {height: 0.43, width: [2.54, 4.7], space: [16.13, 6.35]}
+    planes: {height: 0.43, width: [2.54, 4.7], space: [16.13, 6.35]}
 
 Samtec_QSH-030-xx-x-D-A_P0.5mm_Vertical:
   <<: *QSH-030-xx-x-D
@@ -338,7 +338,7 @@ Samtec_QTS-025-xx-x-D_P0.635mm_Vertical: &QTS-025-xx-x-D
   banks: {n: 1, diff: 0, slots: 50, space: 20.0, width: 16.5, height: 4.0}
   pads: &QTS_pads
     signal: {pitch: 0.635, y: 3.086, width: 0.406, height: 1.45}
-    plane: {height: 0.635, width: [2.54, 4.7], space: [16.89, 6.35]}
+    planes: {height: 0.635, width: [2.54, 4.7], space: [16.89, 6.35]}
 
 Samtec_QTS-025-xx-x-D-A_P0.635mm_Vertical:
   <<: *QTS-025-xx-x-D
@@ -447,7 +447,7 @@ Samtec_QSS-025-xx-x-D_P0.635mm_Vertical: &QSS-025-xx-x-D
   banks: {n: 1, diff: 0, slots: 50, space: 20.0, width: 16.0, height: 3.66}
   pads: &QSS_pads
     signal: {pitch: 0.635, y: 2.865, width: 0.406, height: 2.273}
-    plane: {height: 0.432, width: [2.8, 4.7], space: [16.13, 6.35]}
+    planes: {height: 0.432, width: [2.8, 4.7], space: [16.13, 6.35]}
 
 Samtec_QSS-025-xx-x-D-A_P0.635mm_Vertical:
   <<: *QSS-025-xx-x-D
@@ -556,7 +556,7 @@ Samtec_QTE-020-xx-x-D_P0.8mm_Vertical: &QTE-020-xx-x-D
   banks: {n: 1, diff: 0, slots: 40, space: 20.0, width: 16.5, height: 4.0}
   pads: &QTE_pads
     signal: {pitch: 0.8, y: 2.98, width: 0.46, height: 1.94}
-    plane: {height: 0.64, width: [2.54, 4.7], space: [16.89, 6.35]}
+    planes: {height: 0.64, width: [2.54, 4.7], space: [16.89, 6.35]}
 
 Samtec_QTE-020-xx-x-D-A_P0.8mm_Vertical:
   <<: *QTE-020-xx-x-D
@@ -679,7 +679,7 @@ Samtec_QSE-020-xx-x-D_P0.8mm_Vertical: &QSE-020-xx-x-D
   banks: {n: 1, diff: 0, slots: 40, space: 20.0, width: 16.0, height: 3.8}
   pads: &QSE_pads
     signal: {pitch: 0.8, y: 2.87, width: 0.41, height: 2.27}
-    plane: {height: 0.43, width: [2.54, 4.7], space: [16.13, 6.35]}
+    planes: {height: 0.43, width: [2.54, 4.7], space: [16.13, 6.35]}
 
 Samtec_QSE-020-xx-x-D-A_P0.8mm_Vertical:
   <<: *QSE-020-xx-x-D
