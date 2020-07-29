@@ -168,7 +168,6 @@ def generate_one_footprint(param, config, default_lib):
                       layers = Pad.LAYERS_SMT,
                       shape = Pad.SHAPE_RECT)
             fp.append(pad)
-            n += 1
 
     ############################################################################
     # Holes
