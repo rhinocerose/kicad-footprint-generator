@@ -85,6 +85,13 @@ def generate_one_footprint(param, config, default_lib):
     
     # Terminal or Socket mode
     mode = param['layout']['type'].capitalize()
+    if mode == "Terminal":
+        x_inv = 1
+    elif mode == "Socket":
+        x_inv = -1
+    else:
+        raise ValueError("Connector type must be either 'Terminal' or 'Socket'")
+
     
     # Bank parameters
     banks  = param['banks']['n']
@@ -105,24 +112,27 @@ def generate_one_footprint(param, config, default_lib):
     # Pin 1 position
     pin1 = Vector2D(0,0)
     pin1.x = -(bank_slots / 4)*pitch + pitch/2 - ((banks-1) / 2)*bank_x
-    if mode == "Terminal":
-        pin1.y = -pad_y
-    elif mode == "Socket":
-        pin1.y = pad_y
-    else:
-        raise ValueError("Connector type must be either 'Terminal' or 'Socket'")
+    pin1.y = -pad_y
     
     # Bank 1 center point
-    bank1_mid = pin1.x - pitch/2 + (bank_slots / 4)*pitch
+    bank1_mid = x_inv * (pin1.x - pitch/2 + (bank_slots / 4)*pitch)
 
-    # Place signal pads
+    # Ground pad parameters
+    gnd_h = param['pads']['planes']['height']
+    # Combine spacing and width data into a zipped list: [(space,width), ...]
+    gnd_sw = [sw for sw in zip(param['pads']['planes']['space'],
+                               param['pads']['planes']['width'])]
+    gnd_sw.sort() # Sort from lowest (inner) to highest (outer) spacing
+
+    # Place pads
     n = 1 # Pin counter
     pin = [] # Pin position list, organized by bank
-    for b in range(0, banks):
+    for b in range(banks):
         pin.append([])
+        # Place signal pads
         for slot in range(bank_slots):
             # Compute next pad location
-            pos = {'x': pin1.x + (slot // 2)*pitch + b*bank_x,
+            pos = {'x': x_inv * (pin1.x + (slot // 2)*pitch + b*bank_x),
                    'y': pin1.y - (slot  % 2)*(2*pin1.y),
                    'n': n+1, 'slot': slot}
 
@@ -147,16 +157,8 @@ def generate_one_footprint(param, config, default_lib):
             fp.append(pad)
             n += 1
     
-    # Ground pad parameters
-    gnd_h = param['pads']['planes']['height']
-    # Combine spacing and width data into a zipped list: [(space,width), ...]
-    gnd_sw = [sw for sw in zip(param['pads']['planes']['space'],
-                               param['pads']['planes']['width'])]
-    gnd_sw.sort() # Sort from lowest (inner) to highest (outer) spacing
-    
-    # Place ground plane pads
-    for b in range(banks):
-        mid = bank1_mid + b*bank_x # Bank midpoint
+        # Place plane pads
+        mid = bank1_mid + x_inv*b*bank_x # Bank midpoint
         # Iterate through space/width list to generate ground pads...
         for (space, width) in [(-s,w) for s,w in reversed(gnd_sw)] + gnd_sw:
             pad = Pad(number = "P" + str(b+1),
@@ -190,15 +192,14 @@ def generate_one_footprint(param, config, default_lib):
     fab_w = param['layout']['width'] if 'width' not in param else param['width']
     fab_h = param['layout']['height']
     fab_y = fab_h / 2
-    lEdge = -fab_w / 2
-    rEdge = lEdge + fab_w
+    fab_edge = fab_w/2
     chamfer = fab_h / 4 # 1/4 connector height, cosmetic only
 
     if mode == 'Terminal':
         # Left end outline
-        lEnd = [(lEdge, -fab_y),
-                (lEdge, fab_y-chamfer),
-                (lEdge+chamfer, fab_y)]
+        lEnd = [(-fab_edge, -fab_y),
+                (-fab_edge, fab_y-chamfer),
+                (-fab_edge+chamfer, fab_y)]
         fp.append(PolygoneLine(nodes = lEnd,
                                layer = "F.Fab",
                                width = fab_line))
@@ -208,12 +209,12 @@ def generate_one_footprint(param, config, default_lib):
                                width = fab_line,
                                x_mirror = 0))
         # Top and bottom lines
-        fp.append(Line(start = (lEdge, -fab_y),
-                       end   = (rEdge, -fab_y),
+        fp.append(Line(start = (-fab_edge, -fab_y),
+                       end   = ( fab_edge, -fab_y),
                        layer = "F.Fab",
                        width = fab_line))
-        fp.append(Line(start = (lEdge+chamfer, fab_y),
-                       end   = (rEdge-chamfer, fab_y),
+        fp.append(Line(start = (-fab_edge+chamfer, fab_y),
+                       end   = ( fab_edge-chamfer, fab_y),
                        layer = "F.Fab",
                        width = fab_line))
         # Pin 1 marker
@@ -226,30 +227,31 @@ def generate_one_footprint(param, config, default_lib):
                               line_width = fab_line))
     elif mode == 'Socket':
         # Outline rectangle
-        fp.append(RectLine(start = (lEdge, -fab_y),
-                           end   = (rEdge,  fab_y),
+        fp.append(RectLine(start = (-fab_edge, -fab_y),
+                           end   = ( fab_edge,  fab_y),
                            layer = "F.Fab",
                            width = fab_line))
         # Chamfer lines
-        fp.append(Line(start = (lEdge, -fab_y+chamfer),
-                       end   = (lEdge+chamfer, -fab_y),
+        fp.append(Line(start = (-fab_edge, fab_y-chamfer),
+                       end   = (-fab_edge+chamfer, fab_y),
                        layer = "F.Fab",
                        width = fab_line))
-        fp.append(Line(start = (rEdge, -fab_y+chamfer),
-                       end   = (rEdge-chamfer, -fab_y),
+        fp.append(Line(start = (fab_edge, fab_y-chamfer),
+                       end   = (fab_edge-chamfer, fab_y),
                        layer = "F.Fab",
                        width = fab_line))
         # Pin 1 marker
-        fp.append(markerArrow(x = pin1.x,
-                              y = (fab_h-fab_mark) / 2,
+        fp.append(markerArrow(x = -pin1.x,
+                              y = -(fab_h-fab_mark) / 2,
                               width = fab_mark,
+                              angle = 180,
                               layer = "F.Fab",
                               close = False,
                               line_width = fab_line))
 
     # Draw bank and ground plane outlines
     for b in range(banks):
-        mid = bank1_mid + b*bank_x
+        mid = bank1_mid + x_inv*b*bank_x
         # Bank outline
         fp.append(RectLine(start = (mid-bank_w/2, -bank_h/2),
                            end   = (mid+bank_w/2,  bank_h/2),
@@ -258,63 +260,51 @@ def generate_one_footprint(param, config, default_lib):
     
     ############################################################################
     # Silkscreen: F.SilkS
-    #silk_offset = param['layout']['silk-offset']
     silk_offset = config['silk_fab_offset']
     silk_pad = {'x': config['silk_pad_clearance'] + pad_w/2,
                 'y': config['silk_pad_clearance'] + pad_h/2}
     silk_line = config['silk_line_width']
     silk_y = fab_y + silk_offset
-    silk_lEdge = lEdge - silk_offset
-    silk_rEdge = rEdge + silk_offset
+    silk_edge = fab_edge + silk_offset
     silk_chamfer = chamfer + silk_offset/2
-    silk_pin1 = pin1.x - silk_pad['x']
     
     if mode == 'Terminal':
         # Polygon left end outline points
-        silk_lEnd = [{'x': silk_pin1,  'y': -silk_y},
-                     {'x': silk_lEdge, 'y': -silk_y},
-                     {'x': silk_lEdge, 'y': silk_y-silk_chamfer},
-                     {'x': silk_lEdge+silk_chamfer, 'y': silk_y},
-                     {'x': silk_pin1,  'y': silk_y}]
+        silk_end = [[(pin[i][i]['x']+m*silk_pad['x'], -silk_y),
+                     (m*silk_edge, -silk_y),
+                     (m*silk_edge,  silk_y-silk_chamfer),
+                     (m*(silk_edge-silk_chamfer), silk_y),
+                     (pin[i][i]['x']+m*silk_pad['x'],  silk_y)]
+                    for (i,m) in ((0,-1), (-1,1))]
         # Pin 1 indicator
-        fp.append(Line(start = (silk_pin1, pin1.y - pad_h/2),
-                       end   = (silk_pin1, -silk_y),
+        fp.append(Line(start = (pin[0][0]['x']-silk_pad['x'], pin1.y - pad_h/2),
+                       end   = (pin[0][0]['x']-silk_pad['x'], -silk_y),
                        layer = "F.SilkS",
                        width = silk_line))
     elif mode == 'Socket':
         # Left end outline points
-        silk_lEnd = [{'x': silk_pin1,  'y':  silk_y},
-                     {'x': silk_lEdge, 'y':  silk_y},
-                     {'x': silk_lEdge, 'y': -silk_y},
-                     {'x': silk_pin1,  'y': -silk_y}]
+        silk_end = [[(pin[i][i]['x']+m*silk_pad['x'],  silk_y),
+                     (m*silk_edge,  silk_y),
+                     (m*silk_edge, -silk_y),
+                     (pin[i][i]['x']+m*silk_pad['x'], -silk_y)]
+                    for (i,m) in ((0,1), (-1,-1))]
         # Pin 1 indicator
-        fp.append(markerArrow(x = pin1.x,
-                              y = pin1.y + silk_pad['y'],
+        fp.append(markerArrow(x = pin[0][0]['x'],
+                              y = pin[0][0]['y'] - silk_pad['y'],
                               width = fab_mark / 2,
                               line_width = silk_line,
+                              angle = 180,
                               layer = "F.SilkS"))
-
-    # Generate right end outline
-    silk_rEnd = deepcopy(silk_lEnd)
-    # Mirror about x axis
-    for i in range(len(silk_rEnd)):
-        silk_rEnd[i]['x'] = -silk_rEnd[i]['x']
-    # Define right outline inner offset from the last pin
-    # (if the last bank is differential, it does not perfectly mirror the first)
-    silk_rEnd[0]['x'] = silk_rEnd[-1]['x'] = pin[-1][-1]['x'] + silk_pad['x']
-
-    # Draw left and right end outlines
-    fp.append(PolygoneLine(nodes = silk_lEnd,
-                           layer = "F.SilkS",
-                           width = silk_line))
-    fp.append(PolygoneLine(nodes = silk_rEnd,
-                           layer = "F.SilkS",
-                           width = silk_line))
+    
+    # Draw end outlines
+    fp.extend([PolygoneLine(nodes = end,
+                            layer = "F.SilkS",
+                            width = silk_line) for end in silk_end])
 
     # Draw outlines between banks
     for b in range(banks-1):
-        fp.extend([Line(start = (pin[b][-1]['x']  + silk_pad['x'], m*silk_y),
-                        end   = (pin[b+1][0]['x'] - silk_pad['x'], m*silk_y),
+        fp.extend([Line(start = (pin[b][-1]['x']  + x_inv*silk_pad['x'], m*silk_y),
+                        end   = (pin[b+1][0]['x'] - x_inv*silk_pad['x'], m*silk_y),
                         layer = "F.SilkS",
                         width = silk_line) for m in (-1,1)])
 
