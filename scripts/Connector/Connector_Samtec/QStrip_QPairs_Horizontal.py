@@ -68,7 +68,7 @@ import sys
 import os
 import argparse
 from copy import deepcopy
-import math
+from math import *
 import yaml
 
 # Load parent path of KicadModTree
@@ -96,6 +96,7 @@ def generate_one_footprint(param, config, default_lib):
     
     # Signal pad parameters
     pad_pitch = param['pads']['signal']['pitch']
+    pad_rows = param['pads']['signal']['rows']
     pad_w = param['pads']['signal']['width']
     pad_h = param['pads']['signal']['height']
     pad_y = param['pads']['signal']['y']
@@ -108,15 +109,19 @@ def generate_one_footprint(param, config, default_lib):
     plane_y = param['pads']['plane']['y']
     plane_n = param['pads']['plane']['n']
 
-    # Pin 1 position
-    pin1 = Vector2D(0,0)
-    pin1.x = -(pad_n / 4)*pad_pitch + pad_pitch/2 - ((banks-1) / 2)*bank_x
+    # Terminal or Socket mode
+    mode = param['layout']['type'].capitalize()
     if mode == "Terminal":
-        pin1.y = -pad_y
+        x_inv = 1
     elif mode == "Socket":
-        pin1.y = pad_y
+        x_inv = -1
     else:
         raise ValueError("Connector type must be either 'Terminal' or 'Socket'")
+    
+    # Pin 1 position
+    pin1 = Vector2D(0,0)
+    pin1.x = -(pad_n/4)*pad_pitch + pad_pitch/2 - ((banks-1) / 2)*bank_x
+    pin1.y = pad_y[0]
     
     # Bank 1 center point
     bank1_mid = pin1.x - pad_pitch/2 + (pad_n / 4)*pad_pitch
@@ -128,9 +133,10 @@ def generate_one_footprint(param, config, default_lib):
         pin.append([])
         for slot in range(pad_n):
             # Compute next pad location
-            pos = {'x': pin1.x + (slot // 2)*pad_pitch + b*bank_x,
-                   'y': pin1.y - (slot  % 2)*(2*pin1.y),
-                   'n': n+1, 'slot': slot}
+            for r in range(pad_rows):
+                pos = {'x': pin1.x + (slot // pad_rows)*pad_pitch + b*bank_x,
+                       'y': pad_y[slot % 2],
+                       'n': n+1, 'slot': slot}
 
             # Skip slots for differential banks
             if b < param['banks']['diff']:
@@ -170,14 +176,14 @@ def generate_one_footprint(param, config, default_lib):
         for p in param['holes']:
             drill = p['drill']
             shape = Pad.SHAPE_CIRCLE if type(drill) is float else Pad.SHAPE_OVAL
-            h = [Pad(number = "MP" if 'pad' in p else "",
-                     at     = (m*p['space']/2, p['y']),
-                     drill  = drill,
-                     size   = p['pad'] if 'pad' in p else drill,
-                     type   = Pad.TYPE_THT if 'pad' in p else Pad.TYPE_NPTH,
-                     layers = Pad.LAYERS_THT if 'pad' in p else Pad.LAYERS_NPTH,
-                     shape  = shape) for m in (-1,1)]
-            fp.extend(h)
+            holes = [Pad(number = "MP" if 'pad' in p else "",
+                         at     = ((h/(p['n']-1) - 1/2)*p['space'], p['y']),
+                         drill  = drill,
+                         size   = p['pad'] if 'pad' in p else drill,
+                         type   = Pad.TYPE_THT if 'pad' in p else Pad.TYPE_NPTH,
+                         layers = Pad.LAYERS_THT if 'pad' in p else Pad.LAYERS_NPTH,
+                         shape  = shape) for h in range(p['n'])]
+            fp.extend(holes)
 
     ############################################################################
     # Fabrication layer: F.Fab
@@ -185,41 +191,95 @@ def generate_one_footprint(param, config, default_lib):
     fab_mark = config['fab_pin1_marker_length']
     fab_w = param['layout']['width'] if 'width' not in param else param['width']
     fab_h = param['layout']['height']
-    fab_y = fab_h / 2
-    lEdge = -fab_w / 2
-    rEdge = lEdge + fab_w
-    chamfer = fab_h / 4 # 1/4 connector height, cosmetic only
+    fab_y = param['layout']['y']
+    fab_edge = fab_w/2
 
     if param['layout']['type'] == "Terminal":
-        # Plug outline
-        plug_h = param['layout']['plug']['height']
-        fp.append(RectLine(start  = (-banks*bank_w/2, -fab_y),
-                           end    = ( banks*bank_w/2, -fab_y - plug_h),
-                           layer  = "F.CrtYd",
+        # Draw left and right outlines
+        fab_end = [[banks*bank_x/2, pin1.y],
+                   [banks*bank_x/2 + (fab_y-fab_h-pin1.y)/tan(radians(-60)), fab_y-fab_h],
+                   [fab_w/2, fab_y-fab_h],
+                   [fab_w/2, fab_y],
+                   [banks*bank_x/2, fab_y]]
+        fp.append(PolygoneLine(nodes = fab_end,
+                               layer = "F.Fab",
+                               width = fab_line))
+        fp.append(PolygoneLine(nodes = fab_end,
+                               layer = "F.Fab",
+                               width = fab_line,
+                               x_mirror = 0))
+        fp.append(Line(start = (-banks*bank_x/2, pin1.y),
+                       end   = ( banks*bank_x/2, pin1.y),
+                       layer = "F.Fab",
+                       width = fab_line))
+        # Terminal outline
+        fp.append(RectLine(start  = (-banks*bank_x/2, fab_y),
+                           end    = ( banks*bank_x/2, fab_y + bank_h),
+                           layer  = "F.Fab",
                            width  = fab_line))
-    
+
     ############################################################################
     # Silkscreen: F.SilkS
-    #silk_offset = param['layout']['silk-offset']
     silk_offset = config['silk_fab_offset']
     silk_pad = {'x': config['silk_pad_clearance'] + pad_w/2,
                 'y': config['silk_pad_clearance'] + pad_h/2}
     silk_line = config['silk_line_width']
-    silk_y = fab_y + silk_offset
-    silk_lEdge = lEdge - silk_offset
-    silk_rEdge = rEdge + silk_offset
-    silk_chamfer = chamfer + silk_offset/2
-    silk_pin1 = pin1.x - silk_pad['x']
+    silk_pad = {'x': config['silk_pad_clearance'] + pad_w/2,
+                'y': config['silk_pad_clearance'] + pad_h/2}
 
+    # Draw silkscreen end outlines
+    silk_end = fab_end.copy()
+    silk_end.pop()
+    silk_end_offset = [(-silk_offset, -silk_offset),
+                       (-silk_offset, -silk_offset),
+                       ( silk_offset, -silk_offset),
+                       ( silk_offset,  0)]
+    for a in range(len(silk_end)):
+        for b in range(2):
+            silk_end[a][b] += silk_end_offset[a][b]
+    
+    fp.append(PolygoneLine(nodes = silk_end,
+                           layer = "F.SilkS",
+                           width = silk_line))
+    fp.append(PolygoneLine(nodes = silk_end,
+                           layer = "F.SilkS",
+                           width = silk_line,
+                           x_mirror = 0))
+
+    # Extend end outlines to pins
+    fp.append(Line(start = (-banks*bank_x/2+silk_offset, pin1.y-silk_offset),
+                   end   = (pin[0][0]['x']-silk_pad['x'], pin1.y-silk_offset),
+                   layer = "F.SilkS",
+                   width = silk_line))
+    fp.append(Line(start = (banks*bank_x/2-silk_offset, pin1.y-silk_offset),
+                   end   = (pin[-1][-1]['x']+silk_pad['x'], pin1.y-silk_offset),
+                   layer = "F.SilkS",
+                   width = silk_line))
+
+    # Pin 1 indicator
+    fp.append(markerArrow(x = pin[0][0]['x'],
+                          y = pin[0][0]['y'] - silk_pad['y'],
+                          width = fab_mark / 2,
+                          line_width = silk_line,
+                          angle = 180,
+                          layer = "F.SilkS"))
+
+    # Draw outlines between banks
+    for b in range(banks-1):
+        fp.append(Line(start = (pin[b][-1]['x']  + x_inv*silk_pad['x'], pin1.y-silk_offset),
+                       end   = (pin[b+1][0]['x'] - x_inv*silk_pad['x'], pin1.y-silk_offset),
+                       layer = "F.SilkS",
+                       width = silk_line))
+    
     ############################################################################
     # PCB Edge: Dwgs.User
-    fp.append(Line(start = (lEdge, param['layout']['edge']),
-                   end   = (rEdge, param['layout']['edge']),
+    fp.append(Line(start = (-fab_edge, fab_y + param['layout']['edge']),
+                   end   = ( fab_edge, fab_y + param['layout']['edge']),
                    layer = "Dwgs.User",
                    width = fab_line))
     
     fp.append(Text(type = "user", text = "PCB Edge",
-                   at = (0, param['layout']['edge'] - 1.0),
+                   at = (bank1_mid, fab_y + param['layout']['edge'] - 1.0),
                    layer = "Dwgs.User"))
 
     ############################################################################
@@ -227,12 +287,13 @@ def generate_one_footprint(param, config, default_lib):
     court_line = config['courtyard_line_width']
     court_grid = config['courtyard_grid']
     court_offset = config['courtyard_offset']['connector']
-
+    
     court_x = roundToBase(fab_w/2 + court_offset, court_grid)
-    court_y = roundToBase(max(fab_y, pad_y + pad_h/2) + court_offset, court_grid)
-
-    fp.append(RectLine(start  = (-court_x, -court_y),
-                       end    = ( court_x,  court_y),
+    court_y = [roundToBase(fab_y - fab_h - court_offset, court_grid),
+               roundToBase(fab_y + bank_h + court_offset, court_grid)]
+    
+    fp.append(RectLine(start  = (-court_x, court_y[0]),
+                       end    = ( court_x, court_y[1]),
                        layer  = "F.CrtYd",
                        width  = court_line))
     
@@ -240,7 +301,7 @@ def generate_one_footprint(param, config, default_lib):
     # Set Metadata
     
     # Draw reference and value
-    text_y = court_y + 1.0
+    text_y = fab_y + 1.0
     fp.append(Text(type = 'reference', text = 'REF**',
                    at = (0, -text_y),
                    layer = "F.SilkS"))
@@ -248,7 +309,7 @@ def generate_one_footprint(param, config, default_lib):
                    at = (0, -text_y),
                    layer = "F.Fab"))
     fp.append(Text(type = 'value', text=param['name'],
-                   at = (0, text_y),
+                   at = (0, text_y + bank_h + court_offset),
                    layer="F.Fab"))
     
     # Set surface-mount attribute

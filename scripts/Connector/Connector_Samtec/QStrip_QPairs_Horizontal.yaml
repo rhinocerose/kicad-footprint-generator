@@ -8,34 +8,32 @@ Samtec_QTH-030-xx-x-D-RA_P0.5mm_Horizontal:
     datasheet: >-
       [drawing](http://suddendocs.samtec.com/prints/qth-xxx-xx-x-d-xxx-mkt.pdf),
       [footprint](http://suddendocs.samtec.com/prints/qth-xxx-xx-x-d-xxx-footprint.pdf)
-  layout: {type: "Terminal", width: 25.72, height: 9.78, edge: -3.309, plug:
-    {width: 20.0, height: 3.05}}
-  banks: {n: 1, diff: 0, space: 20.0, width: 16.5, height: 4.0}
+  layout: {type: "Terminal", width: 25.72, height: 9.78, y: 3.81, edge: 0.38}
+  banks: {n: 1, diff: 0, space: 20.0, width: 16.5, height: 3.05}
   pads: &QTH-RA_pads
-    signal: {n: 60, pitch: 0.5, y: 2.3055, width: 0.305, height: 1.45}
-    plane: {n: 8, pitch: 2.032, y: 0, drill: 0.533, pad: 1.0}
+    signal: {n: 60, rows: 2, pitch: 0.5, y: [-3.277, 1.334], width: 0.305, height: 1.45}
+    plane: {n: 8, pitch: 2.032, y: -0.851, drill: 0.533, pad: 1.0}
   holes: # Holes sorted by dimension labels in Samtec ECN-264948 Rev. E
-    - {drill: 1.067, pad: 1.8, space: 23.178, y: -2.197} # "A"
-    - {drill: 1.448,           space: 21.908, y: 0.851}  # "B"
-    - {drill: 1.067, pad: 1.8, space: 18.190, y: 3.607}  # "C"
+    - {n: 2, drill: 1.067, pad: 1.8, space: 23.178, y: -2.54} # "A"
+    - {n: 2, drill: 1.448,           space: 21.908, y: 0}     # "B"
+    - {n: 2, drill: 1.067, pad: 1.8, space: 18.190, y: 3.048} # "C"
 
 Samtec_QTH-060-xx-x-D-RA_P0.5mm_Horizontal:
   meta: *QTH-RA_meta
   pads: *QTH-RA_pads
-  layout: {type: "Terminal", width: 45.72, height: 1.45, edge: -3.309, plug:
-    {width: 40.01, height: 3.05}}
-  banks: {n: 2, diff: 0, space: 20.0, width: 16.5, height: 4.0}
+  layout: {type: "Terminal", width: 45.72, height: 9.78, y: 3.81, edge: 0.38}
+  banks: {n: 2, diff: 0, space: 20.0, width: 16.5, height: 3.05}
   holes:
-    - {drill: 1.067, pad: 1.8, space: 43.180, y: -2.197} # "A"
-    - {drill: 1.448,           space: 41.910, y: 0.851}  # "B"
-    - {drill: 1.067, pad: 1.8, space: 38.913, y: 3.607}  # "C"
+    - {n: 2, drill: 1.067, pad: 1.8, space: 43.180, y: -2.54} # "A"
+    - {n: 2, drill: 1.448,           space: 41.910, y: 0}     # "B"
+    - {n: 3, drill: 1.067, pad: 1.8, space: 38.913, y: 3.048} # "C"
 
 Samtec_QTH-090-xx-x-D-RA_P0.5mm_Horizontal:
   meta: *QTH-RA_meta
   pads: *QTH-RA_pads
-  layout: {type: "Terminal", width: 65.72, height: 1.45, edge: -3.309, plug: {height: 3.05}}
-  banks: {n: 3, diff: 0, space: 20.0, width: 16.5, height: 4.0}
+  layout: {type: "Terminal", width: 65.72, height: 9.78, y: 3.81, edge: 0.38}
+  banks: {n: 3, diff: 0, space: 20.0, width: 16.5, height: 3.05}
   holes:
-    - {drill: 1.067, pad: 1.8, space: 63.183, y: -2.197} # "A"
-    - {drill: 1.448,           space: 61.913, y: 0.851}  # "B"
-    - {drill: 1.067, pad: 1.8, space: 58.915, y: 3.607}  # "C"
+    - {n: 2, drill: 1.067, pad: 1.8, space: 63.183, y: -2.54} # "A"
+    - {n: 2, drill: 1.448,           space: 61.913, y: 0}     # "B"
+    - {n: 4, drill: 1.067, pad: 1.8, space: 58.915, y: 3.048} # "C"

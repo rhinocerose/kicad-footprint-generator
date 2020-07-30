@@ -195,15 +195,15 @@ def generate_one_footprint(param, config, default_lib):
     chamfer = fab_h / 4 # 1/4 connector height, cosmetic only
 
     if mode == 'Terminal':
-        # Left end outline
-        lEnd = [(-fab_edge, -fab_y),
-                (-fab_edge, fab_y-chamfer),
-                (-fab_edge+chamfer, fab_y)]
-        fp.append(PolygoneLine(nodes = lEnd,
+        # End outline
+        fab_end = [(-fab_edge, -fab_y),
+                   (-fab_edge, fab_y-chamfer),
+                   (-fab_edge+chamfer, fab_y)]
+        fp.append(PolygoneLine(nodes = fab_end,
                                layer = "F.Fab",
                                width = fab_line))
         # Right end outline (mirrors left end)
-        fp.append(PolygoneLine(nodes = lEnd,
+        fp.append(PolygoneLine(nodes = fab_end,
                                layer = "F.Fab",
                                width = fab_line,
                                x_mirror = 0))
