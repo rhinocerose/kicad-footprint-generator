@@ -25,14 +25,15 @@ Footprint_Name:
   meta: # Footprint metadata
     pn: 'part number' # [optional] overrides automatic part number detection
     description: 'Brief description of the footprint'
-    datasheet: 'URL(s) to footprint datasheet'
     tags: 'KiCad tags go here'
+    datasheet: 'URL(s) to footprint datasheet'
   add-tags: 'more tags' # [optional] extends the tag list
   layout: # General footprint layout/drawing data
     type: '(Terminal|Socket)' # sets Pin 1 position and drawing mode
     width: !!float mm # [cosmetic] overall width of the connector
     height: !!float mm # [cosmetic] overall height of the connector
-  width: !!float mm # [optional, cosmetic] overrides layout::width
+    y: !!float mm # [cosmetic] y-offset used to draw connector outline
+    edge: !!float mm # y-offset of PCB edge
   banks:
     n: !!uint # number of banks in the connector
     diff: !!uint # number of differential banks
@@ -41,21 +42,22 @@ Footprint_Name:
     height: !!float mm # height of bank outline drawn on F.Fab
   pads:
     signal: # signal pin parameters
+      n: !!uint # Number of pin slots on a bank
+      rows: !!uint # Number of pin rows
       pitch: !!float mm
       width: !!float mm # Pad width
       height: !!float mm # Pad height
-      y: !!float mm # vertical offset
-    planes: # plane parameters
-      width:
-        - !!float mm # outer pins 
-        - !!float mm # inner pins
-      height: !!float mm # Ground pad heights
-      space: # Distance between ground pads within each bank
-        - !!float mm # outer pins
-        - !!float mm # inner pins
+      y: [!!float mm, ...] # y-offset for each pin row
+    plane: # plane parameters
+      n: !!uint # Number of holes for plane connection
+      pitch: !!float mm
+      y: !!float mm # y-offset of plane holes
+      drill: !!float mm # drill diameter
+      pad: !!float mm # pad diameter
   holes: # [optional] hole pair specifications, mirrored about y axis
     - # Hole spec. 1
       name: "" # [optional] name/number for plated holes
+      n: !!uint # number of holes to drill
       drill: !!float mm # drill diameter (a list produces an oval)
       pad: !!float mm # [optional] PTH pad diameter (a list produces an oval)
       space: !!float mm # distance between holes mirrored about the y-axis
@@ -173,16 +175,16 @@ def generate_one_footprint(param, config, default_lib):
     ############################################################################
     # Holes
     if 'holes' in param:
-        for p in param['holes']:
-            drill = p['drill']
+        for hole in param['holes']:
+            drill = hole['drill']
             shape = Pad.SHAPE_CIRCLE if type(drill) is float else Pad.SHAPE_OVAL
-            holes = [Pad(number = "MP" if 'pad' in p else "",
-                         at     = ((h/(p['n']-1) - 1/2)*p['space'], p['y']),
+            holes = [Pad(number = "MP" if 'pad' in hole else "",
+                         at     = ((h/(hole['n']-1) - 1/2)*hole['space'], hole['y']),
                          drill  = drill,
-                         size   = p['pad'] if 'pad' in p else drill,
-                         type   = Pad.TYPE_THT if 'pad' in p else Pad.TYPE_NPTH,
-                         layers = Pad.LAYERS_THT if 'pad' in p else Pad.LAYERS_NPTH,
-                         shape  = shape) for h in range(p['n'])]
+                         size   = hole['pad'] if 'pad' in hole else drill,
+                         type   = Pad.TYPE_THT if 'pad' in hole else Pad.TYPE_NPTH,
+                         layers = Pad.LAYERS_THT if 'pad' in hole else Pad.LAYERS_NPTH,
+                         shape  = shape) for h in range(hole['n'])]
             fp.extend(holes)
 
     ############################################################################
@@ -196,8 +198,9 @@ def generate_one_footprint(param, config, default_lib):
 
     if param['layout']['type'] == "Terminal":
         # Draw left and right outlines
+        # Angle measured from 3D model of QTH-060-01-L-D-RA
         fab_end = [[banks*bank_x/2, pin1.y],
-                   [banks*bank_x/2 + (fab_y-fab_h-pin1.y)/tan(radians(-60)), fab_y-fab_h],
+                   [banks*bank_x/2 + (fab_y-fab_h-pin1.y)/tan(-1.112), fab_y-fab_h],
                    [fab_w/2, fab_y-fab_h],
                    [fab_w/2, fab_y],
                    [banks*bank_x/2, fab_y]]
@@ -279,7 +282,7 @@ def generate_one_footprint(param, config, default_lib):
                    width = fab_line))
     
     fp.append(Text(type = "user", text = "PCB Edge",
-                   at = (bank1_mid, fab_y + param['layout']['edge'] - 1.0),
+                   at = (0, fab_y + param['layout']['edge'] + 1.0),
                    layer = "Dwgs.User"))
 
     ############################################################################
@@ -288,12 +291,12 @@ def generate_one_footprint(param, config, default_lib):
     court_grid = config['courtyard_grid']
     court_offset = config['courtyard_offset']['connector']
     
-    court_x = roundToBase(fab_w/2 + court_offset, court_grid)
-    court_y = [roundToBase(fab_y - fab_h - court_offset, court_grid),
-               roundToBase(fab_y + bank_h + court_offset, court_grid)]
+    court = {'x': roundToBase(fab_w/2 + court_offset, court_grid),
+             'y': [roundToBase(fab_y -  fab_h - court_offset, court_grid),
+                   roundToBase(fab_y + bank_h + court_offset, court_grid)]}
     
-    fp.append(RectLine(start  = (-court_x, court_y[0]),
-                       end    = ( court_x, court_y[1]),
+    fp.append(RectLine(start  = (-court['x'], court['y'][0]),
+                       end    = ( court['x'], court['y'][1]),
                        layer  = "F.CrtYd",
                        width  = court_line))
     
@@ -365,7 +368,7 @@ if __name__ == '__main__':
                         default='../conn_config_KLCv3.yaml',
                         help='Series KLC configuration YAML file')
     parser.add_argument('--library', type=str, nargs='?',
-                        default='Connector_Samtec_QStrip_QPairs',
+                        default='Connector_Samtec_QSeries',
                         help='Default KiCad library name (without extension)')
     parser.add_argument('files', metavar='file', type=str, nargs='*',
                         help='YAML file(s) containing footprint parameters')

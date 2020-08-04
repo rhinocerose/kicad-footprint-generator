@@ -241,7 +241,7 @@ if __name__ == '__main__':
                         default='../conn_config_KLCv3.yaml',
                         help='Series KLC configuration YAML file')
     parser.add_argument('--library', type=str, nargs='?',
-                        default='Connector_Samtec_QStrip_QPairs',
+                        default='Connector_Samtec_RazorBeam',
                         help='Default KiCad library name (without extension)')
     parser.add_argument('files', metavar='file', type=str, nargs='*',
                         help='YAML file(s) containing footprint parameters')

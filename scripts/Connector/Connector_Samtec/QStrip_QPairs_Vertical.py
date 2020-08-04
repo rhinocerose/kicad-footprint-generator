@@ -91,14 +91,12 @@ def generate_one_footprint(param, config, default_lib):
         x_inv = -1
     else:
         raise ValueError("Connector type must be either 'Terminal' or 'Socket'")
-
     
     # Bank parameters
     banks  = param['banks']['n']
     bank_x = param['banks']['space']
     bank_w = param['banks']['width']
     bank_h = param['banks']['height']
-    bank_slots = param['banks']['slots']
 
     ############################################################################
     # Copper layer(s)
@@ -108,21 +106,22 @@ def generate_one_footprint(param, config, default_lib):
     pad_w = param['pads']['signal']['width']
     pad_h = param['pads']['signal']['height']
     pad_y = param['pads']['signal']['y']
+    pad_n = param['pads']['signal']['n']
 
     # Pin 1 position
     pin1 = Vector2D(0,0)
-    pin1.x = -(bank_slots / 4)*pitch + pitch/2 - ((banks-1) / 2)*bank_x
+    pin1.x = -(pad_n / 4)*pitch + pitch/2 - ((banks-1) / 2)*bank_x
     pin1.y = -pad_y
     
     # Bank 1 center point
-    bank1_mid = x_inv * (pin1.x - pitch/2 + (bank_slots / 4)*pitch)
+    bank1_mid = x_inv * (pin1.x - pitch/2 + (pad_n / 4)*pitch)
 
     # Ground pad parameters
-    gnd_h = param['pads']['planes']['height']
+    #gnd_h = param['pads']['planes']['height']
     # Combine spacing and width data into a zipped list: [(space,width), ...]
-    gnd_sw = [sw for sw in zip(param['pads']['planes']['space'],
-                               param['pads']['planes']['width'])]
-    gnd_sw.sort() # Sort from lowest (inner) to highest (outer) spacing
+    #gnd_sw = [sw for sw in zip(param['pads']['planes']['space'],
+    #                           param['pads']['planes']['width'])]
+    #gnd_sw.sort() # Sort from lowest (inner) to highest (outer) spacing
 
     # Place pads
     n = 1 # Pin counter
@@ -130,7 +129,7 @@ def generate_one_footprint(param, config, default_lib):
     for b in range(banks):
         pin.append([])
         # Place signal pads
-        for slot in range(bank_slots):
+        for slot in range(pad_n):
             # Compute next pad location
             pos = {'x': x_inv * (pin1.x + (slot // 2)*pitch + b*bank_x),
                    'y': pin1.y - (slot  % 2)*(2*pin1.y),
@@ -141,7 +140,7 @@ def generate_one_footprint(param, config, default_lib):
                 if ((slot+1) % 6 == 0 or # Skip every 3rd odd slot
                     (slot+2) % 6 == 0 or # Skip every 3rd even slot
                     # Only add end-of-bank pins if they are completing a pair
-                    (slot+2 >= bank_slots and
+                    (slot+2 >= pad_n and
                      pin[b][-2]['slot'] != slot-2)):
                     continue
 
@@ -159,28 +158,28 @@ def generate_one_footprint(param, config, default_lib):
     
         # Place plane pads
         mid = bank1_mid + x_inv*b*bank_x # Bank midpoint
-        # Iterate through space/width list to generate ground pads...
-        for (space, width) in [(-s,w) for s,w in reversed(gnd_sw)] + gnd_sw:
-            pad = Pad(number = "P" + str(b+1),
-                      at = (mid + space/2, 0),
-                      size = (width, gnd_h),
-                      type = Pad.TYPE_SMT,
-                      layers = Pad.LAYERS_SMT,
-                      shape = Pad.SHAPE_RECT)
-            fp.append(pad)
+        if 'planes' in param['pads']:
+            for plane in param['pads']['planes']:
+                pad = [Pad(number = "P" + str(b+1),
+                           at = ((x - (plane['n']-1)/2)*plane['pitch'] + mid, plane['y']),
+                           size = (plane['width'], plane['height']),
+                           type = Pad.TYPE_SMT,
+                           layers = Pad.LAYERS_SMT,
+                           shape = Pad.SHAPE_RECT) for x in range(plane['n'])]
+                fp.extend(pad)
 
     ############################################################################
     # Holes
     if 'holes' in param:
-        for p in param['holes']:
-            drill = p['drill']
+        for hole in param['holes']:
+            drill = hole['drill']
             shape = Pad.SHAPE_CIRCLE if type(drill) is float else Pad.SHAPE_OVAL
-            h = [Pad(number = "MP" if 'pad' in p else "",
-                     at     = (m*p['space']/2, p['y']),
+            h = [Pad(number = "MP" if 'pad' in hole else "",
+                     at     = (m*hole['space']/2, hole['y']),
                      drill  = drill,
-                     size   = p['pad'] if 'pad' in p else drill,
-                     type   = Pad.TYPE_THT if 'pad' in p else Pad.TYPE_NPTH,
-                     layers = Pad.LAYERS_THT if 'pad' in p else Pad.LAYERS_NPTH,
+                     size   = hole['pad'] if 'pad' in hole else drill,
+                     type   = Pad.TYPE_THT if 'pad' in hole else Pad.TYPE_NPTH,
+                     layers = Pad.LAYERS_THT if 'pad' in hole else Pad.LAYERS_NPTH,
                      shape  = shape) for m in (-1,1)]
             fp.extend(h)
 
@@ -345,9 +344,9 @@ def generate_one_footprint(param, config, default_lib):
     # Pins or pairs/bank
     if param['banks']['diff'] == banks:
         # Differential mode: round up to nearest even number of pairs
-        pins_or_pairs = (bank_slots // 3) + (bank_slots // 3) % 2
+        pins_or_pairs = (pad_n // 3) + (pad_n // 3) % 2
     else:
-        pins_or_pairs = bank_slots
+        pins_or_pairs = pad_n
 
     # Description
     desc = param['meta']['description']
@@ -389,7 +388,7 @@ if __name__ == '__main__':
                         default='../conn_config_KLCv3.yaml',
                         help='Series KLC configuration YAML file')
     parser.add_argument('--library', type=str, nargs='?',
-                        default='Connector_Samtec_QStrip_QPairs',
+                        default='Connector_Samtec_QSeries',
                         help='Default KiCad library name (without extension)')
     parser.add_argument('files', metavar='file', type=str, nargs='*',
                         help='YAML file(s) containing footprint parameters')
