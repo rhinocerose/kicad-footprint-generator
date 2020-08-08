@@ -192,6 +192,67 @@ Samtec_BSH-150-xx-x-D-A_P0.5mm_Vertical:
 
 ################################################################################
 # BTS family (0.635mm terminal)
+Samtec_BTS-025-xx-x-D_P0.5mm_Vertical: &BTS-025-xx-x-D
+  library: 'Connector_Samtec_BasicBladeAndBeam'
+  meta: &BTS_meta
+    description: >-
+      Samtec {pn:s} {pitch:1.3f}mm Basic Blade & Beam {type:s}; {pins:d} pins;
+      {ds:s}
+    tags: 'connector Samtec BTS mezzanine terminal vertical'
+    datasheet: >-
+      
+  layout: {type: 'Terminal', width: 20.0, height: 5.97}
+  banks: {n: 1, diff: 0, space: 0, width: 16.89, height: 4.0}
+  pads:
+    signal: {n: 50, pitch: 0.635, y: 3.086, width: 0.432, height: 1.45}
+
+Samtec_BTS-025-xx-x-D-A_P0.5mm_Vertical:
+  <<: *BTS-025-xx-x-D
+  add-tags: 'alignment-pins'
+  holes:
+    - {drill: 1.0, y: -2.03, space: 18.48}
+
+Samtec_BTS-050-xx-x-D_P0.5mm_Vertical: &BTS-050-xx-x-D
+  library: 'Connector_Samtec_BasicBladeAndBeam'
+  meta: *BTH_meta
+  layout: {type: 'Terminal', width: 35.88, height: 5.97}
+  banks: {n: 1, diff: 0, space: 0, width: 32.77, height: 4.0}
+  pads:
+    signal: {n: 100, pitch: 0.635, y: 3.086, width: 0.305, height: 1.45}
+
+Samtec_BTS-050-xx-x-D-A_P0.5mm_Vertical:
+  <<: *BTS-050-xx-x-D
+  add-tags: 'alignment-pins'
+  holes:
+    - {drill: 1.0, y: -2.03, space: 34.35}
+
+Samtec_BTS-075-xx-x-D_P0.5mm_Vertical: &BTS-075-xx-x-D
+  library: 'Connector_Samtec_BasicBladeAndBeam'
+  meta: *BTH_meta
+  layout: {type: 'Terminal', width: 51.755, height: 5.97}
+  banks: {n: 1, diff: 0, space: 0, width: 48.65, height: 4.0}
+  pads:
+    signal: {n: 150, pitch: 0.635, y: 3.086, width: 0.305, height: 1.45}
+
+Samtec_BTS-075-xx-x-D-A_P0.5mm_Vertical:
+  <<: *BTS-075-xx-x-D
+  add-tags: 'alignment-pins'
+  holes:
+    - {drill: 1.0, y: -2.03, space: 50.23}
+
+Samtec_BTS-100-xx-x-D_P0.5mm_Vertical: &BTS-100-xx-x-D
+  library: 'Connector_Samtec_BasicBladeAndBeam'
+  meta: *BTH_meta
+  layout: {type: 'Terminal', width: 67.63, height: 5.97}
+  banks: {n: 1, diff: 0, space: 0, width: 64.52, height: 4.0}
+  pads:
+    signal: {n: 200, pitch: 0.635, y: 3.086, width: 0.305, height: 1.45}
+
+Samtec_BTS-100-xx-x-D-A_P0.5mm_Vertical:
+  <<: *BTS-100-xx-x-D
+  add-tags: 'alignment-pins'
+  holes:
+    - {drill: 1.0, y: -2.03, space: 66.10}
 
 ################################################################################
 # BSS family (0.635mm socket)
@@ -201,4 +262,3 @@ Samtec_BSH-150-xx-x-D-A_P0.5mm_Vertical:
 
 ################################################################################
 # BSE family (0.8mm socket)
-
