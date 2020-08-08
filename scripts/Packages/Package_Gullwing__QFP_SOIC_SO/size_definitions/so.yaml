@@ -47,3 +47,24 @@ SO-4_4.4x3.9mm_P2.54mm:
   pitch: 2.54
   num_pins_x: 0
   num_pins_y: 2
+
+SO-24_7.5x15.4mm_P1.27mm:
+  size_source: 'https://www.st.com/resource/en/datasheet/l6219.pdf'
+  body_size_x:
+    nominal: 7.5
+    tolerance: 0.1
+  body_size_y:
+    nominal: 15.4
+    tolerance: 0.2
+  overall_size_x:
+    nominal: 10.325
+    tolerance: 0.325
+  lead_width:
+    nominal: 0.42
+    tolerance: 0.09
+  lead_len:
+    nominal: 0.835
+    tolerance: 0.435
+  pitch: 1.27
+  num_pins_x: 0
+  num_pins_y: 12
