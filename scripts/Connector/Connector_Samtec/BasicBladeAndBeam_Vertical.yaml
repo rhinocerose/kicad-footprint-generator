@@ -1,0 +1,204 @@
+# This file contains footprint specifications the vertical variations of Samtec
+# Basic Blade & Beam connectors. QStrip_QPairs_Vertical.py contains a complete
+# specification of the properties and data types that can be used in this file.
+#
+# Note:
+# - Basic Blade & Beam connectors are very similar to their Q Strip/Q Pairs
+#   counterparts. The only difference is that the Q Strip connectors have an
+#   integrated ground plane.
+# - This file should be passed as an argument to QStrip_Vertical.py
+# 
+
+################################################################################
+# BTH family (0.5mm terminal)
+Samtec_BTH-030-xx-x-D_P0.5mm_Vertical: &BTH-030-xx-x-D
+  library: 'Connector_Samtec_BasicBladeAndBeam'
+  meta: &BTH_meta
+    description: &desc >-
+      Samtec {pn:s} {pitch:1.2f}mm Basic Blade & Beam {type:s}; {pins:d} pins;
+      {ds:s}
+    tags: 'connector Samtec BTH mezzanine terminal vertical'
+    datasheet: >-
+  layout: {type: 'Terminal', width: 20.0, height: 5.97}
+  banks: {n: 1, diff: 0, space: 0, width: 16.88, height: 4.0}
+  pads:
+    signal: {n: 60, pitch: 0.5, y: 3.086, width: 0.305, height: 1.45}
+
+Samtec_BTH-030-xx-x-D-A_P0.5mm_Vertical:
+  <<: *BTH-030-xx-x-D
+  add-tags: 'alignment-pins'
+  holes:
+    - {drill: 1.0, y: -2.03, space: 18.48}
+ 
+Samtec_BTH-050-xx-x-D_P0.5mm_Vertical: &BTH-050-xx-x-D
+  library: 'Connector_Samtec_BasicBladeAndBeam'
+  meta: *BTH_meta
+  layout: {type: 'Terminal', width: 30.0, height: 5.97}
+  banks: {n: 1, diff: 0, space: 0, width: 26.88, height: 4.0}
+  pads:
+    signal: {n: 100, pitch: 0.5, y: 3.086, width: 0.305, height: 1.45}
+
+Samtec_BTH-050-xx-x-D-A_P0.5mm_Vertical:
+  <<: *BTH-050-xx-x-D
+  add-tags: 'alignment-pins'
+  holes:
+    - {drill: 1.0, y: -2.03, space: 28.48}
+
+Samtec_BTH-060-xx-x-D_P0.5mm_Vertical: &BTH-060-xx-x-D
+  library: 'Connector_Samtec_BasicBladeAndBeam'
+  meta: *BTH_meta
+  layout: {type: 'Terminal', width: 35.0, height: 5.97}
+  banks: {n: 1, diff: 0, space: 0, width: 31.88, height: 4.0}
+  pads:
+    signal: {n: 120, pitch: 0.5, y: 3.086, width: 0.305, height: 1.45}
+
+Samtec_BTH-060-xx-x-D-A_P0.5mm_Vertical:
+  <<: *BTH-060-xx-x-D
+  add-tags: 'alignment-pins'
+  holes:
+    - {drill: 1.0, y: -2.03, space: 33.48}
+
+Samtec_BTH-090-xx-x-D_P0.5mm_Vertical: &BTH-090-xx-x-D
+  library: 'Connector_Samtec_BasicBladeAndBeam'
+  meta: *BTH_meta
+  layout: {type: 'Terminal', width: 50.0, height: 5.97}
+  banks: {n: 1, diff: 0, space: 0, width: 46.88, height: 4.0}
+  pads:
+    signal: {n: 180, pitch: 0.5, y: 3.086, width: 0.305, height: 1.45}
+
+Samtec_BTH-090-xx-x-D-A_P0.5mm_Vertical:
+  <<: *BTH-090-xx-x-D
+  add-tags: 'alignment-pins'
+  holes:
+    - {drill: 1.0, y: -2.03, space: 48.48}
+
+Samtec_BTH-120-xx-x-D_P0.5mm_Vertical: &BTH-120-xx-x-D
+  library: 'Connector_Samtec_BasicBladeAndBeam'
+  meta: *BTH_meta
+  layout: {type: 'Terminal', width: 65.0, height: 5.97}
+  banks: {n: 1, diff: 0, space: 0, width: 61.88, height: 4.0}
+  pads:
+    signal: {n: 240, pitch: 0.5, y: 3.086, width: 0.305, height: 1.45}
+
+Samtec_BTH-120-xx-x-D-A_P0.5mm_Vertical:
+  <<: *BTH-120-xx-x-D
+  add-tags: 'alignment-pins'
+  holes:
+    - {drill: 1.0, y: -2.03, space: 63.48}
+
+Samtec_BTH-150-xx-x-D_P0.5mm_Vertical: &BTH-150-xx-x-D
+  library: 'Connector_Samtec_BasicBladeAndBeam'
+  meta: *BTH_meta
+  layout: {type: 'Terminal', width: 80.0, height: 5.97}
+  banks: {n: 1, diff: 0, space: 0, width: 76.88, height: 4.0}
+  pads:
+    signal: {n: 300, pitch: 0.5, y: 3.086, width: 0.305, height: 1.45}
+
+Samtec_BTH-150-xx-x-D-A_P0.5mm_Vertical:
+  <<: *BTH-150-xx-x-D
+  add-tags: 'alignment-pins'
+  holes:
+    - {drill: 1.0, y: -2.03, space: 78.48}
+
+################################################################################
+# BSH family (0.5mm socket)
+Samtec_BSH-030-xx-x-D_P0.5mm_Vertical: &BSH-030-xx-x-D
+  library: 'Connector_Samtec_BasicBladeAndBeam'
+  meta: &BSH_meta
+    description: *desc
+    tags: 'connector Samtec BSH mezzanine socket vertical'
+    datasheet: >-
+  layout: {type: 'Socket', width: 21.3, height: 7.24}
+  banks: {n: 1, diff: 0, space: 0, width: 16.6, height: 3.8}
+  pads:
+    signal: {n: 60, pitch: 0.5, y: 2.865, width: 0.279, height: 2.27}
+
+
+Samtec_BSH-030-xx-x-D-A_P0.5mm_Vertical:
+  <<: *BSH-030-xx-x-D
+  add-tags: 'alignment-pins'
+  holes:
+    - {drill: 1.0, space: 20.13, y: 2.67}
+
+Samtec_BSH-050-xx-x-D_P0.5mm_Vertical: &BSH-050-xx-x-D
+  library: 'Connector_Samtec_BasicBladeAndBeam'
+  meta: *BSH_meta
+  layout: {type: 'Socket', width: 31.3, height: 7.24}
+  banks: {n: 1, diff: 0, space: 20.0, width: 26.6, height: 3.8}
+  pads:
+    signal: {n: 100, pitch: 0.5, y: 2.865, width: 0.279, height: 2.27}
+
+Samtec_BSH-050-xx-x-D-A_P0.5mm_Vertical:
+  <<: *BSH-050-xx-x-D
+  add-tags: 'alignment-pins'
+  holes:
+    - {drill: 1.0, space: 30.13, y: 2.67}
+
+Samtec_BSH-060-xx-x-D_P0.5mm_Vertical: &BSH-060-xx-x-D
+  library: 'Connector_Samtec_BasicBladeAndBeam'
+  meta: *BSH_meta
+  layout: {type: 'Socket', width: 36.3, height: 7.24}
+  banks: {n: 1, diff: 0, space: 20.0, width: 31.6, height: 3.8}
+  pads:
+    signal: {n: 120, pitch: 0.5, y: 2.865, width: 0.279, height: 2.27}
+
+Samtec_BSH-060-xx-x-D-A_P0.5mm_Vertical:
+  <<: *BSH-060-xx-x-D
+  add-tags: 'alignment-pins'
+  holes:
+    - {drill: 1.0, space: 35.13, y: 2.67}
+
+Samtec_BSH-090-xx-x-D_P0.5mm_Vertical: &BSH-090-xx-x-D
+  library: 'Connector_Samtec_BasicBladeAndBeam'
+  meta: *BSH_meta
+  layout: {type: 'Socket', width: 51.3, height: 7.24}
+  banks: {n: 1, diff: 0, space: 20.0, width: 46.6, height: 3.8}
+  pads:
+    signal: {n: 180, pitch: 0.5, y: 2.865, width: 0.279, height: 2.27}
+
+Samtec_BSH-090-xx-x-D-A_P0.5mm_Vertical:
+  <<: *BSH-090-xx-x-D
+  add-tags: 'alignment-pins'
+  holes:
+    - {drill: 1.0, space: 50.13, y: 2.67}
+
+Samtec_BSH-120-xx-x-D_P0.5mm_Vertical: &BSH-120-xx-x-D
+  library: 'Connector_Samtec_BasicBladeAndBeam'
+  meta: *BSH_meta
+  layout: {type: 'Socket', width: 66.3, height: 7.24}
+  banks: {n: 1, diff: 0, space: 20.0, width: 61.6, height: 3.8}
+  pads:
+    signal: {n: 240, pitch: 0.5, y: 2.865, width: 0.279, height: 2.27}
+
+Samtec_BSH-120-xx-x-D-A_P0.5mm_Vertical:
+  <<: *BSH-120-xx-x-D
+  add-tags: 'alignment-pins'
+  holes:
+    - {drill: 1.0, space: 65.13, y: 2.67}
+
+Samtec_BSH-150-xx-x-D_P0.5mm_Vertical: &BSH-150-xx-x-D
+  library: 'Connector_Samtec_BasicBladeAndBeam'
+  meta: *BSH_meta
+  layout: {type: 'Socket', width: 81.3, height: 7.24}
+  banks: {n: 1, diff: 0, space: 20.0, width: 76.6, height: 3.8}
+  pads:
+    signal: {n: 300, pitch: 0.5, y: 2.865, width: 0.279, height: 2.27}
+
+Samtec_BSH-150-xx-x-D-A_P0.5mm_Vertical:
+  <<: *BSH-150-xx-x-D
+  add-tags: 'alignment-pins'
+  holes:
+    - {drill: 1.0, space: 80.13, y: 2.67}
+
+################################################################################
+# BTS family (0.635mm terminal)
+
+################################################################################
+# BSS family (0.635mm socket)
+
+################################################################################
+# BTE family (0.8mm terminal)
+
+################################################################################
+# BSE family (0.8mm socket)
+

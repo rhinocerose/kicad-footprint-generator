@@ -42,18 +42,14 @@ Footprint_Name:
     height: !!float mm # height of bank outline drawn on F.Fab
   pads:
     signal: # signal pin parameters
+      n: !!uint # number of pin positions in a bank
       pitch: !!float mm
+      y: !!float mm # vertical offset
       width: !!float mm # Pad width
       height: !!float mm # Pad height
-      y: !!float mm # vertical offset
     planes: # plane parameters
-      width:
-        - !!float mm # outer pins 
-        - !!float mm # inner pins
-      height: !!float mm # Ground pad heights
-      space: # Distance between ground pads within each bank
-        - !!float mm # outer pins
-        - !!float mm # inner pins
+      - {n, pitch, y, width, height}
+      - ...
   holes: # [optional] hole pair specifications, mirrored about y axis
     - # Hole spec. 1
       name: "" # [optional] name/number for plated holes
@@ -115,13 +111,6 @@ def generate_one_footprint(param, config, default_lib):
     
     # Bank 1 center point
     bank1_mid = x_inv * (pin1.x - pitch/2 + (pad_n / 4)*pitch)
-
-    # Ground pad parameters
-    #gnd_h = param['pads']['planes']['height']
-    # Combine spacing and width data into a zipped list: [(space,width), ...]
-    #gnd_sw = [sw for sw in zip(param['pads']['planes']['space'],
-    #                           param['pads']['planes']['width'])]
-    #gnd_sw.sort() # Sort from lowest (inner) to highest (outer) spacing
 
     # Place pads
     n = 1 # Pin counter
