@@ -2,11 +2,13 @@
 # LSHM family
 Samtec_LSHM-105-xx.x-x-DV-A-N_Vertical: &LSHM-105
   meta: &LSHM_meta
-    description: 'Samtec {pn:s} {pitch:1.2f}mm Razor Beam High-Speed Hermaphroditic Terminal/Socket Strip; {ds:s}'
+    description: >-
+      Samtec {pn:s} {pitch:1.2f}mm Razor Beam High-Speed Hermaphroditic
+      Terminal/Socket Strip ({ds:s}); generated with kicad-footprint-generator
     tags: 'connector Samtec RazorBeam LSHM self-mating terminal socket vertical'
     datasheet: >-
-     [drawing](http://suddendocs.samtec.com/prints/lshm-1xx-xx.x-xxx-dv-a-x-x-xx-mkt.pdf),
-     [footprint](http://suddendocs.samtec.com/prints/lshm-1xx-xx.x-x-dv-a-x-x-tr-footprint.pdf)
+     http://suddendocs.samtec.com/prints/lshm-1xx-xx.x-xxx-dv-a-x-x-xx-mkt.pdf,
+     http://suddendocs.samtec.com/prints/lshm-1xx-xx.x-x-dv-a-x-x-tr-footprint.pdf
   pads: &LSHM_pads {pitch: 0.5, y: 1.85, width: 0.3, height: 1.5}
   layout: {width: 7.2, height: 4.98}
   pins: 10
@@ -160,11 +162,13 @@ Samtec_LSHM-150-xx.x-x-DV-A-S_Vertical:
 # LSEM family
 Samtec_LSEM-120-xx.x-x-DV-A-N_Vertical:
   meta: &LSEM_meta
-    description: 'Samtec {pn:s} {pitch:1.2f}mm Razor Beam High-Speed Hermaphroditic Terminal/Socket Strip; {ds:s}'
+    description: >-
+      Samtec {pn:s} {pitch:1.2f}mm Razor Beam High-Speed Hermaphroditic
+      Terminal/Socket Strip ({ds:s}); generated with kicad-footprint-generator
     tags: 'connector Samtec RazorBeam LSEM self-mating terminal socket vertical'
     datasheet: >-
-     [drawing](http://suddendocs.samtec.com/prints/lsem-1xx-xx.x-x-dv-a-x-xx-tr-mkt.pdf),
-     [footprint](http://suddendocs.samtec.com/prints/lsem-1xx-xx.x-x-dv-a-x-xx-tr%20footprint.pdf)
+     http://suddendocs.samtec.com/prints/lsem-1xx-xx.x-x-dv-a-x-xx-tr-mkt.pdf,
+     http://suddendocs.samtec.com/prints/lsem-1xx-xx.x-x-dv-a-x-xx-tr%20footprint.pdf
   pads: &LSEM_pads {pitch: 0.8, y: 1.85, width: 0.38, height: 1.65}
   layout: {width: 20.4, height: 4.98}
   pins: 40

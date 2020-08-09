@@ -15,10 +15,12 @@ Samtec_BTH-030-xx-x-D_P0.5mm_Vertical: &BTH-030-xx-x-D
   library: 'Connector_Samtec_BasicBladeAndBeam'
   meta: &BTH_meta
     description: &desc >-
-      Samtec {pn:s} {pitch:1.2f}mm Basic Blade & Beam {type:s}; {pins:d} pins;
-      {ds:s}
+      Samtec {pn:s} {pitch:1.2f}mm Basic Blade & Beam {type:s}; {pins:d} pins
+      ({ds:s}); generated with kicad-footprint-generator
     tags: 'connector Samtec BTH mezzanine terminal vertical'
     datasheet: >-
+      http://suddendocs.samtec.com/prints/bth-xxx-xx-x-d-xx-mkt.pdf,
+      http://suddendocs.samtec.com/prints/bth-xxx-xx-x-d-xx-footprint.pdf
   layout: {type: 'Terminal', width: 20.0, height: 5.97}
   banks: {n: 1, diff: 0, space: 0, width: 16.88, height: 4.0}
   pads:
@@ -108,11 +110,12 @@ Samtec_BSH-030-xx-x-D_P0.5mm_Vertical: &BSH-030-xx-x-D
     description: *desc
     tags: 'connector Samtec BSH mezzanine socket vertical'
     datasheet: >-
+      http://suddendocs.samtec.com/prints/bsh-xxx-01-x-d-xx-xx-mkt.pdf,
+      http://suddendocs.samtec.com/prints/bsh-xxx-01-x-d-xx-xx-footprint.pdf
   layout: {type: 'Socket', width: 21.3, height: 7.24}
   banks: {n: 1, diff: 0, space: 0, width: 16.6, height: 3.8}
   pads:
     signal: {n: 60, pitch: 0.5, y: 2.865, width: 0.279, height: 2.27}
-
 
 Samtec_BSH-030-xx-x-D-A_P0.5mm_Vertical:
   <<: *BSH-030-xx-x-D
@@ -196,11 +199,12 @@ Samtec_BTS-025-xx-x-D_P0.5mm_Vertical: &BTS-025-xx-x-D
   library: 'Connector_Samtec_BasicBladeAndBeam'
   meta: &BTS_meta
     description: >-
-      Samtec {pn:s} {pitch:1.3f}mm Basic Blade & Beam {type:s}; {pins:d} pins;
-      {ds:s}
+      Samtec {pn:s} {pitch:1.3f}mm Basic Blade & Beam {type:s}; {pins:d} pins
+      ({ds:s}); generated with kicad-footprint-generator
     tags: 'connector Samtec BTS mezzanine terminal vertical'
     datasheet: >-
-      
+      http://suddendocs.samtec.com/prints/bts-xxx-xx-x-d-xx-mkt.pdf,
+      http://suddendocs.samtec.com/prints/bts-d.pdf
   layout: {type: 'Terminal', width: 20.0, height: 5.97}
   banks: {n: 1, diff: 0, space: 0, width: 16.89, height: 4.0}
   pads:
@@ -256,9 +260,35 @@ Samtec_BTS-100-xx-x-D-A_P0.5mm_Vertical:
 
 ################################################################################
 # BSS family (0.635mm socket)
+Samtec_BSS-025-xx-x-D_P0.5mm_Vertical: &BSS-025-xx-x-D
+  library: 'Connector_Samtec_BasicBladeAndBeam'
+  meta: &BSS_meta
+    description: *desc
+    tags: 'connector Samtec BSS mezzanine socket vertical'
+    datasheet: >-
+      http://suddendocs.samtec.com/prints/bss-xxx-01-x-d-xx-mkt.pdf,
+      http://suddendocs.samtec.com/prints/bss-xxx-01-x-d-xx-footprint.pdf
+  layout: {type: 'Socket', width: 21.3, height: 7.24}
+  banks: {n: 1, diff: 0, space: 0, width: 16.6, height: 3.8}
+  pads:
+    signal: {n: 50, pitch: 0.635, y: 2.865, width: 0.279, height: 2.27}
+
+Samtec_BSS-025-xx-x-D-A_P0.5mm_Vertical:
+  <<: *BSS-025-xx-x-D
+  add-tags: 'alignment-pins'
+  holes:
+    - {drill: 1.0, space: 20.13, y: 2.67}
 
 ################################################################################
 # BTE family (0.8mm terminal)
 
+datasheet: >-
+  http://suddendocs.samtec.com/prints/bte-xxx-xx-x-d-xx-mkt.pdf,
+  http://suddendocs.samtec.com/prints/bte-xxx-xx-x-d-xx-footprint.pdf
+
 ################################################################################
 # BSE family (0.8mm socket)
+
+datasheet: >-
+  http://suddendocs.samtec.com/prints/bse-xxx-01-x-d-xx-mkt.pdf,
+  http://suddendocs.samtec.com/prints/bse-xxx-01-x-d-xx-footprint.pdf

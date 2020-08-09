@@ -7,8 +7,8 @@
 # configurations are denoted with a double-comment followed by a space ("## ").
 #
 # Links:
-#   - [Q Strip](https://www.samtec.com/connectors/high-speed-board-to-board/mezzanine/qstrip)
-#   - [Q Pairs](https://www.samtec.com/connectors/high-speed-board-to-board/mezzanine/qpairs)
+# - https://www.samtec.com/connectors/high-speed-board-to-board/mezzanine/qstrip
+# - https://www.samtec.com/connectors/high-speed-board-to-board/mezzanine/qpairs
 # 
 
 ################################################################################
@@ -18,11 +18,12 @@ Samtec_QTH-030-xx-x-D_P0.5mm_Vertical: &QTH-030-xx-x-D
   meta: &QTH_meta
     description: &QStrip_desc >-
       Samtec {pn:s} {pitch:1.2f}mm Q Strip High-Speed Ground Plane {type:s} Strip;
-      {banks:d} bank(s), {pins:d} pins/bank; {ds:s}
+      {banks:d} bank(s), {pins:d} pins/bank ({ds:s});
+      generated with kicad-footprint-generator
     tags: 'connector Samtec QStrip QTH mezzanine terminal vertical single-ended'
     datasheet: >-
-      [drawing](http://suddendocs.samtec.com/prints/qth-xxx-xx-x-d-xxx-mkt.pdf),
-      [footprint](http://suddendocs.samtec.com/prints/qth-xxx-xx-x-d-xxx-footprint.pdf)
+      http://suddendocs.samtec.com/prints/qth-xxx-xx-x-d-xxx-mkt.pdf,
+      http://suddendocs.samtec.com/prints/qth-xxx-xx-x-d-xxx-footprint.pdf
   layout: {type: 'Terminal', width: 20.0, height: 5.97}
   banks: {n: 1, diff: 0, space: 20.0, width: 16.88, height: 4.0}
   pads: &QTH_pads
@@ -101,11 +102,12 @@ Samtec_QTH-020-xx-x-D-DP_P0.5mm_Vertical: &QTH-020-xx-x-D-DP
   meta: &QTH-DP_meta
     description: &QPairs_desc >-
       Samtec {pn:s} {pitch:1.2f}mm Q Pairs High-Speed Ground Plane {type:s} Strip,
-      Differential Pair; {banks:d} bank(s), {pins:d} pairs/bank; {ds:s}
+      Differential Pair; {banks:d} bank(s), {pins:d} pairs/bank ({ds:s});
+      generated with kicad-footprint-generator
     tags: 'connector Samtec QPairs QTH mezzanine terminal vertical differential'
     datasheet: >-
-      [drawing](http://suddendocs.samtec.com/prints/qth-xxx-xx-x-d-dp-xxx-mkt.pdf),
-      [footprint](http://suddendocs.samtec.com/prints/qth-xxx-xx-x-d-dp-xxx-footprint.pdf)
+      http://suddendocs.samtec.com/prints/qth-xxx-xx-x-d-dp-xxx-mkt.pdf,
+      http://suddendocs.samtec.com/prints/qth-xxx-xx-x-d-dp-xxx-footprint.pdf
   layout: {type: 'Terminal', width: 20.0, height: 5.97}
   banks: {n: 1, diff: 1, space: 20.0, width: 16.88, height: 4.0}
   pads: *QTH_pads
@@ -179,13 +181,13 @@ Samtec_HSMC_ASP-122952-01_P0.5mm_Vertical:
   library: 'Connector_Samtec'
   meta:
     pn: 'ASP-122952-01'
-    datasheet: '[drawing/footprint](http://suddendocs.samtec.com/prints/asp-122952-01-mkt.pdf)'
-    tags: >-
-      connector Samtec QSeries QStrip QPairs HSMC card terminal mezzanine
-      vertical single-ended differential alignment-pins application-specific
     description: >-
-      Samtec {pn:s} HSMC Card {type:s}; modified QTH-090-01-L-D-A,
-      Bank 1 differential; {ds:s}
+      Samtec {pn:s} HSMC Card {type:s}; modified QTH-090-01-L-D-A, Bank 1
+      differential ({ds:s}); generated with kicad-footprint-generator
+    tags: >-
+      connector Samtec QStrip QPairs HSMC card terminal mezzanine
+      vertical single-ended differential alignment-pins application-specific
+    datasheet: 'http://suddendocs.samtec.com/prints/asp-122952-01-mkt.pdf'
   layout: {type: 'Terminal', width: 60.0, height: 5.97}
   banks: {n: 3, diff: 1, space: 20.0, width: 16.88, height: 4.0}
   pads: *QTH_pads
@@ -200,8 +202,8 @@ Samtec_QSH-030-xx-x-D_P0.5mm_Vertical: &QSH-030-xx-x-D
     description: *QStrip_desc
     tags: 'connector Samtec QStrip QSH mezzanine socket vertical single-ended'
     datasheet: >-
-      [drawing](http://suddendocs.samtec.com/prints/qsh-xxx-xx-x-d-xxx-mkt.pdf),
-      [footprint](http://suddendocs.samtec.com/prints/qsh-xxx-xx-x-d-xx-footprint.pdf)
+      http://suddendocs.samtec.com/prints/qsh-xxx-xx-x-d-xxx-mkt.pdf,
+      http://suddendocs.samtec.com/prints/qsh-xxx-xx-x-d-xx-footprint.pdf
   layout: {type: 'Socket', width: 21.31, height: 7.24}
   banks: {n: 1, diff: 0, space: 20.0, width: 17.14, height: 3.8}
   pads: &QSH_pads
@@ -270,8 +272,8 @@ Samtec_QSH-020-xx-x-D-DP_P0.5mm_Vertical: &QSH-020-xx-x-D-DP
     description: *QPairs_desc
     tags: 'connector Samtec QPairs QSH mezzanine socket vertical differential'
     datasheet: >-
-      [drawing](http://suddendocs.samtec.com/prints/qsh-xxx-xx-x-d-dp-xxx-mkt.pdf),
-      [footprint](http://suddendocs.samtec.com/prints/qsh-xxx-xx-x-d-dp-xx-footprint.pdf)
+      http://suddendocs.samtec.com/prints/qsh-xxx-xx-x-d-dp-xxx-mkt.pdf,
+      http://suddendocs.samtec.com/prints/qsh-xxx-xx-x-d-dp-xx-footprint.pdf
   layout: {type: 'Socket', width: 21.31, height: 7.24}
   banks: {n: 1, diff: 1, space: 20.0, width: 17.14, height: 3.8}
   pads: *QSH_pads
@@ -329,13 +331,14 @@ Samtec_HSMC_ASP-122953-01_P0.5mm_Vertical:
   library: 'Connector_Samtec'
   meta:
     pn: 'ASP-122953-01'
-    datasheet: '[drawing/footprint](http://suddendocs.samtec.com/prints/asp-122953-01-mkt.pdf)'
+    description: >-
+      Samtec {pn:s} HSMC Host {type:s}; modified QSH-090-01-L-D-A, Bank 1
+      differential ({ds:s}); generated with kicad-footprint-generator
     tags: >-
       connector Samtec QSeries QStrip QPairs HSMC host socket mezzanine
       vertical single-ended differential application-specific
-    description: >-
-      Samtec {pn:s} HSMC Host {type:s}; modified QSH-090-01-L-D-A,
       Bank 1 differential; {ds:s}
+    datasheet: 'http://suddendocs.samtec.com/prints/asp-122953-01-mkt.pdf'
   layout: {type: 'Socket', width: 61.38, height: 7.24}
   banks: {n: 3, diff: 1, space: 20.0, width: 17.14, height: 3.8}
   pads: *QSH_pads
@@ -350,8 +353,8 @@ Samtec_QTS-025-xx-x-D_P0.635mm_Vertical: &QTS-025-xx-x-D
     description: *QStrip_desc
     tags: 'connector Samtec QStrip QTS mezzanine terminal vertical'
     datasheet: >-
-      [drawing](http://suddendocs.samtec.com/prints/qts-xxx-xx-xxx-d-xxx-mkt.pdf),
-      [footprint](http://suddendocs.samtec.com/prints/qts-xxx-xx-x-d-xx-footprint.pdf)
+      http://suddendocs.samtec.com/prints/qts-xxx-xx-xxx-d-xxx-mkt.pdf,
+      http://suddendocs.samtec.com/prints/qts-xxx-xx-x-d-xx-footprint.pdf
   layout: {type: 'Terminal', width: 20.0, height: 5.97}
   banks: {n: 1, diff: 0, space: 20.0, width: 16.88, height: 4.0}
   pads: &QTS_pads
@@ -401,8 +404,8 @@ Samtec_QTS-016-xx-x-D-DP_P0.635mm_Vertical: &QTS-016-xx-x-D-DP
     description: *QPairs_desc
     tags: 'connector Samtec QPairs QTS mezzanine terminal vertical differential'
     datasheet: >-
-      [drawing](http://suddendocs.samtec.com/prints/qts-xxx-xx-xxx-d-dp-xx-mkt.pdf),
-      [footprint](http://suddendocs.samtec.com/prints/qts-xxx-xx-x-d-dp-xx-footprint.pdf)
+      http://suddendocs.samtec.com/prints/qts-xxx-xx-xxx-d-dp-xx-mkt.pdf,
+      http://suddendocs.samtec.com/prints/qts-xxx-xx-x-d-dp-xx-footprint.pdf
   layout: {type: 'Terminal', width: 20.0, height: 5.97}
   banks: {n: 1, diff: 1, space: 20.0, width: 16.88, height: 4.0}
   pads: *QTS_pads
@@ -467,8 +470,8 @@ Samtec_QSS-025-xx-x-D_P0.635mm_Vertical: &QSS-025-xx-x-D
     description: *QStrip_desc
     tags: 'connector Samtec QStrip QSS mezzanine socket vertical single-ended'
     datasheet: >-
-      [drawing](http://suddendocs.samtec.com/prints/qss-xxx-xx-xxx-d-xxx-mkt.pdf),
-      [footprint](http://suddendocs.samtec.com/prints/qss-xxx-xx-x-d-xx-footprint.pdf)
+      http://suddendocs.samtec.com/prints/qss-xxx-xx-xxx-d-xxx-mkt.pdf,
+      http://suddendocs.samtec.com/prints/qss-xxx-xx-x-d-xx-footprint.pdf
   layout: {type: 'Socket', width: 21.27, height: 7.24}
   banks: {n: 1, diff: 0, space: 20.0, width: 16.64, height: 3.66}
   pads: &QSS_pads
@@ -518,8 +521,8 @@ Samtec_QSS-016-xx-x-D-DP_P0.635mm_Vertical: &QSS-016-xx-x-D-DP
     description: *QPairs_desc
     tags: 'connector Samtec QPairs QSS mezzanine socket vertical differential'
     datasheet: >-
-      [drawing](http://suddendocs.samtec.com/prints/qss-xxx-xx-xxx-d-dp-xxx-mkt.pdf),
-      [footprint](http://suddendocs.samtec.com/prints/qss-xxx-xx-x-d-dp-xx-footprint.pdf)
+      http://suddendocs.samtec.com/prints/qss-xxx-xx-xxx-d-dp-xxx-mkt.pdf,
+      http://suddendocs.samtec.com/prints/qss-xxx-xx-x-d-dp-xx-footprint.pdf
   layout: {type: 'Socket', width: 21.27, height: 7.24}
   banks: {n: 1, diff: 1, space: 20.0, width: 16.64, height: 3.66}
   pads: *QSS_pads
@@ -584,8 +587,8 @@ Samtec_QTE-020-xx-x-D_P0.8mm_Vertical: &QTE-020-xx-x-D
     description: *QStrip_desc
     tags: 'connector Samtec QStrip QTE mezzanine terminal vertical'
     datasheet: >-
-      [drawing](http://suddendocs.samtec.com/prints/qte-xxx-xx-xxx-d-xxx-mkt.pdf),
-      [footprint](http://suddendocs.samtec.com/prints/qte-xxx-xx-xxx-d-xxx-footprint.pdf)
+      http://suddendocs.samtec.com/prints/qte-xxx-xx-xxx-d-xxx-mkt.pdf,
+      http://suddendocs.samtec.com/prints/qte-xxx-xx-xxx-d-xxx-footprint.pdf
   layout: {type: 'Terminal', width: 20.0, height: 5.97}
   banks: {n: 1, diff: 0, space: 20.0, width: 16.88, height: 4.0}
   pads: &QTE_pads
@@ -651,8 +654,8 @@ Samtec_QTE-014-xx-x-D-DP_P0.8mm_Vertical: &QTE-014-xx-x-D-DP
     description: *QPairs_desc
     tags: 'connector Samtec QPairs QTE mezzanine terminal vertical differential'
     datasheet: >-
-      [drawing](http://suddendocs.samtec.com/prints/qte-xxx-xx-xxx-d-dp-xxx-mkt.pdf),
-      [footprint](http://suddendocs.samtec.com/prints/qte-xxx-xx-x-d-dp-xx-footprint.pdf)
+      http://suddendocs.samtec.com/prints/qte-xxx-xx-xxx-d-dp-xxx-mkt.pdf,
+      http://suddendocs.samtec.com/prints/qte-xxx-xx-x-d-dp-xx-footprint.pdf
   layout: {type: 'Terminal', width: 20.0, height: 5.97}
   banks: {n: 1, diff: 1, space: 20.0, width: 16.88, height: 4.0}
   pads: *QTE_pads
@@ -715,8 +718,8 @@ Samtec_QSE-020-xx-x-D_P0.8mm_Vertical: &QSE-020-xx-x-D
     description: *QStrip_desc
     tags: 'connector Samtec QStrip QSE mezzanine socket vertical single-ended'
     datasheet: >-
-      [drawing](http://suddendocs.samtec.com/prints/qse-xxx-xx-xxx-d-xxx-mkt.pdf),
-      [footprint](http://suddendocs.samtec.com/prints/qse-xxx-xx-x-d-xx-footprint.pdf)
+      http://suddendocs.samtec.com/prints/qse-xxx-xx-xxx-d-xxx-mkt.pdf,
+      http://suddendocs.samtec.com/prints/qse-xxx-xx-x-d-xx-footprint.pdf
   layout: {type: 'Socket', width: 21.27, height: 7.24}
   banks: {n: 1, diff: 0, space: 20.0, width: 16.34, height: 3.8}
   pads: &QSE_pads
@@ -774,8 +777,8 @@ Samtec_QSE-014-xx-x-D-DP_P0.8mm_Vertical: &QSE-014-xx-x-D-DP
     description: *QPairs_desc
     tags: 'connector Samtec QPairs QSE mezzanine socket vertical differential'
     datasheet: >-
-      [drawing](http://suddendocs.samtec.com/prints/qse-xxx-xx-xxx-d-dp-xxx-xxxxx-mkt.pdf),
-      [footprint](http://suddendocs.samtec.com/prints/qse-xxx-xx-x-d-dp-xxx-footprint.pdf)
+      http://suddendocs.samtec.com/prints/qse-xxx-xx-xxx-d-dp-xxx-xxxxx-mkt.pdf,
+      http://suddendocs.samtec.com/prints/qse-xxx-xx-x-d-dp-xxx-footprint.pdf
   layout: {type: 'Socket', width: 21.27, height: 7.24}
   banks: {n: 1, diff: 1, space: 20.0, width: 16.34, height: 3.8}
   pads: *QSE_pads
