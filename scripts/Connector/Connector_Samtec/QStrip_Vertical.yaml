@@ -337,7 +337,6 @@ Samtec_HSMC_ASP-122953-01_P0.5mm_Vertical:
     tags: >-
       connector Samtec QSeries QStrip QPairs HSMC host socket mezzanine
       vertical single-ended differential application-specific
-      Bank 1 differential; {ds:s}
     datasheet: 'http://suddendocs.samtec.com/prints/asp-122953-01-mkt.pdf'
   layout: {type: 'Socket', width: 61.38, height: 7.24}
   banks: {n: 3, diff: 1, space: 20.0, width: 17.14, height: 3.8}

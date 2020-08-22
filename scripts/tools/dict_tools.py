@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import collections.abc
 import copy
 
@@ -49,6 +51,21 @@ def dictInherit(d):
     dictMerge() until all of the 'inherit' entries have been resolved. The 
     result is applied to `d` in-place.
     
+    Parameters
+    ----------
+    d : dict
+        Top-level "namespace" dictionary containing other dictionaries, each of
+        which may contain an 'inherit' key to be resolved; edited in-place
+    
+    Raises
+    ------
+    RecursionError
+        If two dictionaries attempt to inherit each other
+    KeyError
+        If a dictionary tries to inherit from a key that is not in `d`
+    
+    Notes
+    -----
     Typical JSON/YAML file structure that can be processed by this function:
     {
       "1": {
@@ -83,22 +100,8 @@ def dictInherit(d):
         "d": 4
       }
     }
-    
-    Parameters
-    ----------
-    d : dict
-        Top-level "namespace" dictionary containing other dictionaries, each of
-        which may contain an 'inherit' key to be resolved; edited in-place
-    
-    Raises
-    ------
-    RecursionError
-        If two dictionaries attempt to inherit each other
-    KeyError
-        If a dictionary tries to inherit from a key that is not in `d`
-
     """
-
+    
     def dictInherit(d, child, parent):
         if 'inherit' not in parent:
             del child['inherit']
