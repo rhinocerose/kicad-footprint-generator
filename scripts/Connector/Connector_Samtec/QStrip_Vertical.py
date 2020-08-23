@@ -75,6 +75,7 @@ sys.path.append(os.path.join(sys.path[0], "..", "..", "tools"))
 from KicadModTree import *
 from footprint_text_fields import addTextFields
 from helpers import *
+from dict_tools import *
 
 def generate_one_footprint(param, config, default_lib):
     fp = Footprint(param['name'])
@@ -411,6 +412,8 @@ if __name__ == '__main__':
                     print(path, "empty, skipping...")
                     continue
 
+                dictInherit(footprints)
+                
                 for fp_name in footprints:
                     fp_params = footprints.get(fp_name)                    
                     if 'name' in fp_params:
