@@ -183,7 +183,7 @@
         "layout": {"type": "Terminal", "width": 20.0, "height": 5.97},
         "banks": {"n": 1, "diff": 0, "space": 20.0, "width": 16.88, "height": 3.94},
         "pads": {
-            "signal": {"n": 50, "pitch": 0.635, "width": 0.406, "height": 1.448, "y": 3.086},
+            "signal": {"n": 50, "pitch": 0.635, "width": 0.406, "height": 1.45, "y": 3.086},
             "planes": [
                 {"n": 2, "pitch": 16.89, "width": 2.54, "height": 0.635, "y": 0},
                 {"n": 2, "pitch":  6.35, "width": 4.70, "height": 0.635, "y": 0}
