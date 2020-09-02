@@ -84,7 +84,7 @@ def generate_one_footprint(pincount, configuration):
     fab_w = configuration['fab_line_width']
 
 
-    pin_inside_distance = (7.16-3.96)/2       # Distance between center of end pin and end of body (from datasheet)
+    pin_inside_distance = (7.77-3.96)/2       # Distance between center of end pin and end of body (from datasheet)
     pin_w = 1.14
     body_height = 3.3
     pin_Y = 5.41
@@ -95,6 +95,7 @@ def generate_one_footprint(pincount, configuration):
         'top':-(pin_Y + body_height)
         }
     body_edge['bottom'] = body_edge['top'] + pin_Y + body_height + pad_size[1]/2
+    body_edge['bottom_silk'] = body_edge['top'] + body_height
 
     # create pads
     # kicad_mod.append(Pad(number=1, type=Pad.TYPE_THT, shape=Pad.SHAPE_RECT,
@@ -122,12 +123,13 @@ def generate_one_footprint(pincount, configuration):
         [body_edge['left'], body_edge['top']]], layer='F.Fab',
         width=fab_w))
 
+    # create main silk rectangle
     offset_ramp_y = 1
     kicad_mod.append(PolygoneLine(polygone=[
         [body_edge['left'] - nudge, body_edge['top'] - nudge],\
         [body_edge['right'] + nudge, body_edge['top'] - nudge],\
-        [body_edge['right'] + nudge, body_edge['bottom'] + nudge],\
-        [body_edge['left'] - nudge , body_edge['bottom'] + nudge],\
+        [body_edge['right'] + nudge, body_edge['bottom_silk'] + nudge],\
+        [body_edge['left'] - nudge , body_edge['bottom_silk'] + nudge],\
         [body_edge['left'] - nudge, body_edge['top'] - nudge]], layer='F.SilkS',
         width=silk_w))
 
