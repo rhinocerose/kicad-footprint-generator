@@ -107,11 +107,25 @@ def generate_one_footprint(model, params, configuration):
 
     else:
     
+        # line1 y not exact TODO
+        line1=[
+            {'x': silk_top_left[0], 'y': silk_bottom_right[1] / 2},
+            {'x': silk_bottom_right[0], 'y': silk_bottom_right[1] / 2}
+        ]
+        kicad_mod.append(PolygoneLine(polygone=line1, layer='F.SilkS', width=configuration['silk_line_width']))
+        
+        line2=[
+            {'x': silk_top_left[0], 'y': silk_bottom_right[1] - 0.5},
+            {'x': silk_bottom_right[0], 'y': silk_bottom_right[1] - 0.5}
+        ]
+        kicad_mod.append(PolygoneLine(polygone=line2, layer='F.SilkS', width=configuration['silk_line_width']))
+        
         for i in range(params.num_pins):
-            lock_translation = Translation(i*params.pin_pitch + ((params.pin_pitch/2 + left_to_pin) if params.pin_pitch <= 3.81 else (3.81/2 + left_to_pin)), silk_bottom_right[1])
-            lock_translation.append(Circle(center=[0, -2.015], radius=1.5, layer='F.SilkS', width=configuration['silk_line_width']))
+            lock_translation = Translation(silk_top_left[0] + params.pin_pitch * i, 0)
+            lock_translation.append(RectLine(start=[0, silk_top_left[1]], end=[params.pin_pitch, 0] , layer='F.SilkS', width=configuration['silk_line_width']))
+            lock_translation.append(Circle(center=[params.pin_pitch / 2, 2.015], radius=1.5, layer='F.SilkS', width=configuration['silk_line_width']))
             if configuration['inner_details_on_fab']:
-                lock_translation.append(Circle(center=[0, -2.015], radius=1.5, layer='F.Fab', width=configuration['silk_line_width']))
+                lock_translation.append(Circle(center=[0, 2.015], radius=1.5, layer='F.Fab', width=configuration['silk_line_width']))
             kicad_mod.append(lock_translation)
 
     ################################################## Courtyard ##################################################
