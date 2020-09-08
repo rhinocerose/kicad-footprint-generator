@@ -17,50 +17,6 @@
 # Copyright (C) 2019 by Caleb Reister <calebreister@gmail.com>
 #
 
-"""
-YAML footprint specification
----
-Footprint_Name:
-  library: 'library name' # [optional] KiCad library to use, overrides default
-  meta: # Footprint metadata
-    pn: 'part number' # [optional] overrides automatic part number detection
-    description: 'Brief description of the footprint'
-    datasheet: 'URL(s) to footprint datasheet'
-    tags: 'KiCad tags go here'
-  add-tags: 'more tags' # [optional] extends the tag list
-  layout: # General footprint layout/drawing data
-    type: '(Terminal|Socket)' # sets Pin 1 position and drawing mode
-    width: !!float mm # [cosmetic] overall width of the connector
-    height: !!float mm # [cosmetic] overall height of the connector
-  width: !!float mm # [optional, cosmetic] overrides layout::width
-  banks:
-    n: !!uint # number of banks in the connector
-    diff: !!uint # number of differential banks
-    slots: !!uint even # number of pin positions in a bank
-    space: !!float mm # distance between adjacent banks
-    width: !!float mm # width of bank outline drawn on F.Fab
-    height: !!float mm # height of bank outline drawn on F.Fab
-  pads:
-    signal: # signal pin parameters
-      n: !!uint # number of pin positions in a bank
-      pitch: !!float mm
-      y: !!float mm # vertical offset
-      width: !!float mm # Pad width
-      height: !!float mm # Pad height
-    planes: # plane parameters
-      - {n, pitch, y, width, height}
-      - ...
-  holes: # [optional] hole pair specifications, mirrored about y axis
-    - # Hole spec. 1
-      name: "" # [optional] name/number for plated holes
-      drill: !!float mm # drill diameter (a list produces an oval)
-      pad: !!float mm # [optional] PTH pad diameter (a list produces an oval)
-      space: !!float mm # distance between holes mirrored about the y-axis
-      y: !!float mm # vertical offset
-    - # Hole spec. 2...
-...
-"""
-
 import sys
 import os
 import argparse
@@ -350,8 +306,6 @@ def generate_one_footprint(param, config, default_lib):
 
     # Tags
     tags = param['meta']['tags']
-    if 'add-tags' in param:
-        tags += ' ' + param['add-tags']
     fp.setTags(tags)
 
     # 3D model path

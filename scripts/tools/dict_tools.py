@@ -10,7 +10,8 @@ def dictMerge(a, b):
     of clobbering the contents of one dictionary with another, it recursively
     combines dictionaries. The result is a dictionary containing the combined
     contents of the arguments. If both dictionaries contain a key with the same
-    name (at the same level), the value in `b` takes precedence.
+    name (at the same level), the value in `b` takes precedence. Keys prefixed
+    with a "+" are added to the corresponding key in the base dictionary.
     
     Parameters
     ----------
@@ -34,6 +35,8 @@ def dictMerge(a, b):
     for k in b:
         if isinstance(b[k], collections.abc.Mapping):
             c[k] = dictMerge(c.get(k, {}), b[k])
+        elif k.startswith("+"):
+            c[k[1:]] += b[k]
         else:
             c[k] = copy.copy(b[k])
     return c
