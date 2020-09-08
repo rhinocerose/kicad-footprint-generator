@@ -259,7 +259,7 @@
         "layout": {"type": "Socket", "width": 21.27, "height": 7.24},
         "banks": {"n": 1, "diff": 0, "space": 20.0, "width": 16.64, "height": 3.66},
         "pads": {
-            "signal": {"n": 60, "pitch": 0.635, "width": 0.406, "height": 2.273, "y": 2.865},
+            "signal": {"n": 50, "pitch": 0.635, "width": 0.406, "height": 2.273, "y": 2.865},
             "planes": [
                 {"n": 2, "pitch": 16.13, "width": 2.8, "height": 0.432, "y": 0},
                 {"n": 2, "pitch":  6.35, "width": 4.7, "height": 0.432, "y": 0}
@@ -359,13 +359,13 @@
     },
     "Samtec_QTE-060-xx-x-D_P0.8mm_Vertical": {
         "inherit": "Samtec_QTE-020-xx-x-D_P0.8mm_Vertical",
-        "layout": {"width": 60.0},
+        "layout": {"width": 40.0},
         "banks": {"n": 2}
     },
     "Samtec_QTE-060-xx-x-D-A_P0.8mm_Vertical": {
         "inherit": "Samtec_QTE-060-xx-x-D_P0.8mm_Vertical",
         "add-tags": "alignment-pins",
-        "holes": [{"drill": 1.0, "space": 58.48, "y": -2.032}]
+        "holes": [{"drill": 1.0, "space": 38.48, "y": -2.032}]
     },
     "Samtec_QTE-014-xx-x-D-DP_P0.8mm_Vertical": {
         "inherit": "Samtec_QTE-020-xx-x-D_P0.8mm_Vertical",
