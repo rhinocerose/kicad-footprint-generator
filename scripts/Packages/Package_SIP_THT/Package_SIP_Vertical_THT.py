@@ -11,6 +11,7 @@ sys.path.append(os.path.join(sys.path[0], "..", "..", "tools"))  # load parent p
 
 from ipc_pad_size_calculators import *
 from footprint_scripts_sip import makeSIPVertical
+from footprint_global_properties import crt_offset
 
 
 # TODO BOTH FUNCTIONS SHOULD ALREADY BE IMPLEMENTED SOMEWHERE!!!
@@ -108,13 +109,17 @@ def create_footprint(name, configuration, **kwargs):
             print("WARNING: Datasheet links should use the HTTPS protocol.")
         description += ", " + datasheet
     if revision:
-        description += " " + revision
+        description += " Rev. " + revision
 
     description += " (Generated with " + os.path.basename(__file__) + ")"
 
     # TODO Remove those print lines
     print(description)
     print(tags)
+
+    # TODO: Move this check into makeSIPVertical and modify parameters to take a TolerancedSize
+    if (package['length'].maximum - package['length'].nominal > 2 * crt_offset) or (package['width'].maximum - package['width'].nominal > 2 * crt_offset):
+        print("ERROR: Your footprint has too high tolerances. This can't be handeld by makeSIPVertical!")
 
     makeSIPVertical(pins=pins, rm=pitch, ddrill=ddrill,
                     pad=[pad['length'], pad['width']],
