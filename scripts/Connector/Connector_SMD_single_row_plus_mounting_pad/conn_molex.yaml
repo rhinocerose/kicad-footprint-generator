@@ -348,7 +348,7 @@ device_definition:
         pinrange: ['list', [2,4,6,8,10]]
         text_inside_pos: 'center'
         pitch: 2
-        pad1_position: 'bottom-left' # 'top-left' | 'bottom-left' -> pin 2 always to the right of pin 1
+        pad1_position: 'top-left' # 'top-left' | 'bottom-left' -> pin 2 always to the right of pin 1
         mounting_pad_size: [1.67, 2.9]
         # x position mounting inner mounting pad edge relative to nearest pad center
         center_pad_to_mounting_pad_edge: 2.22
