@@ -52,7 +52,7 @@ def create_footprint(name, configuration, **kwargs):
 
     # parse pin
     pin = kwargs['pin']
-    if 'length' in pin and 'width' in pin and not 'diameter' in pin or not 'length' in pin and not 'width' in pin and 'diameter':
+    if 'length' in pin and 'width' in pin and not 'diameter' in pin or not 'length' in pin and not 'width' in pin and 'diameter' in pin:
         if 'diameter' in pin:
             pin_diameter = TolerancedSize.fromYaml(pin, base_name='diameter')
         else:
