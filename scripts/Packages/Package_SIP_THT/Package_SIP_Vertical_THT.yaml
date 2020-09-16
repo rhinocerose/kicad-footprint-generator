@@ -1,40 +1,39 @@
-# Example:
-# Converter_DCDC_TRACO_TBA_1-xxxx_THT:
-#   package:
-#     length:
-#       nominal: 19.5
-#       tolerance: 0.35
-#     width:
-#       nominal: 6
-#       tolerance: 0.35
-#     height:
-#       nominal: 9.5
-#       tolerance: 0.35
-#   top_offset: 1.35
-#   left_offset: 2.4
-#   pitch: 2.54
-#   pins: 7
-#   missing_pins: [3, 5, 7]
-#   pin:
+test_Converter_DCDC_TRACO_TBA_1-xxxx_THT:
+  package:
+    length:
+      nominal: 19.5
+      tolerance: 0.35
+    width:
+      nominal: 6
+      tolerance: 0.35
+    height:
+      nominal: 9.5
+      tolerance: 0.35
+  top_offset: 1.35
+  left_offset: 2.4
+  pitch: 2.54
+  pins: 7
+  hidden_pins: [3, 5, 7]
+  pin:
+    length:
+      nominal: 0.5
+      tolerance: 0.01
+    width:
+      nominal: 0.25
+      tolerance: 0.01
+#     diameter:
+#       nominal: 0.8
+#       tolerance: 0.05
+#   ddrill: 1.0
+#   pad:
 #     length:
 #       nominal: 0.5
 #       tolerance: 0.01
 #     width:
 #       nominal: 0.25
 #       tolerance: 0.01
-# #   diameter:
-# #     nominal: 0.8
-# #     tolerance: 0.05
-# # ddrill: 1.0
-# # pad:
-# #   length:
-# #     nominal: 0.5
-# #     tolerance: 0.01
-# #   width:
-# #     nominal: 0.25
-# #     tolerance: 0.01
-#   library: "Converter_DCDC"
-#   tags: "DC/DC Converter"
-#   description: "Traco TBA 1 Series"
-#   datasheet: "https://www.tracopower.com/sites/default/files/products/datasheets/tba1_datasheet.pdf#page=3"
-#   revision: "April 27, 2020"
+  library: "Converter_DCDC"
+  tags: "DC/DC Converter"
+  description: "Traco TBA 1 Series"
+  datasheet: "https://www.tracopower.com/sites/default/files/products/datasheets/tba1_datasheet.pdf#page=3"
+  revision: "April 27, 2020"
