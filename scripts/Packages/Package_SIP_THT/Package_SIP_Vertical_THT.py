@@ -87,8 +87,8 @@ def create_footprint(name, configuration, **kwargs):
         }
 
     pitch = kwargs['pitch'] # pin pitch
-    pins  = kwargs['pins']  # amount of pins in package (including missing ones)
-    missing_pins = kwargs['missing_pins'] if 'missing_pins' in kwargs else [] # list of pin numbers that are missing
+    pins  = kwargs['pins']  # amount of pins in package (including hidden ones)
+    hidden_pins = kwargs['hidden_pins'] if 'hidden_pins' in kwargs else [] # list of pin numbers that are physically abscent but pins are counted
 
     library     = kwargs['library']
     description = kwargs['description']
@@ -129,7 +129,7 @@ def create_footprint(name, configuration, **kwargs):
                     description=description,
                     tags=tags,
                     lib_name=library,
-                    missing_pins=missing_pins)
+                    missing_pins=hidden_pins)
 
 
 if __name__ == "__main__":
