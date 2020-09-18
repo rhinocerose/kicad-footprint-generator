@@ -14,7 +14,7 @@ from footprint_scripts_sip import makeSIPVertical
 from footprint_global_properties import crt_offset
 
 
-# TODO BOTH FUNCTIONS SHOULD ALREADY BE IMPLEMENTED SOMEWHERE!!!
+# TODO Move both ipc functions into a more generic file and rework both as they do not follow the REAL IPC standard
 # Values are taken from
 # https://www.pcb-3d.com/tutorials/how-to-calculate-pth-hole-and-pad-diameter-sizes-according-to-ipc-7251-ipc-2222-and-ipc-2221-standards/
 def ipc_calc_min_drill_size(pin_diameter, ipc_density):
@@ -26,6 +26,7 @@ def ipc_calc_min_drill_size(pin_diameter, ipc_density):
         return pin_diameter.maximum + 0.15
     else:
         sys.exit("ERROR: Invalid IPC density level: " + ipc_density)
+
 
 def ipc_calc_pad_diameter(min_drill_diameter, ipc_density):
     if ipc_density == "A":
@@ -40,62 +41,80 @@ def ipc_calc_pad_diameter(min_drill_diameter, ipc_density):
 
 def create_footprint(name, configuration, **kwargs):
 
-    # ensure all provided dimensions are fully toleranced
+    # read all yaml keys into local variables, all missing keys get 'None' assigned
+
     package = {
         'length': TolerancedSize.fromYaml(kwargs['package'], base_name='length'),
         'width':  TolerancedSize.fromYaml(kwargs['package'], base_name='width'),
-        'height': TolerancedSize.fromYaml(kwargs['package'], base_name='height'),
+        'height': TolerancedSize.fromYaml(kwargs['package'], base_name='height')
     }
 
     top_offset  = kwargs['top_offset']   # offset from pin 1 to the upper package edge
     left_offset = kwargs['left_offset']  # offset from pin 1 to the left package edge
 
-    # parse pin
-    pin = kwargs['pin']
-    if 'length' in pin and 'width' in pin and not 'diameter' in pin or not 'length' in pin and not 'width' in pin and 'diameter' in pin:
-        if 'diameter' in pin:
-            pin_diameter = TolerancedSize.fromYaml(pin, base_name='diameter')
-        else:
-            pin_length   = TolerancedSize.fromYaml(pin, base_name='length')
-            pin_width    = TolerancedSize.fromYaml(pin, base_name='width')
-            # calculate diameter of rectangular pin
-            min_dia = math.sqrt(pin_length.minimum**2 + pin_width.minimum**2)
-            nom_dia = math.sqrt(pin_length.nominal**2 + pin_width.nominal**2)
-            max_dia = math.sqrt(pin_length.maximum**2 + pin_width.maximum**2)
-            pin_diameter = TolerancedSize(minimum=min_dia, nominal=nom_dia, maximum=max_dia)
-    else:
-        sys.exit("ERROR: Do only specify ('length' and 'width') or 'diameter' for pins but not all 3!")
-
-    if 'ddrill' in kwargs:
-        ddrill = kwargs['ddrill']
-    else:
-        ddrill = ipc_calc_min_drill_size(pin_diameter, configuration['ipc_density'])
-
-    if 'pad' in kwargs:
-        pad = kwargs['pad']
-        if 'length' in pad and 'width' in pad:
-            pad = {
-                'length': TolerancedSize.fromYaml(pad, base_name='length').nominal,
-                'width':  TolerancedSize.fromYaml(pad, base_name='width').nominal
-            }
-        else:
-            sys.exit("ERROR: You need to specify either both 'pad_length' and 'pad_width' or none of them to use IPC standard sizes!")
-    else: # use IPC drill size
-        pad = {
-            'length': ipc_calc_pad_diameter(ddrill, configuration['ipc_density']),
-            'width':  ipc_calc_pad_diameter(ddrill, configuration['ipc_density'])
-        }
-
     pitch = kwargs['pitch'] # pin pitch
     pins  = kwargs['pins']  # amount of pins in package (including hidden ones)
-    hidden_pins = kwargs['hidden_pins'] if 'hidden_pins' in kwargs else [] # list of pin numbers that are physically abscent but pins are counted
+
+    # list of pin numbers that are physically abscent but pins are counted
+    hidden_pins = kwargs['hidden_pins'] if 'hidden_pins' in kwargs else []
+
+    pin = kwargs['pin'] if 'pin' in kwargs else None
+    if pin:
+        pin = {
+            'length':   TolerancedSize.fromYaml(pin, base_name='length')   if 'length'   in pin else None,
+            'width':    TolerancedSize.fromYaml(pin, base_name='width')    if 'width'    in pin else None,
+            'diameter': TolerancedSize.fromYaml(pin, base_name='diameter') if 'diameter' in pin else None
+        }
+
+    ddrill = kwargs['ddrill'] if 'ddrill' in kwargs else None
+
+    pad = kwargs['pad'] if 'pad' in kwargs else None
+    if pad:
+        pad = {
+            'length': TolerancedSize.fromYaml(pad, base_name='length'),
+            'width':  TolerancedSize.fromYaml(pad, base_name='width')
+        }
 
     library     = kwargs['library']
     description = kwargs['description']
     datasheet   = kwargs['datasheet'] # link to datasheet
     revision    = kwargs['revision']  # revision of the datasheet
+    tags        = kwargs['tags']
 
-    tags = kwargs['tags']
+    # start actual data processing
+
+    use_ipc_ddrill = True
+    use_ipc_pads   = True
+
+    if ddrill:
+        use_ipc_ddrill = False
+
+    if pad:
+        use_ipc_pads = False
+    else:
+        pad = {
+            'length': None,
+            'width':  None
+        }
+
+    if pin:
+        if bool(pin['length'] and pin['width']) ^ bool(pin['diameter']):
+            if not pin['diameter']:
+                # calculate diameter of rectangular pin
+                min_dia = math.sqrt(pin['length'].minimum**2 + pin['width'].minimum**2)
+                nom_dia = math.sqrt(pin['length'].nominal**2 + pin['width'].nominal**2)
+                max_dia = math.sqrt(pin['length'].maximum**2 + pin['width'].maximum**2)
+                pin['diameter'] = TolerancedSize(minimum=min_dia, nominal=nom_dia, maximum=max_dia)
+        else:
+            sys.exit("ERROR: Do only specify ('length' and 'width') or 'diameter' for pins but not all 3!")
+
+    if use_ipc_ddrill:
+        ddrill = ipc_calc_min_drill_size(pin['diameter'], configuration['ipc_density'])
+
+    if use_ipc_pads:
+        pad['length'] = TolerancedSize(nominal=ipc_calc_pad_diameter(ddrill, configuration['ipc_density']))
+        pad['width']  = TolerancedSize(nominal=ipc_calc_pad_diameter(ddrill, configuration['ipc_density']))
+
     if tags:
         tags = "SIP-{0}".format(pins) + " " + tags
     else:
@@ -122,7 +141,7 @@ def create_footprint(name, configuration, **kwargs):
         print("ERROR: Your footprint has too high tolerances. This can't be handeld by makeSIPVertical!")
 
     makeSIPVertical(pins=pins, rm=pitch, ddrill=ddrill,
-                    pad=[pad['length'], pad['width']],
+                    pad=[pad['length'].nominal, pad['width'].nominal],
                     package_size=[package['length'].nominal, package['width'].nominal, package['height'].nominal],
                     left_offset=left_offset, top_offset=top_offset,
                     footprint_name=name,

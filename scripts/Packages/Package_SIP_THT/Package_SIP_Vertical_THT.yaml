@@ -14,7 +14,7 @@ test_Converter_DCDC_TRACO_TBA_1-xxxx_THT:
   pitch: 2.54
   pins: 7
   hidden_pins: [3, 5, 7]
-  pin:
+  pin: # specify either (length and width) or diameter
     length:
       nominal: 0.5
       tolerance: 0.01
@@ -24,8 +24,8 @@ test_Converter_DCDC_TRACO_TBA_1-xxxx_THT:
 #     diameter:
 #       nominal: 0.8
 #       tolerance: 0.05
-#   ddrill: 1.0
-#   pad:
+#   ddrill: 1.0 # only specify to override IPC value
+#   pad: # only specify to override IPC value
 #     length:
 #       nominal: 0.5
 #       tolerance: 0.01
@@ -38,7 +38,7 @@ test_Converter_DCDC_TRACO_TBA_1-xxxx_THT:
   datasheet: "https://www.tracopower.com/sites/default/files/products/datasheets/tba1_datasheet.pdf#page=3"
   revision: "April 27, 2020"
 
-Converter_DCDC_TRACO_TMV_05xxS_TMV_12xxS_THT:
+test_normal:
   package:
     length:
       nominal: 19.5
@@ -61,6 +61,91 @@ Converter_DCDC_TRACO_TMV_05xxS_TMV_12xxS_THT:
     width:
       nominal: 0.25
       tolerance: 0.05
+  library: "Converter_DCDC"
+  tags: "DC/DC Converter"
+  description: "Traco TMV 5V/12V Input Single Output"
+  datasheet: "https://www.tracopower.com/sites/default/files/products/datasheets/tmv_datasheet.pdf#page=3"
+  revision: "October 23, 2018"
+  
+test_use_pin_diameter:
+  package:
+    length:
+      nominal: 19.5
+      tolerance: 0.25
+    width:
+      nominal: 6.1
+      tolerance: 0.25
+    height:
+      nominal: 10.2
+      tolerance: 0.25
+  top_offset: 1.375
+  left_offset: 2.3
+  pitch: 2.54
+  pins: 7
+  hidden_pins: [3, 4, 6]
+  pin:
+    diameter:
+      nominal: 0.5
+      tolerance: 0.1
+  library: "Converter_DCDC"
+  tags: "DC/DC Converter"
+  description: "Traco TMV 5V/12V Input Single Output"
+  datasheet: "https://www.tracopower.com/sites/default/files/products/datasheets/tmv_datasheet.pdf#page=3"
+  revision: "October 23, 2018"
+  
+test_override_drill_use_IPC_pad:
+  package:
+    length:
+      nominal: 19.5
+      tolerance: 0.25
+    width:
+      nominal: 6.1
+      tolerance: 0.25
+    height:
+      nominal: 10.2
+      tolerance: 0.25
+  top_offset: 1.375
+  left_offset: 2.3
+  pitch: 2.54
+  pins: 7
+  hidden_pins: [3, 4, 6]
+  ddrill: 0.333
+  library: "Converter_DCDC"
+  tags: "DC/DC Converter"
+  description: "Traco TMV 5V/12V Input Single Output"
+  datasheet: "https://www.tracopower.com/sites/default/files/products/datasheets/tmv_datasheet.pdf#page=3"
+  revision: "October 23, 2018"
+  
+test_override_pad_use_IPC_drill:
+  package:
+    length:
+      nominal: 19.5
+      tolerance: 0.25
+    width:
+      nominal: 6.1
+      tolerance: 0.25
+    height:
+      nominal: 10.2
+      tolerance: 0.25
+  top_offset: 1.375
+  left_offset: 2.3
+  pitch: 2.54
+  pins: 7
+  hidden_pins: [3, 4, 6]
+  pin:
+    length:
+      nominal: 0.5
+      tolerance: 0.05
+    width:
+      nominal: 0.25
+      tolerance: 0.05
+  pad: # only specify to override IPC value
+    length:
+      nominal: 0.5
+      tolerance: 0.01
+    width:
+      nominal: 0.25
+      tolerance: 0.01
   library: "Converter_DCDC"
   tags: "DC/DC Converter"
   description: "Traco TMV 5V/12V Input Single Output"
