@@ -14,7 +14,7 @@
         "inherit": "Samtec_LSHM-105-xx.x-x-DV-A-N_P0.5mm_Vertical",
         "meta": {"+tags": " shield"},
         "layout": {"+width": 1.1},
-        "+holes": [{"drill": 1.0, "pad": 1.5, "space": 7.45, "y": 1.15}]
+        "+holes": [{"drill": 1.0, "pad": 1.5, "space": 7.45, "y": 1.15, "name": "SH"}]
     },
     "Samtec_LSHM-110-xx.x-x-DV-A-N_P0.5mm_Vertical": {
         "inherit": "Samtec_LSHM-105-xx.x-x-DV-A-N_P0.5mm_Vertical",
@@ -26,7 +26,7 @@
         "inherit": "Samtec_LSHM-110-xx.x-x-DV-A-N_P0.5mm_Vertical",
         "meta": {"+tags": " shield"},
         "layout": {"+width": 1.1},
-        "+holes": [{"drill": 1.0, "pad": 1.5, "space": 9.95, "y": 1.15}]
+        "+holes": [{"drill": 1.0, "pad": 1.5, "space": 9.95, "y": 1.15, "name": "SH"}]
     },
     "Samtec_LSHM-120-xx.x-x-DV-A-N_P0.5mm_Vertical": {
         "inherit": "Samtec_LSHM-105-xx.x-x-DV-A-N_P0.5mm_Vertical",
@@ -38,7 +38,7 @@
         "inherit": "Samtec_LSHM-120-xx.x-x-DV-A-N_P0.5mm_Vertical",
         "meta": {"+tags": " shield"},
         "layout": {"+width": 1.1},
-        "+holes": [{"drill": 1.0, "pad": 1.5, "space": 14.95, "y": 1.15}]
+        "+holes": [{"drill": 1.0, "pad": 1.5, "space": 14.95, "y": 1.15, "name": "SH"}]
     },
     "Samtec_LSHM-130-xx.x-x-DV-A-N_P0.5mm_Vertical": {
         "inherit": "Samtec_LSHM-105-xx.x-x-DV-A-N_P0.5mm_Vertical",
@@ -50,7 +50,7 @@
         "inherit": "Samtec_LSHM-130-xx.x-x-DV-A-N_P0.5mm_Vertical",
         "meta": {"+tags": " shield"},
         "layout": {"+width": 1.1},
-        "+holes": [{"drill": 1.0, "pad": 1.5, "space": 19.95, "y": 1.15}]
+        "+holes": [{"drill": 1.0, "pad": 1.5, "space": 19.95, "y": 1.15, "name": "SH"}]
     },
     "Samtec_LSHM-140-xx.x-x-DV-A-N_P0.5mm_Vertical": {
         "inherit": "Samtec_LSHM-105-xx.x-x-DV-A-N_P0.5mm_Vertical",
@@ -62,7 +62,7 @@
         "inherit": "Samtec_LSHM-140-xx.x-x-DV-A-N_P0.5mm_Vertical",
         "meta": {"+tags": " shield"},
         "layout": {"+width": 1.1},
-        "+holes": [{"drill": 1.0, "pad": 1.5, "space": 24.95, "y": 1.15}]
+        "+holes": [{"drill": 1.0, "pad": 1.5, "space": 24.95, "y": 1.15, "name": "SH"}]
     },
     "Samtec_LSHM-150-xx.x-x-DV-A-N_P0.5mm_Vertical": {
         "inherit": "Samtec_LSHM-105-xx.x-x-DV-A-N_P0.5mm_Vertical",
@@ -74,7 +74,7 @@
         "inherit": "Samtec_LSHM-150-xx.x-x-DV-A-N_P0.5mm_Vertical",
         "meta": {"+tags": " shield"},
         "layout": {"+width": 1.1},
-        "+holes": [{"drill": 1.0, "pad": 1.5, "space": 29.95, "y": 1.15}]
+        "+holes": [{"drill": 1.0, "pad": 1.5, "space": 29.95, "y": 1.15, "name": "SH"}]
     },
 
     "Samtec_LSS-110-xx-x-DV-A_P0.635mm_Vertical": {

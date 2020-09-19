@@ -78,21 +78,6 @@ def generate_one_footprint(param, config, default_lib):
         fp.append(pad)
 
     ############################################################################
-    # Holes
-    hole_list = param['holes'] + param.get('add-holes', [])
-    for p in hole_list:
-        drill = p['drill']
-        shape = Pad.SHAPE_CIRCLE if type(drill) is float else Pad.SHAPE_OVAL
-        h = [Pad(number = "SH" if 'pad' in p else "",
-                 at     = (m*p['space']/2, p['y']),
-                 drill  = drill,
-                 size   = p['pad']       if 'pad' in p else drill,
-                 type   = Pad.TYPE_THT   if 'pad' in p else Pad.TYPE_NPTH,
-                 layers = Pad.LAYERS_THT if 'pad' in p else Pad.LAYERS_NPTH,
-                 shape  = shape) for m in (-1,1)]
-        fp.extend(h)
-
-    ############################################################################
     # Fabrication layer: F.Fab
     fab_line = config['fab_line_width']
     fab_mark = config['fab_pin1_marker_length']
@@ -127,14 +112,34 @@ def generate_one_footprint(param, config, default_lib):
                           line_width = fab_line))
 
     ############################################################################
+    # Holes
+    hole_list = param['holes']
+    for p in hole_list:
+        drill = p['drill']
+        shape = Pad.SHAPE_CIRCLE if type(drill) is float else Pad.SHAPE_OVAL
+        h = [Pad(number = p.get('name', ""),
+                 at     = (m*p['space']/2, p['y']),
+                 drill  = drill,
+                 size   = p.get('pad', drill),
+                 type   = Pad.TYPE_THT   if 'pad' in p else Pad.TYPE_NPTH,
+                 layers = Pad.LAYERS_THT if 'pad' in p else Pad.LAYERS_NPTH,
+                 shape  = shape) for m in (-1,1)]
+        fp.extend(h)
+        # Extend courtyard width for shield holes
+        if p['space'] + p.get('pad', drill) > fab_w:
+            fab_w = p['space'] + p.get('pad', drill)
+            sh_x = p['space']/2
+            sh_y = p['y']
+            sh_r = p.get('pad', drill) / 2
+    
+    ############################################################################
     # Courtyard: F.CrtYd
     court_line = config['courtyard_line_width']
     court_grid = config['courtyard_grid']
     court_offset = config['courtyard_offset']['connector']
-
     
     court_x = roundToBase(fab_w/2 + court_offset, court_grid)
-    court_y = roundToBase(max(fab_y, pad_y + pad_h/2) + court_offset, court_grid)
+    court_y = roundToBase(max(fab_y, pad_y+pad_h/2) + court_offset, court_grid)
 
     fp.append(RectLine(start  = (-court_x, -court_y),
                        end    = ( court_x,  court_y),
@@ -154,11 +159,13 @@ def generate_one_footprint(param, config, default_lib):
     silk_pin1 = pin1.x - silk_pad['x']
 
     if "shield" in tags:
+        silk_sh = math.sqrt((sh_r+silk_offset)**2 - (silk_rEdge-sh_x)**2)
         silk_lEnd = [[{'x': silk_pin1, 'y': -silk_y},
                       {'x': silk_lEdge + silk_chamfer, 'y': -silk_y},
                       {'x': silk_lEdge, 'y': -silk_y + silk_chamfer},
-                      {'x': silk_lEdge, 'y':  2*silk_offset}],
-                     [{'x': silk_lEdge, 'y': silk_y - silk_chamfer},
+                      {'x': silk_lEdge, 'y': sh_y - silk_sh}],
+                     [{'x': silk_lEdge, 'y': sh_y + silk_sh},
+                      {'x': silk_lEdge, 'y': silk_y - silk_chamfer},
                       {'x': silk_lEdge + silk_chamfer, 'y': silk_y},
                       {'x': silk_pin1, 'y': silk_y}]]
     else:
