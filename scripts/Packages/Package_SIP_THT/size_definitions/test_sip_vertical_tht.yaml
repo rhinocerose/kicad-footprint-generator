@@ -1,4 +1,6 @@
-test_Converter_DCDC_TRACO_TBA_1-xxxx_THT:
+# a typical part with all possible configuration options. The ones that are
+# not necessary are commented out
+all_config_options:
   package:
     length:
       nominal: 19.5
@@ -24,8 +26,8 @@ test_Converter_DCDC_TRACO_TBA_1-xxxx_THT:
 #     diameter:
 #       nominal: 0.8
 #       tolerance: 0.05
-#   ddrill: 1.0 # only specify to override IPC value
-#   pad: # only specify to override IPC value
+#   ddrill: 1.0 # specify only to override IPC value
+#   pad: # specify only to override IPC value
 #     length:
 #       nominal: 0.5
 #       tolerance: 0.01
@@ -38,7 +40,8 @@ test_Converter_DCDC_TRACO_TBA_1-xxxx_THT:
   datasheet: "https://www.tracopower.com/sites/default/files/products/datasheets/tba1_datasheet.pdf#page=3"
   revision: "April 27, 2020"
 
-test_normal:
+# this represents the typical configuration
+normal:
   package:
     length:
       nominal: 19.5
@@ -66,8 +69,9 @@ test_normal:
   description: "Traco TMV 5V/12V Input Single Output"
   datasheet: "https://www.tracopower.com/sites/default/files/products/datasheets/tmv_datasheet.pdf#page=3"
   revision: "October 23, 2018"
-  
-test_use_pin_diameter:
+
+# use the pin diameter and calculate drill and pad sizes from IPC
+use_pin_diameter:
   package:
     length:
       nominal: 19.5
@@ -92,8 +96,9 @@ test_use_pin_diameter:
   description: "Traco TMV 5V/12V Input Single Output"
   datasheet: "https://www.tracopower.com/sites/default/files/products/datasheets/tmv_datasheet.pdf#page=3"
   revision: "October 23, 2018"
-  
-test_override_drill_use_IPC_pad:
+
+# use specified drill size and IPC pad sizes
+override_drill_use_IPC_pad:
   package:
     length:
       nominal: 19.5
@@ -115,8 +120,9 @@ test_override_drill_use_IPC_pad:
   description: "Traco TMV 5V/12V Input Single Output"
   datasheet: "https://www.tracopower.com/sites/default/files/products/datasheets/tmv_datasheet.pdf#page=3"
   revision: "October 23, 2018"
-  
-test_override_pad_use_IPC_drill:
+
+# use specifed pad sizes and IPC drill size
+override_pad_use_IPC_drill:
   package:
     length:
       nominal: 19.5
@@ -139,7 +145,7 @@ test_override_pad_use_IPC_drill:
     width:
       nominal: 0.25
       tolerance: 0.05
-  pad: # only specify to override IPC value
+  pad: # specify only to override IPC value
     length:
       nominal: 0.5
       tolerance: 0.01
