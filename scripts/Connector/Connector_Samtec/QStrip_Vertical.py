@@ -298,11 +298,11 @@ def generate_one_footprint(param, config, default_lib):
     desc = param['meta']['description']
     desc = desc.format(pn = partnum,
                        type = mode,
-                       ds = param['meta']['datasheet'],
                        pitch = pitch,
                        banks = banks,
                        pins = pins_or_pairs)
-    fp.setDescription(desc)
+    fp.setDescription(desc + ", generated with kicad-footprint-generator"
+                      + ", " + param['meta']['datasheet'])
 
     # Tags
     tags = param['meta']['tags']

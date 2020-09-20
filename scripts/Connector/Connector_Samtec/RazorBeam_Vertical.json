@@ -2,7 +2,7 @@
     "Samtec_LSHM-105-xx.x-x-DV-A-N_P0.5mm_Vertical": {
         "library": "Connector_Samtec_RazorBeam",
         "meta": {
-            "description": "Samtec {pn:s} {pitch:1.2f}mm Razor Beam High-Speed Hermaphroditic Terminal/Socket Strip ({ds:s}); generated with kicad-footprint-generator",
+            "description": "Samtec {pn:s} {pitch:1.2f}mm Razor Beam High-Speed Hermaphroditic Terminal/Socket Strip",
             "datasheet": "http://suddendocs.samtec.com/catalog_english/lshm_dv.pdf",
             "tags": "connector Samtec RazorBeam LSHM self-mating terminal socket vertical"
         },
@@ -80,7 +80,7 @@
     "Samtec_LSS-105-xx-x-DV-A_P0.635mm_Vertical": {
         "library": "Connector_Samtec_RazorBeam",
         "meta": {
-            "description": "Samtec {pn:s} {pitch:1.3f}mm Razor Beam High-Speed Hermaphroditic Terminal/Socket Strip ({ds:s}); generated with kicad-footprint-generator",
+            "description": "Samtec {pn:s} {pitch:1.3f}mm Razor Beam High-Speed Hermaphroditic Terminal/Socket Strip, ",
             "datasheet": "http://suddendocs.samtec.com/catalog_english/lss.pdf",
             "tags": "connector Samtec RazorBeam LSS self-mating terminal socket vertical"
         },
@@ -122,7 +122,7 @@
     "Samtec_LSEM-120-xx.x-x-DV-A-N_P0.8mm_Vertical": {
         "library": "Connector_Samtec_RazorBeam",
         "meta": {
-            "description": "Samtec {pn:s} {pitch:1.2f}mm Razor Beam High-Speed Hermaphroditic Terminal/Socket Strip ({ds:s}); generated with kicad-footprint-generator",
+            "description": "Samtec {pn:s} {pitch:1.2f}mm Razor Beam High-Speed Hermaphroditic Terminal/Socket Strip",
             "datasheet": "http://suddendocs.samtec.com/catalog_english/lsem.pdf",
             "tags": "connector Samtec RazorBeam LSEM self-mating terminal socket vertical"
         },

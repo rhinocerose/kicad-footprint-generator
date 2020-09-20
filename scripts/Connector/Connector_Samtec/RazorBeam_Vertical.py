@@ -48,9 +48,9 @@ def generate_one_footprint(param, config, default_lib):
     
     # Description
     desc = param['meta']['description']
-    desc = desc.format(pn = partnum, pitch = pitch,
-                       ds = param['meta']['datasheet'])
-    fp.setDescription(desc)
+    desc = desc.format(pn = partnum, pitch = pitch)
+    fp.setDescription(desc + ", generated with kicad-footprint-generator"
+                      + ", " + param['meta']['datasheet'])
 
     # Tags
     tags = param['meta']['tags']

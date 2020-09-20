@@ -2,7 +2,7 @@
     "Samtec_QTH-030-xx-x-D_P0.5mm_Vertical": {
         "library": "Connector_Samtec_QStrip",
         "meta": {
-            "description": "Samtec {pn:s} {pitch:1.2f}mm Q Strip High-Speed Ground Plane {type:s} Strip; {banks:d} bank(s), {pins:d} pins/bank ({ds:s}); generated with kicad-footprint-generator",
+            "description": "Samtec {pn:s} {pitch:1.2f}mm Q Strip High-Speed Ground Plane {type:s} Strip, {banks:d} bank(s), {pins:d} pins/bank",
             "datasheet": "http://suddendocs.samtec.com/catalog_english/qth.pdf",
             "tags": "connector Samtec QStrip QTH mezzanine terminal vertical single-ended"
         },
@@ -44,7 +44,7 @@
     "Samtec_QTH-020-xx-x-D-DP_P0.5mm_Vertical": {
         "inherit": "Samtec_QTH-030-xx-x-D_P0.5mm_Vertical",
         "meta": {
-            "description": "Samtec {pn:s} {pitch:1.2f}mm Q Pairs High-Speed Ground Plane {type:s} Strip, Differential Pair; {banks:d} bank(s), {pins:d} pairs/bank ({ds:s}); generated with kicad-footprint-generator",
+            "description": "Samtec {pn:s} {pitch:1.2f}mm Q Pairs High-Speed Ground Plane {type:s} Strip, Differential Pair, {banks:d} bank(s), {pins:d} pairs/bank",
             "tags": "connector Samtec QPairs QTH mezzanine terminal vertical differential"
         },
         "banks": {"diff": 1}
@@ -79,7 +79,7 @@
         "library": "Connector_Samtec",
         "meta": {
             "pn": "ASP-122952-01",
-            "description": "Samtec {pn:s} HSMC Card {type:s}; modified QTH-090-01-L-D-A, Bank 1 differential ({ds:s}); generated with kicad-footprint-generator",
+            "description": "Samtec {pn:s} HSMC Card {type:s}, modified QTH-090-01-L-D-A, Bank 1 differential",
             "datasheet": "http://suddendocs.samtec.com/prints/asp-122952-01-mkt.pdf",
             "+tags": " QPairs HSMC card differential application-specific"
         },
@@ -89,7 +89,7 @@
     "Samtec_QSH-030-xx-x-D_P0.5mm_Vertical": {
         "library": "Connector_Samtec_QStrip",
         "meta": {
-            "description": "Samtec {pn:s} {pitch:1.2f}mm Q Strip High-Speed Ground Plane {type:s} Strip; {banks:d} bank(s), {pins:d} pins/bank ({ds:s}); generated with kicad-footprint-generator",
+            "description": "Samtec {pn:s} {pitch:1.2f}mm Q Strip High-Speed Ground Plane {type:s} Strip, {banks:d} bank(s), {pins:d} pins/bank",
             "datasheet": "http://suddendocs.samtec.com/catalog_english/qsh.pdf",
             "tags": "connector Samtec QStrip QSH mezzanine socket vertical single-ended"
         },
@@ -131,7 +131,7 @@
     "Samtec_QSH-020-xx-x-D-DP_P0.5mm_Vertical": {
         "inherit": "Samtec_QSH-030-xx-x-D_P0.5mm_Vertical",
         "meta": {
-            "description": "Samtec {pn:s} {pitch:1.2f}mm Q Pairs High-Speed Ground Plane {type:s} Strip, Differential Pair; {banks:d} bank(s), {pins:d} pairs/bank ({ds:s}); generated with kicad-footprint-generator",
+            "description": "Samtec {pn:s} {pitch:1.2f}mm Q Pairs High-Speed Ground Plane {type:s} Strip, Differential Pair, {banks:d} bank(s), {pins:d} pairs/bank",
             "tags": "connector Samtec QPairs QSH mezzanine socket vertical differential"
         },
         "banks": {"diff": 1}
@@ -166,7 +166,7 @@
         "library": "Connector_Samtec",
         "meta": {
             "pn": "ASP-122953-01",
-            "description": "Samtec {pn:s} HSMC Host {type:s}; modified QSH-090-01-L-D-A, Bank 1 differential ({ds:s}); generated with kicad-footprint-generator",
+            "description": "Samtec {pn:s} HSMC Host {type:s}, modified QSH-090-01-L-D-A, Bank 1 differential",
             "datasheet": "http://suddendocs.samtec.com/prints/asp-122953-01-mkt.pdf",
             "+tags": " QPairs HSMC host differential application-specific"
         },
@@ -176,7 +176,7 @@
     "Samtec_QTS-025-xx-x-D_P0.635mm_Vertical": {
         "library": "Connector_Samtec_QStrip",
         "meta": {
-            "description": "Samtec {pn:s} {pitch:1.3f}mm Q Strip High-Speed Ground Plane {type:s} Strip; {banks:d} bank(s), {pins:d} pins/bank ({ds:s}); generated with kicad-footprint-generator",
+            "description": "Samtec {pn:s} {pitch:1.3f}mm Q Strip High-Speed Ground Plane {type:s} Strip, {banks:d} bank(s), {pins:d} pins/bank",
             "datasheet": "http://suddendocs.samtec.com/catalog_english/qts.pdf",
             "tags": "connector Samtec QStrip QTS mezzanine terminal vertical"
         },
@@ -218,7 +218,7 @@
     "Samtec_QTS-016-xx-x-D-DP_P0.635mm_Vertical": {
         "inherit": "Samtec_QTS-025-xx-x-D_P0.635mm_Vertical",
         "meta": {
-            "description": "Samtec {pn:s} {pitch:1.3f}mm Q Pairs High-Speed Ground Plane {type:s} Strip, Differential Pair; {banks:d} bank(s), {pins:d} pairs/bank ({ds:s}); generated with kicad-footprint-generator",
+            "description": "Samtec {pn:s} {pitch:1.3f}mm Q Pairs High-Speed Ground Plane {type:s} Strip, Differential Pair, {banks:d} bank(s), {pins:d} pairs/bank",
             "tags": "connector Samtec QPairs QTS mezzanine terminal vertical differential"
         },
         "banks": {"diff": 1}
@@ -252,7 +252,7 @@
     "Samtec_QSS-025-xx-x-D_P0.635mm_Vertical": {
         "library": "Connector_Samtec_QStrip",
         "meta": {
-            "description": "Samtec {pn:s} {pitch:1.3f}mm Q Strip High-Speed Ground Plane {type:s} Strip; {banks:d} bank(s), {pins:d} pins/bank ({ds:s}); generated with kicad-footprint-generator",
+            "description": "Samtec {pn:s} {pitch:1.3f}mm Q Strip High-Speed Ground Plane {type:s} Strip, {banks:d} bank(s), {pins:d} pins/bank",
             "datasheet": "http://suddendocs.samtec.com/catalog_english/qss.pdf",
             "tags": "connector Samtec QStrip QSS mezzanine socket vertical single-ended"
         },
@@ -294,7 +294,7 @@
     "Samtec_QSS-016-xx-x-D-DP_P0.635mm_Vertical": {
         "inherit": "Samtec_QSS-025-xx-x-D_P0.635mm_Vertical",
         "meta": {
-            "description": "Samtec {pn:s} {pitch:1.3f}mm Q Pairs High-Speed Ground Plane {type:s} Strip, Differential Pair; {banks:d} bank(s), {pins:d} pairs/bank ({ds:s}); generated with kicad-footprint-generator",
+            "description": "Samtec {pn:s} {pitch:1.3f}mm Q Pairs High-Speed Ground Plane {type:s} Strip, Differential Pair, {banks:d} bank(s), {pins:d} pairs/bank",
             "tags": "connector Samtec QPairs QSS mezzanine socket vertical differential"
         },
         "banks": {"diff": 1}
@@ -328,7 +328,7 @@
     "Samtec_QTE-020-xx-x-D_P0.8mm_Vertical": {
         "library": "Connector_Samtec_QStrip",
         "meta": {
-            "description": "Samtec {pn:s} {pitch:1.2f}mm Q Strip High-Speed Ground Plane {type:s} Strip; {banks:d} bank(s), {pins:d} pins/bank ({ds:s}); generated with kicad-footprint-generator",
+            "description": "Samtec {pn:s} {pitch:1.2f}mm Q Strip High-Speed Ground Plane {type:s} Strip, {banks:d} bank(s), {pins:d} pins/bank",
             "datasheet": "http://suddendocs.samtec.com/catalog_english/qte.pdf",
             "tags": "connector Samtec QStrip QTE mezzanine terminal vertical"
         },
@@ -370,7 +370,7 @@
     "Samtec_QTE-014-xx-x-D-DP_P0.8mm_Vertical": {
         "inherit": "Samtec_QTE-020-xx-x-D_P0.8mm_Vertical",
         "meta": {
-            "description": "Samtec {pn:s} {pitch:1.2f}mm Q Pairs High-Speed Ground Plane {type:s} Strip, Differential Pair; {banks:d} bank(s), {pins:d} pairs/bank ({ds:s}); generated with kicad-footprint-generator",
+            "description": "Samtec {pn:s} {pitch:1.2f}mm Q Pairs High-Speed Ground Plane {type:s} Strip, Differential Pair, {banks:d} bank(s), {pins:d} pairs/bank",
             "tags": "connector Samtec QPairs QTE mezzanine terminal vertical differential"
         },
         "banks": {"diff": 1}
@@ -404,7 +404,7 @@
     "Samtec_QSE-020-xx-x-D_P0.8mm_Vertical": {
         "library": "Connector_Samtec_QStrip",
         "meta": {
-            "description": "Samtec {pn:s} {pitch:1.2f}mm Q Strip High-Speed Ground Plane {type:s} Strip; {banks:d} bank(s), {pins:d} pins/bank ({ds:s}); generated with kicad-footprint-generator",
+            "description": "Samtec {pn:s} {pitch:1.2f}mm Q Strip High-Speed Ground Plane {type:s} Strip, {banks:d} bank(s), {pins:d} pins/bank",
             "datasheet": "http://suddendocs.samtec.com/catalog_english/qse.pdf",
             "tags": "connector Samtec QStrip QSE mezzanine socket vertical single-ended"
         },
@@ -446,7 +446,7 @@
     "Samtec_QSE-014-xx-x-D-DP_P0.8mm_Vertical": {
         "inherit": "Samtec_QSE-020-xx-x-D_P0.8mm_Vertical",
         "meta": {
-            "description": "Samtec {pn:s} {pitch:1.2f}mm Q Pairs High-Speed Ground Plane {type:s} Strip, Differential Pair; {banks:d} bank(s), {pins:d} pairs/bank ({ds:s}); generated with kicad-footprint-generator",
+            "description": "Samtec {pn:s} {pitch:1.2f}mm Q Pairs High-Speed Ground Plane {type:s} Strip, Differential Pair, {banks:d} bank(s), {pins:d} pairs/bank",
             "tags": "connector Samtec QPairs QSE mezzanine socket vertical differential"
         },
         "banks": {"diff": 1}
