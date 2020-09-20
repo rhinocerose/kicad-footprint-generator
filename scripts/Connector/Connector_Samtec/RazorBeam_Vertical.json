@@ -77,40 +77,46 @@
         "+holes": [{"drill": 1.0, "pad": 1.5, "space": 29.95, "y": 1.15, "name": "SH"}]
     },
 
-    "Samtec_LSS-110-xx-x-DV-A_P0.635mm_Vertical": {
+    "Samtec_LSS-105-xx-x-DV-A_P0.635mm_Vertical": {
         "library": "Connector_Samtec_RazorBeam",
         "meta": {
             "description": "Samtec {pn:s} {pitch:1.3f}mm Razor Beam High-Speed Hermaphroditic Terminal/Socket Strip ({ds:s}); generated with kicad-footprint-generator",
             "datasheet": "http://suddendocs.samtec.com/catalog_english/lss.pdf",
             "tags": "connector Samtec RazorBeam LSS self-mating terminal socket vertical"
         },
-        "layout": {"width": 11.10, "height": 4.14},
-        "pads": {"n": 20, "pitch": 0.635, "y": 1.8, "width": 0.4, "height": 1.6},
-        "holes": [{"drill": 0.89, "space": 7.85, "y": -1.1}]
+        "layout": {"width": 7.925, "height": 4.14, "y": 0.07},
+        "pads": {"n": 10, "pitch": 0.635, "y": 1.8, "width": 0.4, "height": 1.6},
+        "holes": [{"drill": 0.89, "space": 4.675, "y": 1.1}]
+    },
+    "Samtec_LSS-110-xx-x-DV-A_P0.635mm_Vertical": {
+        "inherit": "Samtec_LSS-105-xx-x-DV-A_P0.635mm_Vertical",
+        "layout": {"width": 11.10},
+        "pads": {"n": 20},
+        "holes": [{"drill": 0.89, "space": 7.85, "y": 1.1}]
     },
     "Samtec_LSS-120-xx-x-DV-A_P0.635mm_Vertical": {
         "inherit": "Samtec_LSS-110-xx-x-DV-A_P0.635mm_Vertical",
         "layout": {"width": 17.45},
         "pads": {"n": 40},
-        "holes": [{"drill": 0.89, "space": 14.20, "y": -1.1}]
+        "holes": [{"drill": 0.89, "space": 14.20, "y": 1.1}]
     },
     "Samtec_LSS-130-xx-x-DV-A_P0.635mm_Vertical": {
         "inherit": "Samtec_LSS-110-xx-x-DV-A_P0.635mm_Vertical",
         "layout": {"width": 23.8},
         "pads": {"n": 60},
-        "holes": [{"drill": 0.89, "space": 20.55, "y": -1.1}]
+        "holes": [{"drill": 0.89, "space": 20.55, "y": 1.1}]
     },
     "Samtec_LSS-140-xx-x-DV-A_P0.635mm_Vertical": {
         "inherit": "Samtec_LSS-110-xx-x-DV-A_P0.635mm_Vertical",
         "layout": {"width": 30.15},
         "pads": {"n": 80},
-        "holes": [{"drill": 0.89, "space": 26.90, "y": -1.1}]
+        "holes": [{"drill": 0.89, "space": 26.90, "y": 1.1}]
     },
     "Samtec_LSS-150-xx-x-DV-A_P0.635mm_Vertical": {
         "inherit": "Samtec_LSS-110-xx-x-DV-A_P0.635mm_Vertical",
         "layout": {"width": 36.5},
         "pads": {"n": 100},
-        "holes": [{"drill": 0.89, "space": 33.25, "y": -1.1}]
+        "holes": [{"drill": 0.89, "space": 33.25, "y": 1.1}]
     },
 
     "Samtec_LSEM-120-xx.x-x-DV-A-N_P0.8mm_Vertical": {

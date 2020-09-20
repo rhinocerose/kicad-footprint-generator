@@ -83,28 +83,39 @@ def generate_one_footprint(param, config, default_lib):
     fab_mark = config['fab_pin1_marker_length']
     fab_w = param['layout']['width']
     fab_h = param['layout']['height']
-    fab_y = fab_h / 2
+    fab_y = param['layout'].get('y', 0)
     lEdge = -fab_w / 2
     rEdge = lEdge + fab_w
-    chamfer = fab_h / 10 # cosmetic only
 
     # Draw outline
-    outline = [(lEdge + chamfer, -fab_y),
-               (lEdge, -fab_y + chamfer),
-               (lEdge,  fab_y - chamfer),
-               (lEdge + chamfer, fab_y),
-               (rEdge - chamfer, fab_y),
-               (rEdge,  fab_y - chamfer),
-               (rEdge, -fab_y + chamfer),
-               (rEdge - chamfer, -fab_y),
-               (lEdge + chamfer, -fab_y)]
+    if "LSS" in tags:
+        chamfer = fab_h / 3.5 # cosmetic only
+        outline = [(lEdge + chamfer, -fab_h/2 + fab_y),
+                   (lEdge, -fab_h/2 + chamfer + fab_y),
+                   (lEdge, fab_h/2 + fab_y),
+                   (rEdge, fab_h/2 + fab_y),
+                   (rEdge, -fab_h/2 + chamfer + fab_y),
+                   (rEdge - chamfer, -fab_h/2 + fab_y),
+                   (lEdge + chamfer, -fab_h/2 + fab_y)]
+    else:
+        chamfer = fab_h / 10
+        outline = [(lEdge + chamfer, -fab_h/2 + fab_y),
+                   (lEdge, -fab_h/2 + chamfer + fab_y),
+                   (lEdge,  fab_h/2 - chamfer + fab_y),
+                   (lEdge + chamfer, fab_h/2 + fab_y),
+                   (rEdge - chamfer, fab_h/2 + fab_y),
+                   (rEdge,  fab_h/2 - chamfer + fab_y),
+                   (rEdge, -fab_h/2 + chamfer + fab_y),
+                   (rEdge - chamfer, -fab_h/2 + fab_y),
+                   (lEdge + chamfer, -fab_h/2 + fab_y)]
+    
     fp.append(PolygoneLine(nodes = outline,
                            layer = "F.Fab",
                            width = fab_line))
 
     # Pin 1 marker
     fp.append(markerArrow(x = pin1.x,
-                          y = (fab_mark-fab_h) / 2,
+                          y = (fab_mark-fab_h) / 2  + fab_y,
                           width = fab_mark,
                           angle = 180,
                           layer = "F.Fab",
@@ -139,7 +150,7 @@ def generate_one_footprint(param, config, default_lib):
     court_offset = config['courtyard_offset']['connector']
     
     court_x = roundToBase(fab_w/2 + court_offset, court_grid)
-    court_y = roundToBase(max(fab_y, pad_y+pad_h/2) + court_offset, court_grid)
+    court_y = roundToBase(max(fab_h/2+fab_y, pad_y+pad_h/2) + court_offset, court_grid)
 
     fp.append(RectLine(start  = (-court_x, -court_y),
                        end    = ( court_x,  court_y),
@@ -149,9 +160,10 @@ def generate_one_footprint(param, config, default_lib):
     ############################################################################
     # Silkscreen: F.SilkS
     silk_offset = config['silk_fab_offset']
-    silk_y = fab_y + silk_offset
+    silk_y = fab_h/2 + silk_offset
     silk_pad = {'x': config['silk_pad_clearance'] + pad_w/2,
-                'y': config['silk_pad_clearance'] + pad_y/2}
+                'y': config['silk_pad_clearance'] + pad_y/2,
+                'hole': config['silk_pad_clearance']}
     silk_line = config['silk_line_width']
     silk_lEdge = lEdge - silk_offset
     silk_rEdge = rEdge + silk_offset
@@ -159,7 +171,7 @@ def generate_one_footprint(param, config, default_lib):
     silk_pin1 = pin1.x - silk_pad['x']
 
     if "shield" in tags:
-        silk_sh = math.sqrt((sh_r+silk_offset)**2 - (silk_rEdge-sh_x)**2)
+        silk_sh = math.sqrt((sh_r+silk_pad['hole'])**2 - (silk_rEdge-sh_x)**2)
         silk_lEnd = [[{'x': silk_pin1, 'y': -silk_y},
                       {'x': silk_lEdge + silk_chamfer, 'y': -silk_y},
                       {'x': silk_lEdge, 'y': -silk_y + silk_chamfer},
@@ -168,6 +180,12 @@ def generate_one_footprint(param, config, default_lib):
                       {'x': silk_lEdge, 'y': silk_y - silk_chamfer},
                       {'x': silk_lEdge + silk_chamfer, 'y': silk_y},
                       {'x': silk_pin1, 'y': silk_y}]]
+    elif "LSS" in tags:
+        silk_lEnd = [[{'x': silk_pin1,  'y': -silk_y + fab_y},
+                      {'x': silk_lEdge + silk_chamfer, 'y': -silk_y + fab_y},
+                      {'x': silk_lEdge, 'y': -silk_y + fab_y + silk_chamfer},
+                      {'x': silk_lEdge, 'y':  silk_y + fab_y},
+                      {'x': silk_pin1,  'y':  silk_y + fab_y}]]
     else:
         silk_lEnd = [[{'x': silk_pin1, 'y': -silk_y},
                       {'x': silk_lEdge + silk_chamfer, 'y': -silk_y},
