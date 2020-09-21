@@ -14,7 +14,7 @@
 # License along with kicad-footprint-generator. If not, see
 # <http://www.gnu.org/licenses/>.
 # 
-# Copyright (C) 2019 by Caleb Reister <calebreister@gmail.com>
+# Copyright (C) 2020 by Caleb Reister <calebreister@gmail.com>
 #
 
 import sys
@@ -80,6 +80,7 @@ def generate_one_footprint(param, config, default_lib):
             pos = {'x': x_inv * (pin1.x + (slot // 2)*pitch + b*bank_x),
                    'y': pin1.y - (slot  % 2)*(2*pin1.y),
                    'n': n+1, 'slot': slot}
+            pin[b].append(pos) # Add position to list
 
             # Skip slots for differential banks
             if b < param['banks']['diff']:
@@ -91,7 +92,6 @@ def generate_one_footprint(param, config, default_lib):
                     continue
 
             # Create pad
-            pin[b].append(pos) # Add position to list
             # Create pad (both single-ended and differential)
             pad = Pad(number = str(n),
                       at = pos,
@@ -332,7 +332,7 @@ if __name__ == '__main__':
                         default='../conn_config_KLCv3.yaml',
                         help='Series KLC configuration YAML file')
     parser.add_argument('--library', type=str, nargs='?',
-                        default='Connector_Samtec_QSeries',
+                        default='Connector_Samtec_QStrip',
                         help='Default KiCad library name (without extension)')
     parser.add_argument('files', metavar='file', type=str, nargs='*',
                         help='YAML file(s) containing footprint parameters')
@@ -343,7 +343,6 @@ if __name__ == '__main__':
             config = yaml.safe_load(config_stream)
         except yaml.YAMLError as exc:
             print(exc)
-
     with open(args.series_config, 'r') as config_stream:
         try:
             config.update(yaml.safe_load(config_stream))
@@ -355,30 +354,23 @@ if __name__ == '__main__':
         sys.exit(1)
 
     print("Default Library:", args.library)
-    
     for path in args.files:
         print("Reading", path)
         with open(path, 'r') as stream:
             try:
                 footprints = yaml.safe_load(stream)
-                
                 if footprints is None:
                     print(path, "empty, skipping...")
                     continue
-
                 dictInherit(footprints)
-                
                 for fp_name in footprints:
                     fp_params = footprints.get(fp_name)                    
                     if 'name' in fp_params:
                         print("WARNING: setting 'name' to", fp_name)
-                        
                     fp_params['name'] = fp_name
-
                     print("  - ",
                           fp_params.get('library', args.library), ".pretty/",
                           fp_name, ".kicad_mod", sep="")
-                    
                     generate_one_footprint(fp_params, config, args.library)
             except yaml.YAMLError as exc:
                 print(exc)

@@ -14,7 +14,7 @@
 # License along with kicad-footprint-generator. If not, see
 # <http://www.gnu.org/licenses/>.
 # 
-# Copyright (C) 2019 by Caleb Reister <calebreister@gmail.com>
+# Copyright (C) 2020 by Caleb Reister <calebreister@gmail.com>
 #
 
 import sys
@@ -66,9 +66,9 @@ def generate_one_footprint(param, config, default_lib):
         # Compute next pad location
         pos = {'x': pin1.x + (p // 2)*pitch,
                'y': pin1.y - (p  % 2)*(2*pin1.y)}
+        pin.append(pos)
         
         # Create pad
-        pin.append(pos)
         pad = Pad(number = str(p+1),
                   at = pos,
                   size = (pad_w, pad_h),
@@ -271,7 +271,6 @@ if __name__ == '__main__':
             config = yaml.safe_load(config_stream)
         except yaml.YAMLError as exc:
             print(exc)
-
     with open(args.series_config, 'r') as config_stream:
         try:
             config.update(yaml.safe_load(config_stream))
@@ -283,30 +282,23 @@ if __name__ == '__main__':
         sys.exit(1)
 
     print("Default Library:", args.library)
-    
     for path in args.files:
         print("Reading", path)
         with open(path, 'r') as stream:
             try:
                 footprints = yaml.safe_load(stream)
-                
                 if footprints is None:
                     print(path, "empty, skipping...")
                     continue
-
                 dictInherit(footprints)
-
                 for fp_name in footprints:
                     fp_params = footprints.get(fp_name)                    
                     if 'name' in fp_params:
                         print("WARNING: setting 'name' to", fp_name)
-                        
                     fp_params['name'] = fp_name
-
                     print("  - ",
                           fp_params.get('library', args.library), ".pretty/",
                           fp_name, ".kicad_mod", sep="")
-                    
                     generate_one_footprint(fp_params, config, args.library)
             except yaml.YAMLError as exc:
                 print(exc)
