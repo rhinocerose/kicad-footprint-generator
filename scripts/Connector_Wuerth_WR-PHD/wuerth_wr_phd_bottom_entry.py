@@ -35,9 +35,9 @@ def generate_footprint(params, part_params, mpn, configuration):
         
     # Pads
     if params['type'] == 'SMD':
-        kicad_mod.append(PadArray(initial=1, start=[0, 0], y_spacing=params['pitch'], pincount=part_params['pins']//2, increment=2, 
+        kicad_mod.append(PadArray(initial=1, start=[params['pitch']/2+params['holes']['offset'], -params['pitch']*(part_params['pins']//2-1)/2], y_spacing=params['pitch'], pincount=part_params['pins']//2, increment=2, 
             size=[params['pads']['x'], params['pads']['y']], type=Pad.TYPE_SMT, shape=Pad.SHAPE_RECT, layers=['F.Cu', 'F.Mask']))
-        kicad_mod.append(PadArray(initial=2, start=[-params['pitch']-2*params['holes']['offset'], 0], y_spacing=params['pitch'], pincount=part_params['pins']//2, increment=2,
+        kicad_mod.append(PadArray(initial=2, start=[-params['pitch']/2-params['holes']['offset'], -params['pitch']*(part_params['pins']//2-1)/2], y_spacing=params['pitch'], pincount=part_params['pins']//2, increment=2,
             size=[params['pads']['x'], params['pads']['y']], type=Pad.TYPE_SMT, shape=Pad.SHAPE_RECT, layers=['F.Cu', 'F.Mask']))
     else:
         kicad_mod.append(PadArray(initial=1, start=[0, 0], y_spacing=params['pitch'], pincount=part_params['pins']//2, increment=2, 
@@ -46,45 +46,59 @@ def generate_footprint(params, part_params, mpn, configuration):
             size=[params['pads']['diameter'], params['pads']['diameter']], drill=params['pads']['drill'], type=Pad.TYPE_THT, tht_pad1_shape=Pad.SHAPE_RECT, shape=Pad.SHAPE_OVAL, layers=['*.Cu', '*.Mask']))
     
     # Bottom entry holes
-    kicad_mod.append(PadArray(initial="", start=[-params['holes']['offset'], 0], y_spacing=params['pitch'], pincount=part_params['pins']//2, increment="",
-        size=params['holes']['drill'], drill=params['holes']['drill'], type=Pad.TYPE_NPTH, shape=Pad.SHAPE_CIRCLE, layers=Pad.LAYERS_NPTH))
-    kicad_mod.append(PadArray(initial="", start=[-params['pitch']-params['holes']['offset'], 0], y_spacing=params['pitch'], pincount=part_params['pins']//2, increment="",
-        size=params['holes']['drill'], drill=params['holes']['drill'], type=Pad.TYPE_NPTH, shape=Pad.SHAPE_CIRCLE, layers=Pad.LAYERS_NPTH))
+    if params['type'] == 'SMD':
+        kicad_mod.append(PadArray(initial="", start=[params['pitch']/2, -params['pitch']*(part_params['pins']//2-1)/2], y_spacing=params['pitch'], pincount=part_params['pins']//2, increment="",
+            size=params['holes']['drill'], drill=params['holes']['drill'], type=Pad.TYPE_NPTH, shape=Pad.SHAPE_CIRCLE, layers=Pad.LAYERS_NPTH))
+        kicad_mod.append(PadArray(initial="", start=[-params['pitch']/2, -params['pitch']*(part_params['pins']//2-1)/2], y_spacing=params['pitch'], pincount=part_params['pins']//2, increment="",
+            size=params['holes']['drill'], drill=params['holes']['drill'], type=Pad.TYPE_NPTH, shape=Pad.SHAPE_CIRCLE, layers=Pad.LAYERS_NPTH))
+    else:
+        kicad_mod.append(PadArray(initial="", start=[-params['holes']['offset'], 0], y_spacing=params['pitch'], pincount=part_params['pins']//2, increment="",
+            size=params['holes']['drill'], drill=params['holes']['drill'], type=Pad.TYPE_NPTH, shape=Pad.SHAPE_CIRCLE, layers=Pad.LAYERS_NPTH))
+        kicad_mod.append(PadArray(initial="", start=[-params['pitch']-params['holes']['offset'], 0], y_spacing=params['pitch'], pincount=part_params['pins']//2, increment="",
+            size=params['holes']['drill'], drill=params['holes']['drill'], type=Pad.TYPE_NPTH, shape=Pad.SHAPE_CIRCLE, layers=Pad.LAYERS_NPTH))
     
     # Add fab layer
-    body_top_left = [(params['width']-params['pitch'])/2-params['holes']['offset'], -params['top']]
-    body_bottom_right = [(params['width']-params['pitch'])/2-params['width']-params['holes']['offset'], params['top']+params['pitch']*(part_params['pins']//2-1)]
+    if params['type'] == 'SMD':
+        body_top_left = [-params['width']/2, -params['top']-params['pitch']*(part_params['pins']//2-1)/2]
+        body_bottom_right = [params['width']/2, params['top']+params['pitch']*(part_params['pins']//2-1)/2]
+    else:
+        body_top_left = [(params['width']-params['pitch'])/2-params['width']-params['holes']['offset'], -params['top']]
+        body_bottom_right = [(params['width']-params['pitch'])/2-params['holes']['offset'], params['top']+params['pitch']*(part_params['pins']//2-1)]
     kicad_mod.append(RectLine(start=body_top_left, end=body_bottom_right, layer='F.Fab', width=configuration['fab_line_width']))
     
     # Add silkscreen layer
-    silk_top_right = [body_top_left[0] + configuration['silk_fab_offset'], body_top_left[1] - configuration['silk_fab_offset']]
-    silk_bottom_left = [body_bottom_right[0] - configuration['silk_fab_offset'], body_bottom_right[1] + configuration['silk_fab_offset']]
+    silk_top_left = [body_top_left[0] - configuration['silk_fab_offset'], body_top_left[1] - configuration['silk_fab_offset']]
+    silk_bottom_right = [body_bottom_right[0] + configuration['silk_fab_offset'], body_bottom_right[1] + configuration['silk_fab_offset']]
     # -> Top part
-    kicad_mod.append(Line(start=[silk_top_right[0], silk_top_right[1]], end=[silk_bottom_left[0], silk_top_right[1]], layer='F.SilkS', width=configuration['silk_line_width']))
-    kicad_mod.append(Line(start=[silk_top_right[0], silk_top_right[1]], end=[silk_top_right[0], silk_top_right[1] + 1.27/2], layer='F.SilkS', width=configuration['silk_line_width']))
-    kicad_mod.append(Line(start=[silk_bottom_left[0], silk_top_right[1]], end=[silk_bottom_left[0], silk_top_right[1] + 1.27/2], layer='F.SilkS', width=configuration['silk_line_width']))
-    kicad_mod.append(Line(start=[silk_top_right[0], silk_top_right[1] + 1.27/2], end=[silk_top_right[0] + 1.27/2, silk_top_right[1] + 1.27/2], layer='F.SilkS', width=configuration['silk_line_width']))
+    kicad_mod.append(Line(start=[silk_top_left[0], silk_top_left[1]], end=[silk_bottom_right[0], silk_top_left[1]], layer='F.SilkS', width=configuration['silk_line_width']))
+    kicad_mod.append(Line(start=[silk_top_left[0], silk_top_left[1]], end=[silk_top_left[0], silk_top_left[1] + 1.27/2], layer='F.SilkS', width=configuration['silk_line_width']))
+    kicad_mod.append(Line(start=[silk_bottom_right[0], silk_top_left[1]], end=[silk_bottom_right[0], silk_top_left[1] + 1.27/2], layer='F.SilkS', width=configuration['silk_line_width']))
+    kicad_mod.append(Line(start=[silk_bottom_right[0], silk_top_left[1] + 1.27/2], end=[silk_bottom_right[0] + 1.27/2, silk_top_left[1] + 1.27/2], layer='F.SilkS', width=configuration['silk_line_width']))
     # -> Dashes between the pads
     for x in range(0, part_params['pins']//2-1):
-        kicad_mod.append(Line(start=[silk_bottom_left[0], 3*params['pitch']/8 + x * params['pitch']], end=[silk_bottom_left[0], 3*params['pitch']/8 + params['pitch']/4 + x * params['pitch']], layer='F.SilkS', width=configuration['silk_line_width']))
-        kicad_mod.append(Line(start=[silk_top_right[0], 3*params['pitch']/8 + x * params['pitch']], end=[silk_top_right[0], 3*params['pitch']/8 + params['pitch']/4 + x * params['pitch']], layer='F.SilkS', width=configuration['silk_line_width']))
+        if params['type'] == 'SMD':
+            kicad_mod.append(Line(start=[silk_bottom_right[0], -params['pitch']*(part_params['pins']//2-1)/2 + 3*params['pitch']/8 + x * params['pitch']], end=[silk_bottom_right[0], -params['pitch']*(part_params['pins']//2-1)/2 + 3*params['pitch']/8 + params['pitch']/4 + x * params['pitch']], layer='F.SilkS', width=configuration['silk_line_width']))
+            kicad_mod.append(Line(start=[silk_top_left[0], -params['pitch']*(part_params['pins']//2-1)/2 + 3*params['pitch']/8 + x * params['pitch']], end=[silk_top_left[0], -params['pitch']*(part_params['pins']//2-1)/2 + 3*params['pitch']/8 + params['pitch']/4 + x * params['pitch']], layer='F.SilkS', width=configuration['silk_line_width']))
+        else:
+            kicad_mod.append(Line(start=[silk_bottom_right[0], 3*params['pitch']/8 + x * params['pitch']], end=[silk_bottom_right[0], 3*params['pitch']/8 + params['pitch']/4 + x * params['pitch']], layer='F.SilkS', width=configuration['silk_line_width']))
+            kicad_mod.append(Line(start=[silk_top_left[0], 3*params['pitch']/8 + x * params['pitch']], end=[silk_top_left[0], 3*params['pitch']/8 + params['pitch']/4 + x * params['pitch']], layer='F.SilkS', width=configuration['silk_line_width']))
     # -> Bottom part
-    kicad_mod.append(Line(start=[silk_bottom_left[0], silk_bottom_left[1]], end=[silk_bottom_left[0], silk_bottom_left[1] - 1.27/2], layer='F.SilkS', width=configuration['silk_line_width']))
-    kicad_mod.append(Line(start=[silk_top_right[0], silk_bottom_left[1]], end=[silk_top_right[0], silk_bottom_left[1] - 1.27/2], layer='F.SilkS', width=configuration['silk_line_width']))
-    kicad_mod.append(Line(start=[silk_top_right[0], silk_bottom_left[1]], end=[silk_bottom_left[0], silk_bottom_left[1]], layer='F.SilkS', width=configuration['silk_line_width']))
+    kicad_mod.append(Line(start=[silk_bottom_right[0], silk_bottom_right[1]], end=[silk_bottom_right[0], silk_bottom_right[1] - 1.27/2], layer='F.SilkS', width=configuration['silk_line_width']))
+    kicad_mod.append(Line(start=[silk_top_left[0], silk_bottom_right[1]], end=[silk_top_left[0], silk_bottom_right[1] - 1.27/2], layer='F.SilkS', width=configuration['silk_line_width']))
+    kicad_mod.append(Line(start=[silk_top_left[0], silk_bottom_right[1]], end=[silk_bottom_right[0], silk_bottom_right[1]], layer='F.SilkS', width=configuration['silk_line_width']))
     
     # Add courtyard layer
     courtyard_top_left = [body_top_left[0] + configuration['courtyard_offset']['connector'], body_top_left[1] - configuration['courtyard_offset']['connector']]
     if params['type'] == 'SMD':
-        if courtyard_top_left[0] < 0 + params['pads']['x']/2 + configuration['courtyard_offset']['connector']:
-            courtyard_top_left[0] = 0 + params['pads']['x']/2 + configuration['courtyard_offset']['connector']
+        if courtyard_top_left[0] < 0 + params['pitch']/2 + params['holes']['offset'] + params['pads']['x']/2 + configuration['courtyard_offset']['connector']:
+            courtyard_top_left[0] = 0 + params['pitch']/2 + params['holes']['offset'] + params['pads']['x']/2 + configuration['courtyard_offset']['connector']
     else:
         if courtyard_top_left[0] < 0 + params['pads']['diameter']/2 + configuration['courtyard_offset']['connector']:
             courtyard_top_left[0] = 0 + params['pads']['diameter']/2 + configuration['courtyard_offset']['connector']
     courtyard_bottom_right = [body_bottom_right[0] - configuration['courtyard_offset']['connector'], body_bottom_right[1] + configuration['courtyard_offset']['connector']]
     if params['type'] == 'SMD':
-        if courtyard_bottom_right[0] > -params['pitch']-2*params['holes']['offset'] - params['pads']['x']/2 - configuration['courtyard_offset']['connector']:
-            courtyard_bottom_right[0] = -params['pitch']-2*params['holes']['offset'] - params['pads']['x']/2 - configuration['courtyard_offset']['connector']
+        if courtyard_bottom_right[0] > -params['pitch']/2 - params['holes']['offset'] - params['pads']['x']/2 - configuration['courtyard_offset']['connector']:
+            courtyard_bottom_right[0] = -params['pitch']/2 - params['holes']['offset'] - params['pads']['x']/2 - configuration['courtyard_offset']['connector']
     else:
         if courtyard_bottom_right[0] > -params['pitch']-2*params['holes']['offset'] - params['pads']['diameter']/2 - configuration['courtyard_offset']['connector']:
             courtyard_bottom_right[0] = -params['pitch']-2*params['holes']['offset'] - params['pads']['diameter']/2 - configuration['courtyard_offset']['connector']
