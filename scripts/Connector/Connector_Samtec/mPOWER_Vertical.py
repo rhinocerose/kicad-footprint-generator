@@ -65,10 +65,10 @@ def generate_one_footprint(param, config, default_lib):
     ############################################################################
     # Holes
     for p in param.get('holes', {}):
-        h = [Pad(number = "",
+        h = [Pad(number = p.get('name', ""),
                  at     = (p['x'], p['y']),
                  drill  = p['drill'],
-                 size   = p['pad'],
+                 size   = p.get('pad', p['drill']),
                  type   = Pad.TYPE_THT   if 'pad' in p else Pad.TYPE_NPTH,
                  layers = Pad.LAYERS_THT if 'pad' in p else Pad.LAYERS_NPTH,
                  shape  = Pad.SHAPE_CIRCLE)]
