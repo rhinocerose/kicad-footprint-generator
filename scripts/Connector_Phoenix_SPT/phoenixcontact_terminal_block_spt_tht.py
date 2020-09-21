@@ -24,6 +24,10 @@ def generate_footprint(params, part_params, mpn, configuration):
     # Description
     kicad_mod.setDescription("Connector Phoenix Contact, {series_prefix}{pins}-{orientation_short}-{pitch}{series_sufix} Terminal Block, {mpn} ({datasheet}), generated with kicad-footprint-generator".format(
         series_prefix=params['series_prefix'], series_sufix=(params['series_sufix'] if params['series_sufix'] is not None else ''), pins=part_params['pins'], pitch=params['pitch']['x'], orientation_short=params['orientation'][:1], mpn=mpn, datasheet=part_params['datasheet']))
+    
+    # Keywords
+    kicad_mod.setTags("Connector Phoenix Contact {series_prefix}{pins}-{orientation_short}-{pitch}{series_sufix} {mpn}".format(
+        series_prefix=params['series_prefix'], series_sufix=(params['series_sufix'] if params['series_sufix'] is not None else ''), pins=part_params['pins'], pitch=params['pitch']['x'], orientation_short=params['orientation'][:1], mpn=mpn))
         
     # Pads
     kicad_mod.append(PadArray(initial=1, start=[0, 0], x_spacing=params['pitch']['x']*params['pads']['increment'], pincount=(part_params['pins']+params['pads']['increment']-1)//params['pads']['increment'], increment=params['pads']['increment'],
