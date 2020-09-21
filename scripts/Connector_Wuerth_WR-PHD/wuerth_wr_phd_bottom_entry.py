@@ -29,6 +29,10 @@ def generate_footprint(params, part_params, mpn, configuration):
     kicad_mod.setDescription("Connector Wuerth, WR-PHD {pitch}mm Dual Socket Header Bottom Entry {type}, Wuerth electronics {mpn} ({datasheet}), generated with kicad-footprint-generator".format(
         pitch=params['pitch'], type=params['type'], mpn=mpn, datasheet=part_params['datasheet']))
         
+    # Keywords
+    kicad_mod.setTags("Connector Wuerth WR-PHD {pitch}mm {mpn}".format(
+        pitch=params['pitch'], mpn=mpn))
+        
     # Pads
     if params['type'] == 'SMD':
         kicad_mod.append(PadArray(initial=1, start=[0, 0], y_spacing=params['pitch'], pincount=part_params['pins']//2, increment=2, 
