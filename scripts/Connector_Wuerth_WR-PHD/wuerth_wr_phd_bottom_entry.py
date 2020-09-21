@@ -36,9 +36,9 @@ def generate_footprint(params, part_params, mpn, configuration):
     # Pads
     if params['type'] == 'SMD':
         kicad_mod.append(PadArray(initial=1, start=[params['pitch']/2+params['holes']['offset'], -params['pitch']*(part_params['pins']//2-1)/2], y_spacing=params['pitch'], pincount=part_params['pins']//2, increment=2, 
-            size=[params['pads']['x'], params['pads']['y']], type=Pad.TYPE_SMT, shape=Pad.SHAPE_RECT, layers=['F.Cu', 'F.Mask']))
+            size=[params['pads']['x'], params['pads']['y']], type=Pad.TYPE_SMT, shape=Pad.SHAPE_RECT, layers=['F.Cu', 'F.Paste', 'F.Mask']))
         kicad_mod.append(PadArray(initial=2, start=[-params['pitch']/2-params['holes']['offset'], -params['pitch']*(part_params['pins']//2-1)/2], y_spacing=params['pitch'], pincount=part_params['pins']//2, increment=2,
-            size=[params['pads']['x'], params['pads']['y']], type=Pad.TYPE_SMT, shape=Pad.SHAPE_RECT, layers=['F.Cu', 'F.Mask']))
+            size=[params['pads']['x'], params['pads']['y']], type=Pad.TYPE_SMT, shape=Pad.SHAPE_RECT, layers=['F.Cu', 'F.Paste', 'F.Mask']))
     else:
         kicad_mod.append(PadArray(initial=1, start=[0, 0], y_spacing=params['pitch'], pincount=part_params['pins']//2, increment=2, 
             size=[params['pads']['diameter'], params['pads']['diameter']], drill=params['pads']['drill'], type=Pad.TYPE_THT, tht_pad1_shape=Pad.SHAPE_RECT, shape=Pad.SHAPE_OVAL, layers=['*.Cu', '*.Mask']))
