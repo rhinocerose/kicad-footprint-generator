@@ -266,8 +266,6 @@ DFN-8-1EP_2x2mm_P0.5mm_EP0.75x1.2mm:
   #manufacturer: 'man'
   #part_number: 'mpn'
   size_source: 'https://www.qorvo.com/products/d/da001904'
-    minimum: 1.95
-    maximum: 2.05
   body_size_x:
     nominal: 2
     tolerance: 0.05
