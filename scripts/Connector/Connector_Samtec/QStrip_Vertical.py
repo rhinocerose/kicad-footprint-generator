@@ -80,7 +80,6 @@ def generate_one_footprint(param, config, default_lib):
             pos = {'x': x_inv * (pin1.x + (slot // 2)*pitch + b*bank_x),
                    'y': pin1.y - (slot  % 2)*(2*pin1.y),
                    'n': n+1, 'slot': slot}
-            pin[b].append(pos) # Add position to list
 
             # Skip slots for differential banks
             if b < param['banks']['diff']:
@@ -92,7 +91,7 @@ def generate_one_footprint(param, config, default_lib):
                     continue
 
             # Create pad
-            # Create pad (both single-ended and differential)
+            pin[b].append(pos) # Add position to list
             pad = Pad(number = str(n),
                       at = pos,
                       size = (pad_w, pad_h),
@@ -104,15 +103,14 @@ def generate_one_footprint(param, config, default_lib):
     
         # Place plane pads
         mid = bank1_mid + x_inv*b*bank_x # Bank midpoint
-        if 'planes' in param['pads']:
-            for plane in param['pads']['planes']:
-                pad = [Pad(number = "P" + str(b+1),
-                           at = ((x - (plane['n']-1)/2)*plane['pitch'] + mid, plane['y']),
-                           size = (plane['width'], plane['height']),
-                           type = Pad.TYPE_SMT,
-                           layers = Pad.LAYERS_SMT,
-                           shape = Pad.SHAPE_RECT) for x in range(plane['n'])]
-                fp.extend(pad)
+        for plane in param['pads'].get('planes', {}):
+            pad = Pad(number = "P" + str(b+1),
+                      at = (plane['x'] + mid, plane['y']),
+                      size = (plane['width'], plane['height']),
+                      type = Pad.TYPE_SMT,
+                      layers = Pad.LAYERS_SMT,
+                      shape = Pad.SHAPE_RECT)
+            fp.append(pad)
 
     ############################################################################
     # Holes
