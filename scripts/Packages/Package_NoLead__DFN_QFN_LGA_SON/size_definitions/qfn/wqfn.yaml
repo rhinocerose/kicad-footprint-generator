@@ -378,7 +378,7 @@ WQFN-42-1EP_3.5x9mm_P0.5mm_EP2.05x7.55mm:
   num_pins_x: 4
   num_pins_y: 17
 
-WQFN-20-1EP_3x3mm_P0.4mm_EP1.7x1.7mm_ThermalVias:
+WQFN-20-1EP_3x3mm_P0.4mm_EP1.8x1.8mm:
   device_type: 'WQFN'
   #manufacturer: 'man'
   #part_number: 'mpn'
