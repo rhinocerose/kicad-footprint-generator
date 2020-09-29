@@ -17,6 +17,8 @@ base_name = "SW_Kailh_Choc_V1"
 base_tags = "Kailh Choc V1 Keyswitch Switch"
 base_description = "Kailh Choc V1 keyswitch, http://www.kailh.com/en/Products/Ks/CS/"
 
+location_3d = "${KISYS3DMOD}/Switch_Keyboard_Kailh.3dshapes/" + base_name + ".wrl"
+
 unit_value = 19.05
 
 kailh_choc_w = 14
@@ -51,7 +53,7 @@ def generate_switch(footprint_name, footprint_description, footprint_tags):
 	kicad_mod.append(Pad(type=Pad.TYPE_NPTH, shape=Pad.SHAPE_CIRCLE, at=[-5.22,4.2], size=[1.2,1.2], drill=1.2, layers=['*.Cu', '*.Mask']))
 
 	# add model
-	kicad_mod.append(Model(filename="${KISYS3DMOD}/Switch_Keyboard_Kailh.3dshapes/SW_Kailh_Choc_V1.wrl" ,at=[0,0,0] ,scale=[1,1,1] ,rotate=[0,0,0]))
+	kicad_mod.append(Model(filename=location_3d ,at=[0,0,0] ,scale=[1,1,1] ,rotate=[0,0,0]))
 
 	return kicad_mod
 

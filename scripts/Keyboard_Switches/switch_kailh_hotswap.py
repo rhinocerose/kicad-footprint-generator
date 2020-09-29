@@ -17,6 +17,8 @@ base_name = "SW_Hotswap_Kailh"
 base_tags = "Kailh Keyboard Keyswitch Switch Hotswap Socket"
 base_description = "Kailh keyswitch Hotswap Socket, "
 
+location_3d = "${KISYS3DMOD}/Switch_Keyboard_Kailh.3dshapes/" + base_name + ".wrl"
+
 unit_value = 19.05
 
 kailh_hs_w = 14
@@ -72,7 +74,7 @@ def generate_switch(footprint_name, footprint_description, footprint_tags):
 	kicad_mod.append(Pad(number=2, type=Pad.TYPE_SMT, shape=Pad.SHAPE_RECT, at=[5.842,-5.08], size=[2.55,2.5], layers=['B.Cu', 'B.Mask', 'B.Paste']))
 
 	# add model
-	kicad_mod.append(Model(filename="${KISYS3DMOD}/Switch_Keyboard_Kailh.3dshapes/SW_Hotswap_Kailh.wrl" ,at=[0,0,0] ,scale=[1,1,1] ,rotate=[0,0,0]))
+	kicad_mod.append(Model(filename=location_3d ,at=[0,0,0] ,scale=[1,1,1] ,rotate=[0,0,0]))
 
 	return kicad_mod
 

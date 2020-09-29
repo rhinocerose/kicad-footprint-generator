@@ -17,6 +17,8 @@ base_name = "SW_Alps_Matias"
 base_tags = "Alps Matias Keyboard Keyswitch Switch Plate"
 base_description = "Alps/Matias keyswitch (Matias is Alps Compatible), https://github.com/keyboardio/keyswitch_documentation/blob/master/datasheets/ALPS/SKCL.pdf"
 
+location_3d = "${KISYS3DMOD}/Switch_Keyboard_Alps_Matias.3dshapes/" + base_name + ".wrl"
+
 unit_value = 19.05
 
 def generate_switch(footprint_name, footprint_description, footprint_tags):
@@ -44,7 +46,7 @@ def generate_switch(footprint_name, footprint_description, footprint_tags):
 	kicad_mod.append(Pad(number=2, type=Pad.TYPE_THT, shape=Pad.SHAPE_CIRCLE, at=[-2.5,-4], size=[2.5,2.5], drill=1.5, layers=['*.Cu', 'B.Mask']))
 
 	# add model
-	kicad_mod.append(Model(filename="${KISYS3DMOD}/Switch_Keyboard_Alps_Matias.3dshapes/SW_Alps_Matias.wrl" ,at=[0,0,0] ,scale=[1,1,1] ,rotate=[0,0,0]))
+	kicad_mod.append(Model(filename=location_3d ,at=[0,0,0] ,scale=[1,1,1] ,rotate=[0,0,0]))
 
 	return kicad_mod
 
