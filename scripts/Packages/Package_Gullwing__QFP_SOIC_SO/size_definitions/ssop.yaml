@@ -86,10 +86,7 @@ SSOP-8_5.25x5.24mm_P1.27mm:
   num_pins_x: 0
   num_pins_y: 4
 
-SSOP-10_3.9x4.9mm_P1.00mm:
-  #round pitch to two significant digits to comply with old name
-  custom_name_format: "SSOP-10_3.9x4.9mm_P1.00mm"
-
+SSOP-10_3.9x4.9mm_P1mm:
   size_source: 'http://www.st.com/resource/en/datasheet/viper01.pdf'
   body_size_x:
     minimum: 3.80
