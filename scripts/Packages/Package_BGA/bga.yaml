@@ -132,6 +132,30 @@ Microchip_TFBGA-196_11x11mm_Layout14x14_P0.75mm_SMD:
   paste_margin: 0.000001
   layout_x: 14
   layout_y: 14
+FCVG484_19x19mm_Layout22x22_P0.8mm:
+  description: "FCVG484"
+  size_source: "https://www.microsemi.com/document-portal/doc_download/1244577-ug0902-polarfire-soc-fpga-packaging-and-pin-descriptions-user-guide"
+  body_size_x: 19.0
+  body_size_y: 19.0
+  overall_height: 2.92
+  pitch: 0.8
+  ball_type: 'collapsible'
+  ball_diameter: 0.5
+  layout_x: 22
+  layout_y: 22
+FCG1152_35x35mm_Layout34x34_P1.0mm:
+  description: "FCG1152"
+  size_source: "https://www.microsemi.com/document-portal/doc_download/1244577-ug0902-polarfire-soc-fpga-packaging-and-pin-descriptions-user-guide"
+  body_size_x: 35.0
+  body_size_y: 35.0
+  overall_height: 2.8
+  pitch: 1.0
+  ball_type: 'collapsible'
+  ball_diameter: 0.65
+  layout_x: 34
+  layout_y: 34
+  row_skips: [[1, 34], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [],
+              [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [1, 34]]
 TFBGA-216_13x13mm_Layout15x15_P0.8mm:
   description: "TFBGA-216"
   size_source: "http://www.st.com/resource/en/datasheet/stm32f746zg.pdf#page=219"
