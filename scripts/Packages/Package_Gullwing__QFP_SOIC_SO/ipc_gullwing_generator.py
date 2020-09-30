@@ -170,11 +170,14 @@ class Gullwing():
         if 'hidden_pins' in device_params:
             pincount = pincount_full - len(device_params['hidden_pins'])
             pincount2 = '{}'.format(pincount_full)
+            present_pins = pincount_full - len(device_params['hidden_pins'])
         elif 'deleted_pins' in device_params:
             pincount = pincount_full
             pincount2 = '{}'.format(pincount_full - len(device_params['deleted_pins']))
+            present_pins = pincount_full - len(device_params['deleted_pins'])
         else:
             pincount = pincount_full
+            present_pins = pincount
 
         ipc_reference = 'ipc_spec_gw_large_pitch' if device_params['pitch'] >= 0.625 else 'ipc_spec_gw_small_pitch'
         if device_params.get('force_small_pitch_ipc_definition', False):
@@ -234,7 +237,7 @@ class Gullwing():
             mpn=device_params.get('part_number',''),
             pkg=header['device_type'],
             pincount=pincount,
-            pincount2=pincount2 if 'hidden_pins' in device_params or 'deleted_pins' in device_params else '',
+            pincount2='-{}'.format(pincount2) if 'hidden_pins' in device_params or 'deleted_pins' in device_params else '',
             size_y=size_y,
             size_x=size_x,
             pitch=device_params['pitch'],
@@ -252,7 +255,7 @@ class Gullwing():
             mpn=device_params.get('part_number',''),
             pkg=header['device_type'],
             pincount=pincount,
-            pincount2=pincount2 if 'hidden_pins' in device_params or 'deleted_pins' in device_params else '',
+            pincount2='-{}'.format(pincount2) if 'hidden_pins' in device_params or 'deleted_pins' in device_params else '',
             size_y=size_y,
             size_x=size_x,
             pitch=device_params['pitch'],
@@ -281,7 +284,7 @@ class Gullwing():
                 manufacturer = device_params.get('manufacturer',''),
                 package = header['device_type'],
                 mpn = device_params.get('part_number',''),
-                pincount = pincount,
+                pincount = present_pins,
                 datasheet = device_params['size_source'],
                 scriptname = os.path.basename(__file__).replace("  ", " ")
                 ).lstrip())
@@ -310,7 +313,7 @@ class Gullwing():
                                                device_params.get('EP_paste_coverage', DEFAULT_PASTE_COVERAGE))
 
                 EP = ExposedPad(
-                    number=pincount+1, size=EP_size, mask_size=EP_mask_size,
+                    number=present_pins+1, size=EP_size, mask_size=EP_mask_size,
                     paste_layout=thermals.get('EP_num_paste_pads'),
                     paste_coverage=paste_coverage,
                     via_layout=thermals.get('count', 0),
@@ -326,7 +329,7 @@ class Gullwing():
                     )
             else:
                 EP = ExposedPad(
-                    number=pincount+1, size=EP_size, mask_size=EP_mask_size,
+                    number=present_pins+1, size=EP_size, mask_size=EP_mask_size,
                     paste_layout=device_params.get('EP_num_paste_pads', 1),
                     paste_coverage=device_params.get('EP_paste_coverage', DEFAULT_PASTE_COVERAGE),
                     **pad_shape_details
