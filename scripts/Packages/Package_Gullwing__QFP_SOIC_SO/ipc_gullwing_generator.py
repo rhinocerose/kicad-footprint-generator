@@ -168,13 +168,12 @@ class Gullwing():
         pincount_full = device_params['num_pins_x']*2 + device_params['num_pins_y']*2
         
         if 'hidden_pins' in device_params:
-            pincount_text = '{}-{}'.format(pincount_full - len(device_params['hidden_pins']), pincount_full)
             pincount = pincount_full - len(device_params['hidden_pins'])
+            pincount2 = '{}'.format(pincount_full)
         elif 'deleted_pins' in device_params:
-            pincount_text = '{}-{}'.format(pincount_full, pincount_full - len(device_params['deleted_pins']))
-            pincount = pincount_full - len(device_params['deleted_pins'])
+            pincount = pincount_full
+            pincount2 = '{}'.format(pincount_full - len(device_params['deleted_pins']))
         else:
-            pincount_text = '{}'.format(pincount_full)
             pincount = pincount_full
 
         ipc_reference = 'ipc_spec_gw_large_pitch' if device_params['pitch'] >= 0.625 else 'ipc_spec_gw_small_pitch'
@@ -187,12 +186,20 @@ class Gullwing():
 
         pitch = device_params['pitch']
 
-        name_format = self.configuration['fp_name_format_string_no_trailing_zero_pincount_text']
+        if 'hidden_pins' in device_params or 'deleted_pins' in device_params:
+            name_format = self.configuration['fp_name_format_string_no_trailing_zero_2pincount']
+        else:
+            name_format = self.configuration['fp_name_format_string_no_trailing_zero']
+
         EP_size = {'x':0, 'y':0}
         EP_mask_size = {'x':0, 'y':0}
 
         if dimensions['has_EP']:
-            name_format = self.configuration['fp_name_EP_format_string_no_trailing_zero_pincount_text']
+            if 'hidden_pins' in device_params or 'deleted_pins' in device_params:
+                name_format = self.configuration['fp_name_EP_format_string_no_trailing_zero_2pincount']
+            else:
+                name_format = self.configuration['fp_name_EP_format_string_no_trailing_zero']
+
             if 'EP_size_x_overwrite' in device_params:
                 EP_size = {
                     'x':device_params['EP_size_x_overwrite'],
@@ -204,7 +211,11 @@ class Gullwing():
                     'y':dimensions['EP_size_y'].nominal
                     }
             if 'EP_mask_x' in dimensions:
-                name_format = self.configuration['fp_name_EP_custom_mask_format_string_no_trailing_zero_pincount_text']
+                if 'hidden_pins' in device_params or 'deleted_pins' in device_params:
+                    name_format = self.configuration['fp_name_EP_custom_mask_format_string_no_trailing_zero_2pincount']
+                else:
+                    name_format = self.configuration['fp_name_EP_custom_mask_format_string_no_trailing_zero']
+
                 EP_mask_size = {'x':dimensions['EP_mask_x'].nominal, 'y':dimensions['EP_mask_y'].nominal}
         EP_size = Vector2D(EP_size)
 
@@ -222,7 +233,8 @@ class Gullwing():
             man=device_params.get('manufacturer',''),
             mpn=device_params.get('part_number',''),
             pkg=header['device_type'],
-            pincount=pincount_text,
+            pincount=pincount,
+            pincount2=pincount2 if 'hidden_pins' in device_params or 'deleted_pins' in device_params else '',
             size_y=size_y,
             size_x=size_x,
             pitch=device_params['pitch'],
@@ -239,7 +251,8 @@ class Gullwing():
             man=device_params.get('manufacturer',''),
             mpn=device_params.get('part_number',''),
             pkg=header['device_type'],
-            pincount=pincount_text,
+            pincount=pincount,
+            pincount2=pincount2 if 'hidden_pins' in device_params or 'deleted_pins' in device_params else '',
             size_y=size_y,
             size_x=size_x,
             pitch=device_params['pitch'],
