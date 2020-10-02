@@ -82,7 +82,7 @@ def generate_one_footprint(param, config, default_lib):
                    'n': n+1, 'slot': slot}
 
             # Skip slots for differential banks
-            if b < param['banks']['diff']:
+            if b < param['banks'].get('diff', 0):
                 if ((slot+1) % 6 == 0 or # Skip every 3rd odd slot
                     (slot+2) % 6 == 0 or # Skip every 3rd even slot
                     # Only add end-of-bank pins if they are completing a pair
@@ -286,7 +286,7 @@ def generate_one_footprint(param, config, default_lib):
     partnum = param['meta'].get('pn', param['name'].split('_')[1])
 
     # Pins or pairs/bank
-    if param['banks']['diff'] == banks:
+    if param['banks'].get('diff', 0) == banks:
         # Differential mode: round up to nearest even number of pairs
         pins_or_pairs = (pad_n // 3) + (pad_n // 3) % 2
     else:
