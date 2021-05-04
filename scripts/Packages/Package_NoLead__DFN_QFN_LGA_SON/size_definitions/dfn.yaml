@@ -280,10 +280,13 @@ DFN-8-1EP_2x2mm_P0.5mm_EP0.75x1.2mm:
     tolerance: 0.05
 
   EP_size_x:
-    nominal: 0.75
+    nominal: 0.60
+    tolerance: 0.05
+  EP_size_x_overwrite: 0.75
   EP_size_y:
     nominal: 1.2
     tolerance: 0.05
+  EP_size_y_overwrite: 1.2
   # EP_paste_coverage: 0.65
   EP_num_paste_pads: [1, 2]
   # heel_reduction: 0.1 #for relatively large EP pads (increase clearance)
