@@ -68,6 +68,7 @@ class Text(Node):
         self.layer = kwargs.get('layer', 'F.SilkS')
         self.size = Vector2D(kwargs.get('size', [1, 1]))
         self.thickness = kwargs.get('thickness', 0.15)
+        self.justify = kwargs.get('justify', None)
 
         self.hide = kwargs.get('hide', False)
 
@@ -126,6 +127,8 @@ class Text(Node):
                          'layer: {}'.format(self.layer),
                          'size: (size {x} {y})'.format(**self.size.to_dict()),
                          'thickness: {}'.format(self.thickness)]
+        if (self.justify):
+            render_string.append('justify: {}'.format(self.justify))
 
         render_text += " [{}]".format(", ".join(render_string))
 

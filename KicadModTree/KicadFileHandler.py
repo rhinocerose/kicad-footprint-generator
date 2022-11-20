@@ -244,8 +244,13 @@ class KicadFileHandler(FileHandler):
                     ['size', node.size.x, node.size.y],
                     ['thickness', node.thickness]]]
 
+        justify = []
         if node.mirror:
-            effects.append(['justify', 'mirror'])
+            justify.append('mirror')
+        if node.justify:
+            justify.append(node.justify)
+        if (len(justify)):
+            effects.append(['justify'] + justify)
 
         sexpr.append(effects)
         sexpr.append(SexprSerializer.NEW_LINE)
