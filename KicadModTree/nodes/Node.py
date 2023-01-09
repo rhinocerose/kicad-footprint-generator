@@ -12,7 +12,8 @@
 # along with kicad-footprint-generator. If not, see < http://www.gnu.org/licenses/ >.
 #
 # (C) 2016 by Thomas Pointhuber, <thomas.pointhuber@gmx.at>
-
+# modifications 2022 by Armin Schoisswohl (@armin.sch)
+import math
 from copy import copy, deepcopy
 
 from KicadModTree.Vector import *
@@ -32,10 +33,22 @@ class RecursionDetectedError(RuntimeError):
         super(RecursionDetectedError, self).__init__(message)
 
 
+class VirtualNodeError(RuntimeError):
+    def __init__(self, message):
+        # Call the base class constructor with the parameters it needs
+        super(VirtualNodeError, self).__init__(message)
+
+
 class Node(object):
     def __init__(self):
         self._parent = None
         self._childs = []
+
+    def __iter__(self):
+        return self.allChildItems()
+
+    def __len__(self):
+        return len(self.getNormalChilds()) + len(self.getVirtualChilds())
 
     def append(self, node):
         '''
@@ -71,17 +84,47 @@ class Node(object):
 
         self._childs.extend(new_nodes)
 
-    def remove(self, node):
+    @staticmethod
+    def _removeNode(*, parent, node, virtual: bool = False):
         '''
         remove child from node
         '''
         if not isinstance(node, Node):
             raise TypeError('invalid object, has to be based on Node')
 
-        while node in self._childs:
-            self._childs.remove(node)
+        removed = False
 
-        node._parent = None
+        while node in parent.getNormalChilds():
+            parent.getNormalChilds().remove(node)
+            removed = True
+
+        if virtual:
+            while node in parent.getVirtualChilds():
+                parent.getVirtualChilds().remove(node)
+                removed = True
+
+        if (removed):
+            node._parent = None
+
+    def remove(self, node, traverse: bool = False, virtual: bool = False):
+        '''
+        remove child from node or from the tree
+        '''
+        if not isinstance(node, Node):
+            raise TypeError('invalid object, has to be based on Node')
+
+        if not virtual and node in self.getVirtualChilds():
+            raise VirtualNodeError('the node you are trying to remove is virtual')
+
+        if (not traverse):
+            self._removeNode(parent=self, node=node, virtual=virtual)
+        else:
+            if (node == self):
+                if (node._parent):
+                    self._removeNode(parent=node._parent, node=node, virtual=virtual)
+            else:
+                for child in self.allChildItems() if virtual else self.normalChildItems():
+                    child.remove(node, traverse=traverse, virtual=virtual)
 
     def insert(self, node):
         '''
@@ -113,17 +156,44 @@ class Node(object):
         '''
         return self._childs
 
+    def normalChildItems(self):
+        return iter(self.getNormalChilds())
+
     def getVirtualChilds(self):
         '''
         Get virtual childs of this node
         '''
         return []
 
+    def virtualChildItems(self):
+        """
+        virtual child iterator
+        """
+        return iter(self.getVirtualChilds())
+
     def getAllChilds(self):
         '''
         Get virtual and normal childs of this node
         '''
         return self.getNormalChilds() + self.getVirtualChilds()
+
+    def allChildItems(self):
+        for c in self.normalChildItems():
+            yield c
+        for c in self.virtualChildItems():
+            yield c
+
+    @property
+    def num_virtual_nodes(self):
+        return len(self.getVirtualChilds())
+
+    @property
+    def num_normal_nodes(self):
+        return len(self.getNormalChilds())
+
+    @property
+    def num_all_nodes(self):
+        return self.num_virtual_nodes + self.num_normal_nodes
 
     def getParent(self):
         '''
@@ -156,8 +226,8 @@ class Node(object):
         return self._parent.getRealPosition(coordinate, rotation)
 
     def calculateBoundingBox(self, outline=None):
-        min_x, min_y = 0, 0
-        max_x, max_y = 0, 0
+        min_x, min_y = math.inf, math.inf
+        max_x, max_y = -math.inf, -math.inf
 
         if outline:
             min_x = outline['min']['x']
