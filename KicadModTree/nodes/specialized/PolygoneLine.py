@@ -47,7 +47,7 @@ class PolygoneLine(Node):
 
         self._initPolyPoint(**kwargs)
 
-        self.virtual_childs = self._createChildNodes(self.nodes)
+        self.updateVirtualChilds()
 
     def _initPolyPoint(self, **kwargs):
         self.nodes = PolygonPoints(**kwargs)
@@ -61,6 +61,9 @@ class PolygoneLine(Node):
             nodes.append(new_node)
 
         return nodes
+
+    def updateVirtualChilds(self):
+        self.virtual_childs = self._createChildNodes(self.nodes)
 
     def getVirtualChilds(self):
         return self.virtual_childs
@@ -86,3 +89,47 @@ class PolygoneLine(Node):
         render_text += "]"
 
         return render_text
+
+    def lineItems(self):
+        return iter(self.virtual_childs)
+
+    def pointItems(self):
+        return iter(self.nodes.getPoints())
+
+    def isPointOnSelf(self, point):
+        return any(p.isPointOnSelf(point) for p in self.lineItems())
+
+    def isPointInsideSelf(self, point, corner=True):
+        # see, e.g. https://www.inf.usi.ch/hormann/papers/Hormann.2001.TPI.pdf
+        point = Vector2D(point)
+        poly_points = [Vector2D(p) for p in self.nodes.getPoints()]
+        if (len(poly_points) == 0):
+            return False
+        # close the contour if not already closed
+        if (poly_points[-1] != poly_points[0]):
+            poly_points.append(poly_points[0])
+        # calculate the winding number: if 0 the point is outside, otherwise inside
+        p1 = poly_points[0] - point
+        if p1.is_nullvec():
+            return corner
+        a1 = p1.arg()
+        angle = 0
+        for p in poly_points:
+            p0, p1 = p1, p - point
+            if p1.is_nullvec():
+                return corner
+            a0, a1 = a1, p1.arg()
+            angle += (a0 - a1 + 180) % 360 - 180
+        winding = round(angle / 360)
+        return winding
+
+    def cut(self, *other):
+        lines = []
+        for line in self.lineItems():
+            lines += line.cut(*other)
+        return lines
+
+    def rotate(self, *args, **kwargs):
+        self.nodes.rotate(*args, **kwargs)
+        self.updateVirtualChilds()
+        return self

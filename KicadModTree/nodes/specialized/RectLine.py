@@ -75,13 +75,13 @@ class RectLine(PolygoneLine):
             self.end_pos.x = x2 + offset[0]
             self.end_pos.y = y2 + offset[1]
 
-        polygone_line = [{'x': self.start_pos.x, 'y': self.start_pos.y},
-                         {'x': self.start_pos.x, 'y': self.end_pos.y},
-                         {'x': self.end_pos.x, 'y': self.end_pos.y},
-                         {'x': self.end_pos.x, 'y': self.start_pos.y},
-                         {'x': self.start_pos.x, 'y': self.start_pos.y}]
+        polygone_line = [Vector2D(self.start_pos.x, self.start_pos.y),
+                         Vector2D(self.start_pos.x, self.end_pos.y),
+                         Vector2D(self.end_pos.x, self.end_pos.y),
+                         Vector2D(self.end_pos.x, self.start_pos.y),
+                         Vector2D(self.start_pos.x, self.start_pos.y)]
 
-        PolygoneLine.__init__(self, polygone=polygone_line, layer=kwargs['layer'], width=kwargs.get('width'))
+        PolygoneLine.__init__(self, nodes=polygone_line, layer=kwargs['layer'], width=kwargs.get('width'))
 
     def _getRenderTreeText(self):
         render_text = Node._getRenderTreeText(self)
