@@ -122,9 +122,9 @@ class Text(Node):
 
         render_string = ['type: "{}"'.format(self.type),
                          'text: "{}"'.format(self.text),
-                         'at: {}'.format(self.at.render('(at {x} {y})')),
+                         'at: (at {x} {y})'.format(**self.at.to_dict()),
                          'layer: {}'.format(self.layer),
-                         'size: {}'.format(self.size.render('(size {x} {y})')),
+                         'size: (size {x} {y})'.format(**self.size.to_dict()),
                          'thickness: {}'.format(self.thickness)]
 
         render_text += " [{}]".format(", ".join(render_string))

@@ -83,8 +83,8 @@ class Line(Node, geometricLine):
 
     def _getRenderTreeText(self):
         render_strings = ['fp_line']
-        render_strings.append(self.start_pos.render('(start {x} {y})'))
-        render_strings.append(self.end_pos.render('(end {x} {y})'))
+        render_strings.append('(start {x} {y})'.format(**self.start_pos.to_dict()))
+        render_strings.append('(end {x} {y})'.format(**self.end_pos.to_dict()))
         render_strings.append('(layer {layer})'.format(layer=self.layer))
         render_strings.append('(width {width})'.format(width=self.width))
 

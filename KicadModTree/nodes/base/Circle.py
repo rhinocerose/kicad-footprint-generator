@@ -89,8 +89,8 @@ class Circle(Node, geometricCircle):
 
     def _getRenderTreeText(self):
         render_strings = ['fp_circle']
-        render_strings.append(self.center_pos.render('(center {x} {y})'))
-        render_strings.append(self.end_pos.render('(end {x} {y})'))
+        render_strings.append('(center {x} {y})'.format(**self.center_pos.to_dict()))
+        render_strings.append('(radius {radius})'.format(radius=self.radius))
         render_strings.append('(layer {layer})'.format(layer=self.layer))
         render_strings.append('(width {width})'.format(width=self.width))
 

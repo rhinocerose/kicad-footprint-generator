@@ -398,13 +398,13 @@ class Pad(Node):
         render_strings.append(lispString(self.number))
         render_strings.append(lispString(self.type))
         render_strings.append(lispString(self.shape))
-        render_strings.append(self.at.render('(at {x} {y})'))
-        render_strings.append(self.size.render('(size {x} {y})'))
+        render_strings.append('(at {x} {y})'.format(**self.at.to_dict()))
+        render_strings.append('(size {x} {y})'.format(**self.size.to_dict()))
         render_strings.append('(drill {})'.format(self.drill))
         render_strings.append('(layers {})'.format(' '.join(self.layers)))
 
         render_text = Node._getRenderTreeText(self)
-        render_text += '({})'.format(' '.join(render_strings))
+        render_text += ' ({})'.format(' '.join(render_strings))
 
         return render_text
 
