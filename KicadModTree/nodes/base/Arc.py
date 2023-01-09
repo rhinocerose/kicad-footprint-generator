@@ -78,7 +78,8 @@ class Arc(Node, geometricArc):
         result = []
         garcs = geometricArc.cut(self, *other)
         for g in garcs:
-            result.append(self.copyReplaceGeometry(g))
+            if (abs(g.angle) > 1e-6):
+                result.append(self.copyReplaceGeometry(g))
 
         return result
 

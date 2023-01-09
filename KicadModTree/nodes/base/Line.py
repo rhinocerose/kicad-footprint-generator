@@ -77,7 +77,8 @@ class Line(Node, geometricLine):
         result = []
         glines = geometricLine.cut(self, *other)
         for g in glines:
-            result.append(self.copyReplaceGeometry(g))
+            if not (g.start_pos - g.end_pos).is_nullvec(1e-6):
+                result.append(self.copyReplaceGeometry(g))
 
         return result
 
