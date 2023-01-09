@@ -142,6 +142,9 @@ class Vector2D(object):
         return Vector2D({'x': self.x * other.x,
                          'y': self.y * other.y})
 
+    def __rmul__(self, other):
+        return Vector2D.__mul__(self, other)
+
     def __div__(self, value):
         other = Vector2D.__arithmetic_parse(value)
 
@@ -150,6 +153,12 @@ class Vector2D(object):
 
     def __truediv__(self, obj):
         return self.__div__(obj)
+
+    def min(self, other):
+        return Vector2D(*[min(*v) for v in zip(self, other)])
+
+    def max(self, other):
+        return Vector2D(*[max(*v) for v in zip(self, other)])
 
     def to_dict(self):
         return {'x': self.x, 'y': self.y}
@@ -230,13 +239,64 @@ class Vector2D(object):
         op = Vector2D(origin)
 
         diff = self - op
-        radius = hypot(diff.x, diff.y)
-
-        angle = atan2(diff.y, diff.x)
-        if use_degrees:
-            angle = degrees(angle)
+        radius = diff.norm()
+        angle = diff.arg(use_degrees)
 
         return (radius, angle)
+
+    def norm(self):
+        """
+        Calculate the length (cartesian norm) of a vector
+        """
+        return hypot(*self)
+
+    def arg(self, use_degrees=True):
+        """
+        Calculate the angle of a vector
+
+        Args:
+            use_degrees: angle in degrees (default: True)
+
+        Returns:
+            angle of the vector
+        """
+        phi = atan2(self.y, self.x)
+        if use_degrees:
+            phi = degrees(phi)
+        return phi
+
+    def inner(self, other):
+        """
+        Calculate the inner product of a vector with ``other``
+        """
+        return sum(s * o for s, o in zip(self, other))
+
+    def orthogonal(self):
+        """
+        Calculate the orthogonal onto a vector
+        """
+        return Vector2D(-self.y, self.x)
+
+    def is_nullvec(self, tol: float = 1e-7):
+        """
+        Check if a vector is the null-vector (up to tol)
+
+        Args:
+            tol: minimum length to be considered as null vector
+        """
+        return Vector2D.norm(self) < tol
+
+    def normalize(self, tol: float = 1e-7):
+        """
+        Normalize a vector (scale it to unit length)
+
+        Args:
+            tol: minimum length to be considered as null vector
+        """
+        norm = self.norm()
+        if norm > tol:
+            self /= norm
+        return self
 
     @staticmethod
     def from_polar(radius, angle, origin=(0, 0), use_degrees=True):
