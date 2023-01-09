@@ -17,6 +17,8 @@ from KicadModTree.Vector import *
 from KicadModTree.nodes.Node import Node
 from KicadModTree.util.geometric_util import geometricCircle, BaseNodeIntersection
 
+from .Arc import Arc
+
 
 class Circle(Node, geometricCircle):
     r"""Add a Circle to the render tree
@@ -42,7 +44,7 @@ class Circle(Node, geometricCircle):
 
     def __init__(self, **kwargs):
         Node.__init__(self)
-        geometricCircle.__init__(self, Vector2D(kwargs['center']), float(kwargs['radius']))
+        geometricCircle.__init__(self, center=Vector2D(kwargs['center']), radius=float(kwargs['radius']))
 
         self.layer = kwargs.get('layer', 'F.SilkS')
         self.width = kwargs.get('width')
@@ -73,8 +75,20 @@ class Circle(Node, geometricCircle):
         self.center_pos += distance_vector
         return self
 
+    def asArc(self):
+        return Arc(
+            center=self.center_pos, start=self.center_pos + Vector2D(self.radius, 0),
+            angle=360, layer=self.layer, width=self.width
+        )
+
     def cut(self, *other):
-        raise NotImplemented("cut for circles not yet implemented")
+        r""" cut circle with given other element
+
+        :params:
+            * *other* (``Line``, ``Circle``, ``Arc``)
+                cut the element on any intersection with the given geometric element
+        """
+        return self.asArc().cut(*other)
 
     def getRadius(self):
         return self.radius
