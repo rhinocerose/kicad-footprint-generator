@@ -13,6 +13,7 @@
 #
 # (C) 2016 by Thomas Pointhuber, <thomas.pointhuber@gmx.at>
 # (C) 2018 by Rene Poeschl, github @poeschlr
+import warnings
 
 from KicadModTree.util.paramUtil import *
 from KicadModTree.Vector import *
@@ -381,7 +382,16 @@ class Pad(Node):
 
     # calculate the outline of a pad
     def calculateBoundingBox(self):
-        return Node.calculateBoundingBox(self)
+        if (self.shape in [Pad.SHAPE_CIRCLE, Pad.SHAPE_OVAL]):
+            return {"min": self.at - self.size / 2, "max": self.at + self.size / 2}
+        elif (self.shape in [Pad.SHAPE_RECT, Pad.SHAPE_ROUNDRECT]):
+            from ..specialized import RectLine
+            rect = RectLine(start=self.at - self.size/2,
+                            end=self.at + self.size / 2,
+                            layer=None, width=0).rotate(self.rotation)
+            return rect.calculateBoundingBox()
+        else:
+            raise NotImplementedError("calculateBoundingBox is not implemented for pad shape '%s'" % self.shape)
 
     def _getRenderTreeText(self):
         render_strings = ['pad']

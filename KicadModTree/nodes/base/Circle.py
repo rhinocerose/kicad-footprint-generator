@@ -85,7 +85,7 @@ class Circle(Node, geometricCircle):
         max_x = self.center_pos.x+self.radius
         max_y = self.center_pos.y+self.radius
 
-        return Node.calculateBoundingBox({'min': ParseXY(min_x, min_y), 'max': ParseXY(max_x, max_y)})
+        return {'min': Vector2D(min_x, min_y), 'max': Vector2D(max_x, max_y)}
 
     def _getRenderTreeText(self):
         render_strings = ['fp_circle']

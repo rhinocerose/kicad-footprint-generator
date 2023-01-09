@@ -76,7 +76,7 @@ class Polygon(Node):
         return self
 
     def calculateBoundingBox(self):
-        return nodes.calculateBoundingBox()
+        return self.nodes.calculateBoundingBox()
 
     def _getRenderTreeText(self):
         render_text = Node._getRenderTreeText(self)

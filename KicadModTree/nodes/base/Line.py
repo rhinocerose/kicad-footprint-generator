@@ -102,4 +102,4 @@ class Line(Node, geometricLine):
         max_x = max([render_start_pos.x, render_end_pos.x])
         max_y = max([render_start_pos.y, render_end_pos.y])
 
-        return Node.calculateBoundingBox({'min': Vector2D(min_x, min_y), 'max': Vector2D(max_x, max_y)})
+        return {'min': Vector2D(min_x, min_y), 'max': Vector2D(max_x, max_y)}

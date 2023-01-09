@@ -74,15 +74,18 @@ class PolygonPoints(object):
             self.mirror[1] = kwargs['y_mirror']
 
     def calculateBoundingBox(self):
-        min = max = self.getRealPosition(self.nodes[0])
-
-        for n in self.nodes:
-            min.x = min([min.x, n.x])
-            min.y = min([min.y, n.y])
-            max.x = max([max.x, n.x])
-            max.y = max([max.y, n.y])
-
-        return Node.calculateBoundingBox({'min': min, 'max': max})
+        # getRealPosition is not implemented for PolygonPoints, therefore calculateBoundingBox fails.
+        # This was obviously dead code so far, now we raise an exception.
+        raise NotImplementedError("calculateBoundingBox is not implemeted for %s" % self.__class__.__name__)
+        # bb_min = bb_max = self.getRealPosition(self.nodes[0])
+        #
+        # for n in self.nodes:
+        #     bb_min.x = min([bb_min.x, n.x])
+        #     bb_min.y = min([bb_min.y, n.y])
+        #     bb_max.x = max([bb_max.x, n.x])
+        #     bb_max.y = max([bb_max.y, n.y])
+        #
+        # return {'min': bb_min, 'max': bb_max}
 
     def findNearestPoints(self, other):
         r""" Find the nearest points for two polygons

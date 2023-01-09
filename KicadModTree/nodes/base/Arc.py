@@ -105,7 +105,7 @@ class Arc(Node, geometricArc):
             print("TODO: add angle side: {1}".format(float_angle))
         '''
 
-        return Node.calculateBoundingBox({'min': Vector2D((min_x, min_y)), 'max': Vector2D((max_x, max_y))})
+        return {'min': Vector2D((min_x, min_y)), 'max': Vector2D((max_x, max_y))}
 
     def _getRenderTreeText(self):
         render_strings = ['fp_arc']

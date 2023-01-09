@@ -115,7 +115,7 @@ class Text(Node):
         max_x = self.at['x']+width/2.
         max_y = self.at['y']+height/2.
 
-        return Node.calculateBoundingBox({'min': Vector2D(min_x, min_y), 'max': Vector2D(max_x, max_y)})
+        return {'min': Vector2D(min_x, min_y), 'max': Vector2D(max_x, max_y)}
 
     def _getRenderTreeText(self):
         render_text = Node._getRenderTreeText(self)
