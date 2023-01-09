@@ -1,6 +1,7 @@
 import unittest
 import math
 from KicadModTree import *
+from KicadModTree.util import geometric_util as geo
 
 RESULT_kx90DEG = """(module test (layer F.Cu) (tedit 0)
   (fp_arc (start 0 0) (end 1 0) (angle -90) (layer F.SilkS) (width 0.12))
@@ -479,3 +480,105 @@ class ArcTests(unittest.TestCase):
         file_handler = KicadFileHandler(kicad_mod)
         # file_handler.writeFile('test_3point.kicad_mod')
         self.assertEqual(file_handler.serialize(timestamp=0), RESULT_kx3Point)
+
+    def testCircleCircleIntersection(self):
+        # check intersection of two circles with identical radii
+        c1 = geo.geometricCircle(center=[0, 0], radius=math.sqrt(2))
+        c2 = geo.geometricCircle(center=[2, 0], radius=math.sqrt(2))
+        ip = geo.BaseNodeIntersection.intersectTwoNodes(c1, c2)
+        self.assertEqual(len(ip), 2)
+        for p in ip:
+            self.assertTrue(any((p - Vector2D(1, y)).is_nullvec(tol=1e-7) for y in [1, -1]))
+
+        # check intersection of two circles with different radii
+        c1 = geo.geometricCircle(center=[0, 0], radius=2)
+        c2 = geo.geometricCircle(center=[2 * math.sqrt(3/4), 0], radius=1)
+        ip = geo.BaseNodeIntersection.intersectTwoNodes(c1, c2)
+        self.assertEqual(len(ip), 2)
+        for p in ip:
+            self.assertTrue(any((p - Vector2D(2 * math.sqrt(3/4), y)).is_nullvec(tol=1e-7) for y in [1, -1]))
+
+        # check intersection of two circles with different radii, too far apart
+        c1 = geo.geometricCircle(center=[0, 0], radius=2)
+        c2 = geo.geometricCircle(center=[4, 0], radius=1)
+        ip = geo.BaseNodeIntersection.intersectTwoNodes(c1, c2)
+        self.assertEqual(len(ip), 0)
+
+        # check intersection of two circles with different radii, contained in each other
+        c1 = geo.geometricCircle(center=[0, 0], radius=2)
+        c2 = geo.geometricCircle(center=[0.5, 0], radius=1)
+        ip = geo.BaseNodeIntersection.intersectTwoNodes(c1, c2)
+        self.assertEqual(len(ip), 0)
+
+        # check intersection point of circles touching outside
+        c1 = geo.geometricCircle(center=[0, 0], radius=1)
+        c2 = geo.geometricCircle(center=[2, 0], radius=1)
+        ip = geo.BaseNodeIntersection.intersectTwoNodes(c1, c2)
+        self.assertEqual(len(ip), 1)
+        self.assertTrue((ip[0] - Vector2D(1, 0)).is_nullvec(tol=1e-7))
+
+        # check intersection point of circles touching inside
+        c1 = geo.geometricCircle(center=[0, 0], radius=2)
+        c2 = geo.geometricCircle(center=[1, 0], radius=1)
+        ip = geo.BaseNodeIntersection.intersectTwoNodes(c1, c2)
+        self.assertEqual(len(ip), 1)
+        self.assertTrue((ip[0] - Vector2D(2, 0)).is_nullvec(tol=1e-7))
+
+        # vary position on x and y axis
+        c1 = geo.geometricCircle(center=[0, 0], radius=math.sqrt(2))
+        c2 = geo.geometricCircle(center=[0, 2], radius=math.sqrt(2))
+        ip = geo.BaseNodeIntersection.intersectTwoNodes(c1, c2)
+        self.assertEqual(len(ip), 2)
+        for p in ip:
+            self.assertTrue(any((p - Vector2D(x, 1)).is_nullvec(tol=1e-7) for x in [1, -1]))
+        c2 = geo.geometricCircle(center=[-2, 0], radius=math.sqrt(2))
+        ip = geo.BaseNodeIntersection.intersectTwoNodes(c1, c2)
+        self.assertEqual(len(ip), 2)
+        for p in ip:
+            self.assertTrue(any((p - Vector2D(-1, y)).is_nullvec(tol=1e-7) for y in [1, -1]))
+        c2 = geo.geometricCircle(center=[0, -2], radius=math.sqrt(2))
+        for p in geo.BaseNodeIntersection.intersectTwoNodes(c1, c2):
+            self.assertTrue(any((p - Vector2D(x, -1)).is_nullvec(tol=1e-7) for x in [1, -1]))
+
+        # circle 2 on the first median
+        c1 = geo.geometricCircle(center=[0, 0], radius=1)
+        c2 = geo.geometricCircle(center=[1, 1], radius=1)
+        ip = geo.BaseNodeIntersection.intersectTwoNodes(c1, c2)
+        self.assertEqual(len(ip), 2)
+        for p in ip:
+            self.assertTrue(any((p - Vector2D(x, y)).is_nullvec(tol=1e-7) for x, y in [(1, 0), (0, 1)]))
+
+        # circle 2 on the fourth median
+        c1 = geo.geometricCircle(center=[0, 0], radius=1)
+        c2 = geo.geometricCircle(center=[1, -1], radius=1)
+        ip = geo.BaseNodeIntersection.intersectTwoNodes(c1, c2)
+        self.assertEqual(len(ip), 2)
+        for p in ip:
+            self.assertTrue(any((p - Vector2D(x, y)).is_nullvec(tol=1e-7) for x, y in [(1, 0), (0, -1)]))
+
+        # circles on arbitrary positions
+        center = Vector2D(3, -2)
+        for angle in [0, 30, -30, 180, -180, 72, 143]:
+            offset = Vector2D(sin(radians(angle)), cos(radians(angle)))
+            c1 = geo.geometricCircle(center=center, radius=math.sqrt(2))
+            c2 = geo.geometricCircle(center=center + 2 * offset, radius=math.sqrt(2))
+            ip = geo.BaseNodeIntersection.intersectTwoNodes(c1, c2)
+            self.assertEqual(len(ip), 2)
+            for p in ip:
+                self.assertTrue(any(
+                    (p - (center + offset + s * copy(offset).rotate(90))).is_nullvec(tol=1e-7)
+                    for s in [-1, 1]))
+
+        # two degenerated circles with the same center
+        center = Vector2D(3, -2)
+        c1 = geo.geometricCircle(center=center, radius=0)
+        c2 = geo.geometricCircle(center=center, radius=0)
+        ip = geo.BaseNodeIntersection.intersectTwoNodes(c1, c2)
+        self.assertEqual(len(ip), 1)
+        self.assertTrue((ip[0] - center).is_nullvec(tol=1e-7))
+
+        # two identical circles with the same center
+        center = Vector2D(3, -2)
+        c1 = geo.geometricCircle(center=center, radius=1)
+        c2 = geo.geometricCircle(center=center, radius=1)
+        self.assertRaises(ValueError, geo.BaseNodeIntersection.intersectTwoNodes, c1, c2)
