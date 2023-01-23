@@ -117,7 +117,7 @@ pins:
 Used for the 3D model. See below for configuration data for the pins on each variant.
 
 ```
-3d_prefix: '${KICAD6_3DMODEL_DIR}/TO_SOT_Packages_SMD.3dshapes'
+3d_prefix: '${KICAD7_3DMODEL_DIR}/TO_SOT_Packages_SMD.3dshapes'
 ```
 
 This string is added to the module to set the path to the 3D models folder.

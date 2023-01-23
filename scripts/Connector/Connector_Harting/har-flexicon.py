@@ -41,7 +41,7 @@ for series in data:
         kicad_mod.setAttribute("smd")
         kicad_mod.append(
             Model(
-                filename="${KICAD6_3DMODEL_DIR}/Connector_Harting.3dshapes/"
+                filename="${KICAD7_3DMODEL_DIR}/Connector_Harting.3dshapes/"
                 + footprint_name
                 + ".wrl"
             )
