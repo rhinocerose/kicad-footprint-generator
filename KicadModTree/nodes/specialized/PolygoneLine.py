@@ -133,3 +133,28 @@ class PolygoneLine(Node):
         self.nodes.rotate(*args, **kwargs)
         self.updateVirtualChilds()
         return self
+
+    def duplicate(self, *, offset: float = 0.0, layer: str = None, width: float = None, split_angle: float = 90):
+        """
+        Create a duplicate of the polygon.
+
+        Args:
+            offset: specifies an optional offset (in mm); if the polygon is sorted clockwise, the
+                duplicate will be a polygon with parallel edges with the specific offset
+            layer: defines the duplication layer (default is to keep the same layer)
+            width: defines the line width of the duplicate (default: same as original)
+            split_angle: defines the limit to maintain convex corners; any turn with an angle bigger than
+                split_angle will be split into two corners (default 90 degree)
+
+        Returns:
+            an independent copy of the polygon with the specific modifications
+        """
+        points = self.nodes.getPoints()
+        if layer is None:
+            layer = self.layer
+        if width is None:
+            width = self.width
+        if (offset):
+            from KicadModTree.util.silkmask_util import calculateOffsetPolygonNodes
+            points = calculateOffsetPolygonNodes(points, offset=offset, split_angle=max(0, min(150, split_angle)))
+        return PolygoneLine(nodes=points, layer=layer, width=width)
