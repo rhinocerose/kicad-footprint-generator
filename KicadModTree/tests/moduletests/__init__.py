@@ -19,3 +19,4 @@ from .test_exposed_pad import ExposedPadTests
 from .test_arc import ArcTests
 from .test_rotation import RotationTests
 from .test_intersection import IntersectionTests
+from .test_offset_polgon import PolygonOffsetTests
