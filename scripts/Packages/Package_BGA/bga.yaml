@@ -769,3 +769,15 @@ BGA-324_15.0x15.0mm_Layout18x18_P0.8mm_Ball0.45mm_Pad0.4mm_NSMD:
   ball_diameter: 0.45
   layout_x: 18
   layout_y: 18
+
+Texas_BGA-289_15.0x15.0mm_Layout17x17_P0.8mm_Ball0.5mm_Pad0.4mm:
+  description: "Texas Instruments BGA-289, 0.4mm pad"
+  size_source: "https://www.ti.com/lit/ml/mpbg777/mpbg777.pdf"
+  additional_tags: "ZAV S-PBGA-N289"
+  body_size_x: 15
+  body_size_y: 15
+  overall_height: 1.40
+  pitch: 0.8
+  pad_diameter: 0.4
+  layout_x: 17
+  layout_y: 17
