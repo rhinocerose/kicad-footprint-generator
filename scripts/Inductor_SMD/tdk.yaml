@@ -1,0 +1,7 @@
+- series: MLZ
+  manufacturer: TDK
+  csv: tdk_mlz.csv
+  3d:
+    type: 2 # best effort, these parts are more like chip resistors
+  tags:
+    - MLZ

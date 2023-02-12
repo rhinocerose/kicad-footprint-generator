@@ -46,6 +46,7 @@ def qfn(args):
 
 
 if __name__ == '__main__':
+	print("Warning: this style of generator is considered deprecated, see readme.md")
 	parser = ModArgparser(qfn)
 	# the root node of .yml files is parsed as name
 	parser.add_parameter("name", type=str, required=True)

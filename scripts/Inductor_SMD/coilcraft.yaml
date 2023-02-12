@@ -1,7 +1,6 @@
 - series: XAL
   manufacturer: Coilcraft
   csv: coilcraft_xal.csv
-  landingSpacing: center # center-to-center for copper
   3d:
     type: 1
     bodyColor: black body

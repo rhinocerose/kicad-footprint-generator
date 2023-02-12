@@ -31,6 +31,33 @@ fabOffset = 0.0
 courtyardOffset = 0.25      # 0.25 per KLC
 silkLineThickness = 0.12    # Default silkscreen line is 0.12mm thick. Do not change.
 
+
+def derive_landing_x(data: dict[str, str]) -> (float, float):
+    """
+    Handle the various methods of providing sufficient dimensions to
+    derive the land X dimension, and the inside edge to edge distance
+    that this script works with internally.
+    :param data: a csvreader row
+    :return: a tuple of the form (landingX, landingSpacing)
+    """
+    xin = data.get("landingX", None)
+    spc_c = data.get("landingSpacingX", None)
+    spc_ix = data.get("landingInsideX", None)
+    spc_ox = data.get("landingOutsideX", None)
+
+    if xin and spc_ix:
+        return float(xin), float(spc_ix)
+    if xin and spc_c:
+        xin = float(xin)
+        spc_ix = float(spc_c) - xin
+        return xin, spc_ix
+    if spc_ix and spc_ox:
+        spc_ix = float(spc_ix)
+        xin = (float(spc_ox) - spc_ix) / 2
+        return xin, spc_ix
+    raise RuntimeError("Unhandled combination of landingX dimensions, saw: " + ', '.join(data.keys()))
+
+
 with open(batchInputFile, 'r') as stream:
     data_loaded = yaml.safe_load(stream)
 
@@ -39,7 +66,6 @@ with open(batchInputFile, 'r') as stream:
         seriesManufacturer = data_loaded[yamlBlocks]['manufacturer']
         seriesDatasheet = data_loaded[yamlBlocks].get('datasheet', '')      # allow empty datasheet in case of unique per-part datasheets
         seriesCsv = data_loaded[yamlBlocks]['csv']
-        seriesLandingSpacing = data_loaded[yamlBlocks].get('landingSpacing', 'edge')      # default to edge
         seriesTags = data_loaded[yamlBlocks]['tags']                        # space delimited list of the tags
         seriesTagsString = ' '.join(seriesTags)
 
@@ -50,20 +76,14 @@ with open(batchInputFile, 'r') as stream:
                 widthX = float(row['widthX'])
                 lengthY = float(row['lengthY'])
                 height = float(row['height'])
-                landingX = float(row['landingX'])
                 landingY = float(row['landingY'])
-                if seriesLandingSpacing == 'edge':
-                    landingSpacing = float(row['landingSpacing'])
-                else:   
-                    # If datasheet uses center-to-center spacing, subtract two of the half pad X values to get
-                    # the edge-to-edge spacing
-                    landingSpacing = float(float(row['landingSpacing']) - landingX)
+                landingX, landingSpacing = derive_landing_x(row)
                 partNumber = row['PartNumber']
-                
+
                 # If the CSV has unique data sheets, then use that. Otherwise, if the column 
                 # is missing, then use the series datasheet for all
                 try:
-                    partDatasheet = str(row['datasheetUrl'])
+                    partDatasheet = str(row['datasheet'])
                 except:
                     partDatasheet = seriesDatasheet
                 finally:

@@ -25,12 +25,13 @@
 
 - series: SWRB-S
   manufacturer: Sunlord
-  datasheet: "https://www.sunlordinc.com/Download.aspx?file=L1VwbG9hZEZpbGVzL1BERl9DYXQvMjAyMTA2MTAxMTMyMzc4MTEucGRm&lan="
+  datasheet: "https://www.sunlordinc.com/Download.aspx?file=L1VwbG9hZEZpbGVzL1BERl9DYXQvMjAyMTA2MTAxMTMyMzc4MTEucGRm&lan=en"
   csv: sunlord_swrb.csv
   3d:
-    type: 3
+    type: 1
     bodyColor: black body
     pinColor: metal grey pins
     padThickness: 0.05
+    cornerRadius: 2
   tags:
     - swrb
