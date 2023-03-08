@@ -1038,6 +1038,60 @@ LFCSP-40-1EP_6x6mm_P0.5mm_EP3.9x3.9mm:
     EP_paste_coverage: 0.70
     paste_avoid_via: True
 
+LFCSP-40-1EP_6x6mm_P0.5mm_EP4.6x4.6mm:
+  device_type: 'LFCSP'
+  library: Package_CSP
+  size_source: 'https://www.analog.com/media/en/package-pcb-resources/package/pkg_pdf/lfcspcp/cp-40/CP_40_15.pdf'
+  ipc_class: 'qfn'
+  body_size_x: 5.9 .. 6 .. 6.1
+  body_size_y: 5.9 .. 6 .. 6.1
+  overall_height: 0.85 .. 0.95 .. 1.0
+  lead_width: 0.18 .. 0.25 .. 0.3
+  lead_len: 0.35 .. 0.4 .. 0.45
+
+  pitch: 0.5
+  num_pins_x: 10
+  num_pins_y: 10
+
+  EP_size_x: 4.50 .. 4.60 .. 4.70
+  EP_size_y: 4.50 .. 4.60 .. 4.70
+  EP_num_paste_pads: [2, 2]
+
+  thermal_vias:
+    count: [3, 3]
+    drill: 0.3
+    paste_via_clearance: 0.1
+    EP_num_paste_pads: [2, 2]
+    EP_paste_coverage: 0.70
+    paste_avoid_via: True
+
+LFCSP-40-1EP_6x6mm_P0.5mm_EP4.65x4.65mm:
+  device_type: 'LFCSP'
+  library: Package_CSP
+  size_source: 'https://www.jedec.org/system/files/docs/MO-220K01.pdf (variation VJJD-5)'
+  ipc_class: 'qfn'
+  body_size_x: 5.9 .. 6 .. 6.1
+  body_size_y: 5.9 .. 6 .. 6.1
+  overall_height: 0.85 .. 0.95 .. 1.0
+  lead_width: 0.18 .. 0.25 .. 0.3
+  lead_len: 0.35 .. 0.4 .. 0.45
+
+  pitch: 0.5
+  num_pins_x: 10
+  num_pins_y: 10
+
+  EP_size_x: 4.50 .. 4.65 .. 4.80
+  EP_size_y: 4.50 .. 4.65 .. 4.80
+  EP_num_paste_pads: [2, 2]
+
+  thermal_vias:
+    count: [3, 3]
+    drill: 0.3
+    paste_via_clearance: 0.1
+    EP_num_paste_pads: [2, 2]
+    EP_paste_coverage: 0.70
+    paste_avoid_via: True
+
 LFCSP-64-1EP_9x9mm_P0.5mm_EP5.21x5.21mm:
   device_type: 'LFCSP'
   library: Package_CSP
