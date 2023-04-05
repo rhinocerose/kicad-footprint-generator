@@ -74,3 +74,8 @@ class Footprint(Node):
         assert abs(value) <= 1, "Solder paste margin must be between -1 and 1. {} is too large.".format(value)
 
         self.pasteMarginRatio = value
+
+    def cleanSilkMaskOverlap(self, side: str = 'F', silk_pad_clearance: float = 0.2, silk_line_width: float = 0.12):
+        from KicadModTree.util.silkmask_util import cleanSilkOverMask
+        cleanSilkOverMask(footprint=self, side=side, silk_pad_clearance=silk_pad_clearance,
+                          silk_line_width=silk_line_width)

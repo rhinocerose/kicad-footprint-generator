@@ -16,7 +16,7 @@
 import sys
 
 from KicadModTree.nodes import *
-from . import geometric_util as geo
+from KicadModTree.util import geometric_util as geo
 from typing import Iterable
 
 from math import tan
@@ -103,3 +103,114 @@ def calculateOffsetPolygonNodes(nodes: Iterable[Vector2D], offset: float, split_
         offset_polygon.append(offset_polygon[0])
 
     return offset_polygon
+
+
+def _collectNodesAsGeometricShapes(node: Node,
+                                   layer: str,
+                                   select_drill: bool = False,
+                                   silk_pad_clearance: float = 0.0):
+    """
+    Collect all nodes from a specific layer as geometric shapes (Arcs, Circles, Lines, Rectangles)
+
+    Args:
+        node: the root node of the tree to be converted
+        layer: the layer to be selected
+        select_drill: defines if also drill should be selected (to catch NPTHs)
+        silk_pad_clearance: additional clearance between silk and pad to be added to pad shapes
+
+    Returns:
+        the list of collected nodes.
+
+    Notes:
+        - pads are converted into rectangles or circles (other shapes are not yet supported)
+        - drills are (optionally) included as circles (other shapes not yet supported)
+        - silk_pad_clearance is an additional offset around pads and holes
+    """
+    if (not isinstance(layer, str) and isinstance(layer, Iterable)):
+        layers = layer
+    else:
+        layers = [layer]
+    for layer in layers[:]:
+        if (layer.startswith("F.") or layer.startswith("B.")):
+            layers.append("*.%s" % layer.split(".", maxsplit=1)[-1])
+    shapes = []
+    for c in node:
+        if isinstance(c, Pad):
+            if any(_ in c.layers for _ in layers):
+                if (c.shape in (Pad.SHAPE_RECT, Pad.SHAPE_ROUNDRECT, Pad.SHAPE_OVAL)):
+                    shapes.append(RectLine(start=c.at - 0.5 * c.size - silk_pad_clearance,
+                                           end=c.at + 0.5 * c.size + silk_pad_clearance,
+                                           layer=layer, width=0.01).rotate(angle=-c.rotation, origin=c.at))
+                elif (c.shape == Pad.SHAPE_CIRCLE):
+                    shapes.append(Circle(center=c.at, radius=c.size[0] * c.radius_ratio + silk_pad_clearance))
+                else:
+                    sys.stderr.write("cleaning silk over pad is not implemented for pad shape '%s'\n" % c.shape)
+            elif (select_drill and c.drill):
+                if (c.drill.x != c.drill.y):
+                    sys.stderr.write("cleaning silk over non-circular drills is not implemented\n")
+                shapes.append(Circle(center=c.at, radius=c.drill[0] * 0.5 + silk_pad_clearance))
+        elif (hasattr(c, 'layer') and c.layer in layers and geo.isGeometricPrimitive(c)):
+            shapes.append(c)
+        else:
+            shapes += _collectNodesAsGeometricShapes(
+                node=c, layer=layer, select_drill=select_drill,
+                silk_pad_clearance=silk_pad_clearance)
+    return shapes
+
+
+def _cleanSilkByMask(silk_shapes: list, mask_shapes: list):
+    """
+
+    Args:
+        silk_shapes: the list of silk shapes (collected by _collectNodesAsGeometricShapes)
+        mask_shapes: the list of mask shapes (collected by _collectNodesAsGeometricShapes)
+
+    Returns:
+    The cut silk shapes as a list of geometric primitives; this list can be appended to the module.
+    """
+
+    # iterate through all mask shapes
+    for mask in mask_shapes:
+        cut_silk = []   # initialize the result array
+        # iterate through all silk shapes
+        for silk in silk_shapes:
+            # if we do not have a geometric object, just store it
+            if (not hasattr(silk, "cut")):
+                print("WARNING: cutting a %s with a %s is not implemented" % (type(silk), type(mask)))
+                cut_silk.append(silk)
+                continue
+            # cut the geometric objects
+            segments = silk.cut(mask)
+            # store all segments which are not inside the mask
+            for seg in segments:
+                if not mask.isPointInsideSelf(seg.getMidPoint()):
+                    cut_silk.append(seg)
+        silk_shapes = cut_silk
+    return silk_shapes
+
+
+def cleanSilkOverMask(footprint: Node, *, side: str, silk_pad_clearance: float, silk_line_width: float,
+                      ignore_paste: bool = False):
+    """
+    Clean SilkScreen contours by removing overlap with pads and holes.
+
+    This is not perfect, but mostly does a very good job
+
+    Args:
+        footprint: the KicadModTree Footprint to clean up.
+        side: `'F'` for front or `'B'` for back side of the footprint.
+        silk_pad_clearance: the clearance between silk and pad.
+        ignore_paste: if set to True, then paste is ignored in calculating the silk/mask overlap.
+    """
+    silk_shapes = _collectNodesAsGeometricShapes(footprint, layer=f"{side:s}.SilkS")
+    mask_layers = [f"{side:s}.Mask"]
+    if not ignore_paste:
+        mask_layers.append(f"{side:s}.Paste")
+    mask_shapes = _collectNodesAsGeometricShapes(footprint, layer=mask_layers, select_drill=True,
+                                                 silk_pad_clearance=silk_pad_clearance + 0.5 * silk_line_width)
+    tidy_silk = _cleanSilkByMask(silk_shapes, mask_shapes)
+    for node in silk_shapes:
+        footprint.remove(node, traverse=True, virtual=True)
+    for node in tidy_silk:
+        footprint.append(node)
+    return footprint
