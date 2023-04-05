@@ -33,18 +33,18 @@ def add_dual_pad_border_y(kicad_mod, pad_details, device_params, pad_shape_detai
     init = 1
     increment = get_generator(device_params)
 
-    pa = PadArray(
-            initial= init,
-            type=Pad.TYPE_SMT,
-            layers=Pad.LAYERS_SMT,
-            pincount=device_params['num_pins_y'],
-            x_spacing=0, y_spacing=device_params['pitch'],
-            increment=increment,
-            **pad_details['left'], **pad_shape_details,
-            )
-    kicad_mod.append(pa)
+    pad_arrays = []
+    pad_arrays.append(PadArray(
+        initial= init,
+        type=Pad.TYPE_SMT,
+        layers=Pad.LAYERS_SMT,
+        pincount=device_params['num_pins_y'],
+        x_spacing=0, y_spacing=device_params['pitch'],
+        increment=increment,
+        **pad_details['left'], **pad_shape_details,
+    ))
     init += device_params['num_pins_y']
-    kicad_mod.append(PadArray(
+    pad_arrays.append(PadArray(
         initial= init,
         type=Pad.TYPE_SMT,
         layers=Pad.LAYERS_SMT,
@@ -52,8 +52,10 @@ def add_dual_pad_border_y(kicad_mod, pad_details, device_params, pad_shape_detai
         x_spacing=0, y_spacing=-device_params['pitch'],
         increment=increment,
         **pad_details['right'], **pad_shape_details,
-        )
-    )
+    ))
+    for pa in pad_arrays:
+        kicad_mod.append(pa)
+    return __get_pad_radius__(pad_arrays)
 
     pads = pa.getVirtualChilds()
     pad = pads[0]
@@ -65,18 +67,18 @@ def add_dual_pad_border_x(kicad_mod, pad_details, device_params, pad_shape_detai
     init = 1
     increment = get_generator(device_params)
 
-    pa = PadArray(
-            initial= init,
-            type=Pad.TYPE_SMT,
-            layers=Pad.LAYERS_SMT,
-            pincount=device_params['num_pins_x'],
-            y_spacing=0, x_spacing=device_params['pitch'],
-            increment=increment,
-            **pad_details['top'], **pad_shape_details,
-    )
-    kicad_mod.append(pa)
+    pad_arrays = []
+    pad_arrays.append(PadArray(
+        initial= init,
+        type=Pad.TYPE_SMT,
+        layers=Pad.LAYERS_SMT,
+        pincount=device_params['num_pins_x'],
+        y_spacing=0, x_spacing=device_params['pitch'],
+        increment=increment,
+        **pad_details['top'], **pad_shape_details,
+    ))
     init += device_params['num_pins_x']
-    kicad_mod.append(PadArray(
+    pad_arrays.append(PadArray(
         initial= init,
         type=Pad.TYPE_SMT,
         layers=Pad.LAYERS_SMT,
@@ -84,12 +86,11 @@ def add_dual_pad_border_x(kicad_mod, pad_details, device_params, pad_shape_detai
         y_spacing=0, x_spacing=-device_params['pitch'],
         increment=increment,
         **pad_details['bottom'], **pad_shape_details,
-        )
-    )
+    ))
+    for pa in pad_arrays:
+        kicad_mod.append(pa)
+    return __get_pad_radius__(pad_arrays)
 
-    pads = pa.getVirtualChilds()
-    pad = pads[0]
-    return pad.getRoundRadius()
 
 def add_quad_pad_border(kicad_mod, pad_details, device_params, pad_shape_details, kicad4_compatible):
 
@@ -107,27 +108,26 @@ def add_quad_pad_border(kicad_mod, pad_details, device_params, pad_shape_details
     pad_size_reduction = {'x+': pad_size_red} if pad_size_red > 0 else None
     increment = get_generator(device_params)
 
-    pa = PadArray(
-            initial= init,
-            type=Pad.TYPE_SMT,
-            layers=Pad.LAYERS_SMT,
-            pincount=device_params['num_pins_y'],
-            x_spacing=0, y_spacing=device_params['pitch'],
-            chamfer_size=chamfer_size,
-            chamfer_corner_selection_first=corner_first,
-            chamfer_corner_selection_last=corner_last,
-            end_pads_size_reduction = pad_size_reduction,
-            increment=increment,
-            **pad_details['left'], **pad_shape_details,
-            )
-    kicad_mod.append(pa)
-
+    pad_arrays = []
+    pad_arrays.append(PadArray(
+        initial= init,
+        type=Pad.TYPE_SMT,
+        layers=Pad.LAYERS_SMT,
+        pincount=device_params['num_pins_y'],
+        x_spacing=0, y_spacing=device_params['pitch'],
+        chamfer_size=chamfer_size,
+        chamfer_corner_selection_first=corner_first,
+        chamfer_corner_selection_last=corner_last,
+        end_pads_size_reduction = pad_size_reduction,
+        increment=increment,
+        **pad_details['left'], **pad_shape_details,
+        ))
     init += device_params['num_pins_y']
     corner_first = copy(corner_first).rotateCCW()
     corner_last = copy(corner_last).rotateCCW()
     pad_size_reduction = {'y-': pad_size_red} if pad_size_red > 0 else None
 
-    kicad_mod.append(PadArray(
+    pad_arrays.append(PadArray(
         initial= init,
         type=Pad.TYPE_SMT,
         layers=Pad.LAYERS_SMT,
@@ -139,15 +139,14 @@ def add_quad_pad_border(kicad_mod, pad_details, device_params, pad_shape_details
         end_pads_size_reduction = pad_size_reduction,
         increment=increment,
         **pad_details['bottom'], **pad_shape_details,
-        )
-    )
+    ))
 
     init += device_params['num_pins_x']
     corner_first = copy(corner_first).rotateCCW()
     corner_last = copy(corner_last).rotateCCW()
     pad_size_reduction = {'x-': pad_size_red} if pad_size_red > 0 else None
 
-    kicad_mod.append(PadArray(
+    pad_arrays.append(PadArray(
         initial= init,
         type=Pad.TYPE_SMT,
         layers=Pad.LAYERS_SMT,
@@ -159,15 +158,14 @@ def add_quad_pad_border(kicad_mod, pad_details, device_params, pad_shape_details
         end_pads_size_reduction = pad_size_reduction,
         increment=increment,
         **pad_details['right'], **pad_shape_details,
-        )
-    )
+    ))
 
     init += device_params['num_pins_y']
     corner_first = copy(corner_first).rotateCCW()
     corner_last = copy(corner_last).rotateCCW()
     pad_size_reduction = {'y+': pad_size_red} if pad_size_red > 0 else None
 
-    kicad_mod.append(PadArray(
+    pad_arrays.append(PadArray(
         initial= init,
         type=Pad.TYPE_SMT,
         layers=Pad.LAYERS_SMT,
@@ -179,9 +177,16 @@ def add_quad_pad_border(kicad_mod, pad_details, device_params, pad_shape_details
         end_pads_size_reduction = pad_size_reduction,
         increment=increment,
         **pad_details['top'], **pad_shape_details,
-        )
-    )
+    ))
+    for pa in pad_arrays:
+        kicad_mod.append(pa)
+    return __get_pad_radius__(pad_arrays)
 
-    pads = pa.getVirtualChilds()
-    pad = pads[0]
-    return pad.getRoundRadius()
+def __get_pad_radius__(pad_arrays):
+    pad_radius = 0.0
+    for pa in pad_arrays:
+        if (pad_radius == 0.0):
+            pads = pa.getVirtualChilds()
+            if (len(pads)):
+                pad_radius = pads[0].getRoundRadius()
+    return pad_radius
