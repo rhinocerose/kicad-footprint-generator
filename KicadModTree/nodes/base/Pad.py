@@ -382,13 +382,13 @@ class Pad(Node):
 
     # calculate the outline of a pad
     def calculateBoundingBox(self):
-        if (self.shape in [Pad.SHAPE_CIRCLE, Pad.SHAPE_OVAL]):
+        if (self.shape in [Pad.SHAPE_CIRCLE]):
             return {"min": self.at - self.size / 2, "max": self.at + self.size / 2}
-        elif (self.shape in [Pad.SHAPE_RECT, Pad.SHAPE_ROUNDRECT]):
+        elif (self.shape in [Pad.SHAPE_RECT, Pad.SHAPE_ROUNDRECT, Pad.SHAPE_OVAL]):
             from ..specialized import RectLine
-            rect = RectLine(start=self.at - self.size/2,
-                            end=self.at + self.size / 2,
-                            layer=None, width=0).rotate(self.rotation)
+            rect = RectLine(start=- self.size / 2,
+                            end=self.size / 2,
+                            layer=None, width=0).rotate(self.rotation).translate(self.at)
             return rect.calculateBoundingBox()
         else:
             raise NotImplementedError("calculateBoundingBox is not implemented for pad shape '%s'" % self.shape)

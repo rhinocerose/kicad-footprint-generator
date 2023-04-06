@@ -1,0 +1,207 @@
+defaults:
+  library: 'Test'
+  clean_silk: True
+  #silk_pad_clearance: 0 #0.075
+
+MarkerTest:
+  inherit: 'defaults'
+  description: 'Marker test'
+  fp_name: 'marker-{num_pos:02d}'
+  fp_suffix: ''     # optional: defaults to ''
+  source: '~'
+  tags: 'test'
+  positions: 2
+  pad_pitch: 4.0
+  row_pitch: 3.0
+  pads:
+    size: [1.5, 2.5]
+    drill: 0.5
+  body_size:
+    x_offset: 5.0
+    y: 5.0
+  first_pin:
+    position: 'top'
+    body_chamfer: 0.5
+    marker:
+      shape: 'triangle'
+
+
+THT_Test:
+  inherit: 'defaults'
+  description: 'THT Test'
+  fp_name: 'tht-{num_pos:02d}'
+  fp_suffix: '_Test0'     # optional: defaults to ''
+  source: '~'
+  tags: 'test'
+  positions: 2
+  pad_pitch: 4.0
+  row_pitch: 3.0
+  pads:
+    shape: 'oval'
+    size: [1.5, 2.5]
+    drill: 0.5
+  body_size:
+    x_offset: 5.0
+    y: 5.0
+  first_pin:
+    position: 'top'
+    body_chamfer: 0.5
+    marker:
+      shape: 'triangle'
+  mount_pads:
+    SMDl:
+      size: 1.0
+      center:
+        x_offset: 4.75
+        y: 1
+      ends: 'left'
+    THTr:
+      shape: 'roundrect'
+      drill: 0.5
+      size: 1.5
+      center:
+        x_offset: 4.35
+        y: 1
+      rotation: 50
+      ends: 'right'
+
+Polygon_Test0:
+  inherit: 'defaults'
+  description: 'Polygon-Offset Test'
+  fp_name: 'polygon-offset-{num_pos:02d}'
+  fp_suffix: '_Test0'     # optional: defaults to ''
+  source: '~'
+  tags: 'test'
+  positions: 2
+  pad_pitch: 4.0
+  pads:
+    size: [0.75, 2.25]
+  body_size:
+    x_offset: 5.0
+    y: 5.0
+  first_pin:
+    position: 'top'
+    body_chamfer: 0.5
+    marker:
+      shape: 'triangle'
+  mount_pads:
+    SMDr1:
+      shape: 'roundrect'
+      #drill: 0.5
+      size: 1.5
+      center:
+        x_offset: 4.5
+        y: 1 #[-1, 1]
+      ends: 'right'
+    SMDl:
+      shape: #'rect' #'circ'
+      size: [1.5, 18]
+      center:
+        x_offset: 4.5
+        y: -1
+      ends: 'left'
+    SMDr:
+      shape: 'rect'
+      size: 1.5
+      center:
+        x_offset: 4.5
+        y: -1
+      ends: 'right'
+
+Polygon_Test1:
+  inherit: 'defaults'
+  description: 'Polygon-Offset Test'
+  fp_name: 'polygon-offset-{num_pos:02d}'
+  fp_suffix: '_Test_Circle'     # optional: defaults to ''
+  source: '~'
+  tags: 'test'
+  silk_pad_clearance: 0.1 #0.075
+  positions: 5
+  pad_pitch: 1.0
+  pads:
+    size: [0.75, 2.25]
+    rratio: 0.5
+  body_size:
+    x_offset: 5.0
+    y: 5.0
+  first_pin:
+    position: 'bottom'
+    body_chamfer: 0.5
+    marker:
+      shape: 'circle'
+      offset: -2.5
+      size: 4.5
+
+Polygon_Test:
+  inherit: 'defaults'
+  description: 'Polygon-Offset Test'
+  fp_name: 'polygon-offset-{num_pos:02d}'
+  fp_suffix: '_Test'     # optional: defaults to ''
+  source: '~'
+  tags: 'test'
+  silk_fab_offset: 0.25
+  silk_pad_clearance: 0.1 #0.075
+  positions: 5
+  pad_pitch: 1.0
+  pads:
+    size: [0.75, 2.25]
+    shape: 'rect'
+  body_size:
+    x_offset: 5.0
+    y: 5.0
+  first_pin:
+    position: 'bottom'
+    body_chamfer: 0.5
+    marker:
+      shape: 'circle'
+      offset: -2.5
+      size: 2.5
+  body_shape: # very odd shape
+    right:
+      polyline: [[r - 1, t + 1], [r, t + 1], [r - 1, t + 1.05], [r, b-0.5]]
+      #polyline: [[r - 1, t + 1], [r, t + 1], [r - 1, t + 1], [r, b-0.5]]
+    bottom:
+      polyline: [[r - 1, b - 0.5], [r - 1, b],]
+#    left:
+#      polyline: [[l, t + 1], [l + 0.5, t + 1.5], [l, t + 0.25],]
+    inner:
+      polyline: [[l + 0.2, t + 0.2], [r - 0.2, t + 0.2], [r - 0.2, b - 0.2], [l + 0.2, b - 0.2], [l + 0.2, t + 0.2], ]
+  mount_pads: # odd mount pad positions
+    NPTHl:
+      drill: 1.0
+      center:
+        x_offset: 4.75
+        y: 1
+      ends: 'left'
+    THTr:
+      shape: 'roundrect'
+      drill: 0.5
+      size: 1.5
+      center:
+        x_offset: 4.35
+        y: 1
+      rotation: 50
+      ends: 'right'
+    SMDl:
+      shape: 'circ'
+      size: 1.5
+      center:
+        x_offset: 4.5
+        y: -1
+      ends: 'left'
+    SMDr:
+      #shape: 'rect'
+      size: 1.5
+      center:
+        x_offset: 2
+        y: -2
+      rotation: 20
+      ends: 'right'
+    PTHt:
+      drill: 0.8
+      size: 1.5
+      center:
+        x: 0
+        y: 2.5
+      ends: 'right'
+
