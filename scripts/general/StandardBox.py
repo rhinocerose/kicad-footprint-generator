@@ -138,13 +138,13 @@ class StandardBox(Node):
         return self.virtual_childs
 
     def _initPosition(self, **kwargs):
-        if not kwargs.get('at'):
+        if 'at' not in kwargs:
             raise KeyError('Upper left position not declared (like "at: [0,0]")')
         self.at = Point2D(kwargs.get('at'))
         self.at.y = 0.0 - self.at.y
 
     def _initSize(self, **kwargs):
-        if not kwargs.get('size'):
+        if 'size' not in kwargs:
             raise KeyError('Size not declared (like "size: [1,1]")')
         if type(kwargs.get('size')) in [int, float]:
             # when the attribute is a simple number, use it for x and y
@@ -157,7 +157,7 @@ class StandardBox(Node):
             self.size = Point2D(size_original[0], size_original[1])
 
     def _initFootPrint(self, **kwargs):
-        if not kwargs.get('footprint'):
+        if 'footprint' not in kwargs:
             raise KeyError('footprint node is missing')
 
         self.footprint = kwargs.get('footprint')
@@ -199,15 +199,15 @@ class StandardBox(Node):
         self.virtual_childs.append(new_node)
 
     def _initDesriptionNode(self, **kwargs):
-        if not kwargs.get('description'):
+        if 'description' not in kwargs:
             raise KeyError('Description not declared (like description: "Bul Holder )')
-        if not kwargs.get('datasheet'):
+        if 'datasheet' not in kwargs:
             raise KeyError('datasheet not declared (like datasheet: http://www.bulgin.com/media/bulgin/data/Battery_holders.pdf)')
         self.description = str(kwargs.get('description')) + " (Script generated with StandardBox.py) (" + str(kwargs.get('datasheet')) + ")"
         self.footprint.setDescription(self.description)
 
     def _initTagNode(self, **kwargs):
-        if not kwargs.get('tags'):
+        if 'tags' not in kwargs:
             raise KeyError('tags not declared (like "tags: "Bulgin Battery Holder, BX0033, Battery Type 1xPP3")')
         self.tags = str(kwargs.get('tags'))
         self.footprint.setTags(self.tags)
@@ -219,7 +219,7 @@ class StandardBox(Node):
                 self.footprint.setAttribute("smd")
 
     def _initFile3DNameNode(self, **kwargs):
-        if not kwargs.get('file3Dname'):
+        if 'file3Dname' not in kwargs:
             raise KeyError('file3Dname not declared')
         self.file3Dname = str(kwargs.get('file3Dname'))
         self.footprint.append(Model(filename=self.file3Dname,
